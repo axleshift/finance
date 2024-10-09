@@ -51,12 +51,16 @@ const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
-const Finance = lazy(() => import('./views/finance.js'))
+const Billing = lazy(() => import('./views/billing/billing.js'))
+const Invoice = lazy(() => import('./views/invoice/invoice.js'))
+const Reporting = lazy(() => import('./views/reporting/reporting.js'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-  { path: '/billing', name: 'Billing', element: Finance },
+  { path: '/billing', name: 'Billing', element: Billing },
+  { path: '/invoice', name: 'Invoice', element: Invoice },
+  { path: '/reporting', name: 'Reporting', element: Reporting },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },
