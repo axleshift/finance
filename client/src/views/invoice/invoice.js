@@ -7,7 +7,7 @@ const Invoice = () => {
 
   // Sample invoice data
   const invoice = {
-    number: '09629941794',
+    number: '01',
     name: 'Denmark Nini',
     address: 'Caloocan City',
     date: 'October 9, 2024',

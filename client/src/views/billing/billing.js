@@ -127,6 +127,7 @@ const NameForm = () => {
       setInvoices([...invoices, invoiceData])
     }
 
+    // Reset fields
     setFirstName('')
     setLastName('')
     setProducts([])
@@ -138,8 +139,8 @@ const NameForm = () => {
     setEditInvoice(invoice)
     setFirstName(invoice.customerName.split(' ')[0])
     setLastName(invoice.customerName.split(' ')[1])
-    setProducts(invoice.products)
     setAddress(invoice.address)
+    setProducts(invoice.products)
   }
 
   const handleDelete = (invoiceNumber) => {
@@ -170,6 +171,18 @@ const NameForm = () => {
       const latestInvoice = invoices[invoices.length - 1]
       setShowReceipt(latestInvoice)
     }
+  }
+
+  // Handle editing of products in the product list
+  const handleEditProduct = (index) => {
+    const product = products[index]
+    setProductName(product.name)
+    setQuantity(product.quantity)
+    setPrice(product.price)
+
+    // Remove the product from the list so it can be added again after editing
+    const updatedProducts = products.filter((_, i) => i !== index)
+    setProducts(updatedProducts)
   }
 
   return (
@@ -265,6 +278,13 @@ const NameForm = () => {
             <li key={index}>
               {product.name} - {product.quantity} x {selectedCurrency}{' '}
               {convertCurrency(product.price, selectedCurrency)}
+              <CButton
+                color="warning"
+                onClick={() => handleEditProduct(index)}
+                style={{ marginLeft: '10px' }}
+              >
+                Edit
+              </CButton>
             </li>
           ))}
         </ul>
