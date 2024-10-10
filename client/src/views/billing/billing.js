@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { CRow, CCol, CFormInput, CButton, CFormSelect } from '@coreui/react'
+import PropTypes from 'prop-types'
 
 // Currency converter function
 const convertCurrency = (amount, currency) => {
@@ -62,6 +63,11 @@ const Receipt = ({ invoice, selectedCurrency }) => {
       </p>
     </div>
   )
+}
+
+Receipt.propTypes = {
+  invoice: PropTypes.array.isRequired,
+  selectedCurrency: PropTypes.string.isRequired,
 }
 
 const NameForm = () => {
