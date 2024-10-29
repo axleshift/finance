@@ -1,15 +1,13 @@
 {
-  "short_name": "Main",
-  "name": "Freight Main",
-  "icons": [
-    {
-      "src": "./assets/img/favicon.png",
-      "sizes": "100x100",
-      "type": "image/png"
-    }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+    "short_name": "Finance",
+    "name": "Axleshift Finance",
+    "icons": [
+        {
+            "src": "./favicon.png",
+            "sizes": "500x500",
+            "type": "image/png"
+        }
+    ],
+    "display": "standalone",
+    "start_url": "."
 }

@@ -12,7 +12,7 @@ import {
   CTableDataCell,
 } from '@coreui/react'
 
-const FinancialReport = () => {
+const FreightAudit = () => {
   const [financialData] = useState({
     incomeStatement: {
       totalRevenue: 0,
@@ -39,12 +39,12 @@ const FinancialReport = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>Financial Reporting</h1>
+      <h1>Freight Audit</h1>
 
       {/* Income Statement */}
       <CCard>
         <CCardBody>
-          <CCardTitle>Income Statement</CCardTitle>
+          <CCardTitle>Training Cost Reports</CCardTitle>
           <CTable bordered>
             <CTableHead>
               <CTableRow>
@@ -77,7 +77,7 @@ const FinancialReport = () => {
       {/* Balance Sheet */}
       <CCard style={{ marginTop: '20px' }}>
         <CCardBody>
-          <CCardTitle>Balance Sheet</CCardTitle>
+          <CCardTitle>Payroll Cost Reports</CCardTitle>
           <CTable bordered>
             <CTableHead>
               <CTableRow>
@@ -172,4 +172,4 @@ const FinancialReport = () => {
   )
 }
 
-export default FinancialReport
+export default FreightAudit

@@ -5,10 +5,10 @@ import PropTypes from 'prop-types'
 // Currency converter function
 const convertCurrency = (amount, currency) => {
   const rates = {
+    PHP: 1,
     USD: 1,
     EUR: 0.85,
     GBP: 0.76,
-    PHP: 1,
   }
 
   return (amount * rates[currency]).toFixed(2)
@@ -81,7 +81,7 @@ const NameForm = () => {
   const [invoices, setInvoices] = useState([])
   const [showReceipt, setShowReceipt] = useState(null)
   const [editInvoice, setEditInvoice] = useState(null)
-  const [selectedCurrency, setSelectedCurrency] = useState('USD')
+  const [selectedCurrency, setSelectedCurrency] = useState('PHP')
 
   const handleCurrencyChange = (e) => setSelectedCurrency(e.target.value)
 
