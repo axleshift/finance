@@ -15,7 +15,7 @@ const FinancialAnalytics = () => {
 
   return (
     <CRow>
-        <CCol xs={6}>
+      <CCol xs={6}>
         <CCard className="mb-4">
           <CCardHeader>Revenue</CCardHeader>
           <CCardBody>
@@ -35,7 +35,7 @@ const FinancialAnalytics = () => {
           </CCardBody>
         </CCard>
       </CCol>
-       <CCol xs={6}>
+      <CCol xs={6}>
         <CCard className="mb-4">
           <CCardHeader>Revenue and Expenses</CCardHeader>
           <CCardBody>
@@ -71,30 +71,35 @@ const FinancialAnalytics = () => {
           <CCardBody>
             <CChartScatter
               data={{
-                datasets: [{
+                datasets: [
+                  {
                     label: 'Scatter Dataset',
-                    data: [{
-                      x: -10,
-                      y: 0
-                    }, {
-                      x: 0,
-                      y: 10
-                    }, {
-                      x: 10,
-                      y: 5
-                    }, {
-                      x: 0.5,
-                      y: 5.5
-                    }],
-                }],
+                    data: [
+                      {
+                        x: -10,
+                        y: 0,
+                      },
+                      {
+                        x: 0,
+                        y: 10,
+                      },
+                      {
+                        x: 10,
+                        y: 5,
+                      },
+                      {
+                        x: 0.5,
+                        y: 5.5,
+                      },
+                    ],
+                  },
+                ],
               }}
-              
             />
           </CCardBody>
         </CCard>
       </CCol>
-      
-      
+
       <CCol xs={6}>
         <CCard className="mb-4">
           <CCardHeader>Profit and Revenue</CCardHeader>
@@ -125,7 +130,7 @@ const FinancialAnalytics = () => {
           </CCardBody>
         </CCard>
       </CCol>
-      
+
       <CCol xs={6}>
         <CCard className="mb-4">
           <CCardHeader>Operational and Non-operational Expenses</CCardHeader>
@@ -162,10 +167,6 @@ const FinancialAnalytics = () => {
             />
           </CCardBody>
         </CCard>
-      
-        
-     
-        
       </CCol>
     </CRow>
   )
