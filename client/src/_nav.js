@@ -1,10 +1,6 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
-import {
-  
-  cilSpeedometer,
-  cilStar,
-} from '@coreui/icons'
+import { cilSpeedometer, cilStar } from '@coreui/icons'
 
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -16,14 +12,12 @@ import {
   faChartSimple,
 } from '@fortawesome/free-solid-svg-icons'
 
-
 const _nav = [
   {
     component: CNavItem,
     name: 'Dashboard',
     to: '/dashboard',
     icon: <FontAwesomeIcon icon={faHouse} className="nav-icon" />,
-    
   },
   {
     component: CNavTitle,
@@ -46,15 +40,14 @@ const _nav = [
     name: 'Freight Audit',
     to: '/audit',
     icon: <FontAwesomeIcon icon={faClipboard} className="nav-icon" />,
-  },{
+  },
+  {
     component: CNavItem,
     name: 'Financial Analytics',
     to: '/financial-analytics',
-    icon: <FontAwesomeIcon icon={faChartSimple } className="nav-icon" />,
+    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
   },
 
- 
-  
   {
     component: CNavGroup,
     name: 'Pages',
