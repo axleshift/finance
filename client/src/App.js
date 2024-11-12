@@ -1,10 +1,11 @@
 import React, { Suspense, useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
-
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
@@ -33,24 +34,26 @@ const App = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <BrowserRouter>
-      <Suspense
-        fallback={
-          <div className="pt-3 text-center">
-            <CSpinner color="primary" variant="grow" />
-          </div>
-        }
-      >
-        <Routes>
-          <Route path="/testForm" element={<testForm />} />
-          <Route exact path="/login" name="Login Page" element={<Login />} />
-          <Route exact path="/register" name="Register Page" element={<Register />} />
-          <Route exact path="/404" name="Page 404" element={<Page404 />} />
-          <Route exact path="/500" name="Page 500" element={<Page500 />} />
-          <Route path="*" name="Home" element={<DefaultLayout />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+    <div>
+      <ToastContainer />
+      <BrowserRouter>
+        <Suspense
+          fallback={
+            <div className="pt-3 text-center">
+              <CSpinner color="primary" variant="grow" />
+            </div>
+          }
+        >
+          <Routes>
+            <Route exact path="/login" name="Login Page" element={<Login />} />
+            <Route exact path="/register" name="Register Page" element={<Register />} />
+            <Route exact path="/404" name="Page 404" element={<Page404 />} />
+            <Route exact path="/500" name="Page 500" element={<Page500 />} />
+            <Route path="*" name="Home" element={<DefaultLayout />} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+    </div>
   )
 }
 

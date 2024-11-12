@@ -7,6 +7,7 @@ const Audit = lazy(() => import('./views/audit/audit.js'))
 const FinancialAnalytics = React.lazy(
   () => import('./views/financial-analytics/finacial-analytics.js'),
 )
+const TestForm = lazy(() => import('./views/invoice/TestForm.js'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -15,6 +16,7 @@ const routes = [
   { path: '/invoice', name: 'Invoice', element: Invoice },
   { path: '/audit', name: 'Freight Audit', element: Audit },
   { path: '/financial-analytics', name: 'Financial Analytics', element: FinancialAnalytics },
+  { path: '/testForm', name: 'testForm', element: TestForm },
 ]
 
 export default routes
