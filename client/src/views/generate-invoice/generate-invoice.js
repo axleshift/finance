@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { CRow, CCol, CFormInput, CButton, CFormSelect } from '@coreui/react'
 import PropTypes from 'prop-types'
+import axios from 'axios'
+import { apiURL } from '../../context/client_store'
 
 // Currency converter function
 const convertCurrency = (amount, currency) => {
@@ -111,6 +113,16 @@ const NameForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
+
+    console.log(firstName)
+    console.log(products)
+    console.log(quantity)
+    console.log(price)
+    // console.log(firstName)
+    // console.log(firstName)
+    // console.log(firstName)
+    // console.log(firstName)
+    // console.log(firstName)
     const totalAmount = products.reduce((acc, product) => acc + product.price * product.quantity, 0)
 
     const invoiceData = {
@@ -171,8 +183,10 @@ const NameForm = () => {
     setShowReceipt(updatedInvoice)
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const wantsReceipt = window.confirm('Do you want to generate an invoice receipt?')
+    console.log(products)
+    // const response = await axios.post(`${apiURL}`)
     if (wantsReceipt && invoices.length > 0) {
       const latestInvoice = invoices[invoices.length - 1]
       setShowReceipt(latestInvoice)

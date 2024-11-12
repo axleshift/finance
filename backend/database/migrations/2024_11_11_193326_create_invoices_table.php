@@ -13,9 +13,16 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('description');
-            $table->string('status');
+            $table->string('firstName')->nullable();
+            $table->string('lastName')->nullable();
+            $table->string('address')->nullable();
+            $table->string('invoices')->nullable();
+            $table->string('showReceipt')->nullable();
+            $table->string('editInvoice')->nullable();
+            $table->string('selectedCurrency')->nullable();
+            $table->string('status')->nullable();
+            $table->json('products')->nullable();
+            $table->json('totalAmount')->nullable();
             $table->timestamps();
         });
     }

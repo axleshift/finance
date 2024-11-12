@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { apiURL } from '../../context/client_store'
 
 const TestForm = () => {
-  const apiURL = 'http://127.0.0.1:8000'
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [status, setStatus] = useState('')

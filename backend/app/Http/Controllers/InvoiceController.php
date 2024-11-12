@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\productModel;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -16,15 +17,17 @@ class InvoiceController extends Controller
     // Create a new invoice
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'description' => 'required|string',
-            'status' => 'required|string',
-        ]);
+        // Convert 'products' array to JSON
+        $invoiceData = $request->all();
+        $invoiceData['products'] = json_encode($invoiceData['products']); // Convert products array to JSON
 
-        $invoice = Invoice::create($validated);
-        return response()->json($invoice, 201);
+        // Create the invoice
+        $invoice = Invoice::create($invoiceData);
+
+        return response()->json(['success' => true, 'invoice' => $invoice], 201);
     }
+
+
 
     // Get a single invoice by ID
     public function show($id)

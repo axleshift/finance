@@ -9,6 +9,7 @@ const FinancialAnalytics = React.lazy(
 )
 const TestForm = lazy(() => import('./views/invoice/TestForm.js'))
 
+const Generate_invoice = lazy(() => import('./views/generate-invoice/Generate_invoice.js'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
@@ -17,6 +18,7 @@ const routes = [
   { path: '/audit', name: 'Freight Audit', element: Audit },
   { path: '/financial-analytics', name: 'Financial Analytics', element: FinancialAnalytics },
   { path: '/testForm', name: 'testForm', element: TestForm },
+  { path: 'generateInvoice', name: 'Generate_invoice', element: Generate_invoice },
 ]
 
 export default routes

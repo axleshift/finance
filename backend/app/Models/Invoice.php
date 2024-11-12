@@ -10,5 +10,20 @@ class Invoice extends Model
     use HasFactory;
 
 
-    protected $fillable = ['name', 'description', 'status'];
+    protected $fillable = [
+        'firstName',
+        'lastName',
+        'quantity',
+        'price',
+        'products',
+        'address',
+        'selectedCurrency',
+        'status',
+        'products',
+    ];
+
+
+    protected $cast = [
+        'products' => 'array'
+    ];
 }
