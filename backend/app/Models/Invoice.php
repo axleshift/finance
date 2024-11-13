@@ -20,10 +20,14 @@ class Invoice extends Model
         'selectedCurrency',
         'status',
         'products',
+        'email',
+        'phone',
+        'totalAmount',
+        'paymentMethod'
     ];
 
 
-    protected $cast = [
+    protected $casts = [
         'products' => 'array'
     ];
 }

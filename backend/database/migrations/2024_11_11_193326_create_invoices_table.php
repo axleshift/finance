@@ -15,14 +15,17 @@ return new class extends Migration
             $table->id();
             $table->string('firstName')->nullable();
             $table->string('lastName')->nullable();
+            $table->string("email")->nullable();
+            $table->string("phone")->nullable();
             $table->string('address')->nullable();
             $table->string('invoices')->nullable();
             $table->string('showReceipt')->nullable();
             $table->string('editInvoice')->nullable();
             $table->string('selectedCurrency')->nullable();
             $table->string('status')->nullable();
+            $table->string('paymentMethod')->nullable();
             $table->json('products')->nullable();
-            $table->json('totalAmount')->nullable();
+            $table->integer('totalAmount')->nullable();
             $table->timestamps();
         });
     }

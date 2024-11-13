@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("name");
             $table->string("price");
             $table->string("quantity");
+            $table->string("amount");
             $table->foreignId('invoice_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

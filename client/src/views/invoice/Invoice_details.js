@@ -1,27 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import {} from '@coreui/react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { apiURL } from '../../context/client_store'
+import { toast } from 'react-toastify'
+
 const Invoice_details = () => {
   // State for payment status
   const [status, setStatus] = useState('Pending')
   const { id } = useParams()
-
-  // Sample invoice data
-  const invoice = {
-    number: '01',
-    name: 'Denmark Nini',
-    address: 'Caloocan City',
-    date: 'October 9, 2024',
-    products: [
-      { name: 'Shoes', quantity: 2, price: 250 },
-      { name: 'T-shirt', quantity: 1, price: 500 },
-    ],
-    getTotal() {
-      return this.products.reduce((total, item) => total + item.quantity * item.price, 0)
-    },
-  }
+  const [data, setData] = useState(null)
+  const [products, setProducts] = useState([])
 
   useEffect(() => {
     fetchSpecificId()
@@ -31,8 +19,30 @@ const Invoice_details = () => {
     try {
       const response = await axios.get(`${apiURL}/api/invoices/${id}`)
       console.log(response.data)
+
+      // Parse products JSON string if it exists
+      const invoiceData = response.data
+      invoiceData.products = invoiceData.products ? JSON.parse(invoiceData.products) : []
+
+      setData(invoiceData)
+      setProducts(invoiceData.products)
+      setStatus(invoiceData.status)
+      console.log(invoiceData)
     } catch (error) {
       console.log(error?.response.data.message)
+    }
+  }
+
+  const handleUpdateStatus = async (invoiceId) => {
+    const status = 'Paid'
+    console.log(invoiceId)
+    try {
+      const response = await axios.put(`${apiURL}/api/invoices/status/${invoiceId}`, { status })
+
+      toast.success('Updated Successfully!')
+    } catch (error) {
+      console.log(error?.response?.data.message)
+      toast.error(error?.response?.data.message)
     }
   }
 
@@ -42,16 +52,21 @@ const Invoice_details = () => {
       <div style={{ borderBottom: '1px solid black', paddingBottom: '10px' }}>
         <h2>Invoice</h2>
         <p>
-          <strong>Name:</strong> {invoice.name}
+          <strong>Name:</strong> {data?.firstName} {data?.lastName}
         </p>
         <p>
-          <strong>Address:</strong> {invoice.address}
+          <strong>Address:</strong> {data?.address}
         </p>
         <p>
-          <strong>Invoice Number:</strong> {invoice.number}
+          <strong>Invoice Number:</strong> {data?.id}
         </p>
         <p>
-          <strong>Date:</strong> {invoice.date}
+          <strong>Date:</strong>
+          {new Date(data?.created_at).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}
         </p>
       </div>
 
@@ -67,12 +82,12 @@ const Invoice_details = () => {
             </tr>
           </thead>
           <tbody>
-            {invoice.products.map((product, index) => (
+            {products.map((product, index) => (
               <tr key={index}>
-                <td style={styles.cell}>{product.name}</td>
-                <td style={styles.cell}>{product.quantity}</td>
-                <td style={styles.cell}>${product.price}</td>
-                <td style={styles.cell}>${product.quantity * product.price}</td>
+                <td style={styles.cell}>{product?.name}</td>
+                <td style={styles.cell}>{product?.quantity}</td>
+                <td style={styles.cell}>${product?.price}</td>
+                <td style={styles.cell}>${product?.quantity * product?.price}</td>
               </tr>
             ))}
           </tbody>
@@ -81,13 +96,17 @@ const Invoice_details = () => {
         {/* Summary and Status */}
         <div style={{ textAlign: 'right', marginTop: '20px' }}>
           <p>
-            <strong>Total Amount: ${invoice.getTotal()}</strong>
+            <strong>Total Amount: ${data?.totalAmount}</strong>
           </p>
           <p>
-            <strong>Status:</strong> {status}
+            <strong>Status:</strong> <span className="btn btn-primary">{status}</span>
           </p>
           {status === 'Pending' && (
-            <button style={styles.button} onClick={() => setStatus('Paid')}>
+            <button
+              className="btn btn-primary"
+              style={styles.button}
+              onClick={() => handleUpdateStatus(id)}
+            >
               Mark as Paid
             </button>
           )}

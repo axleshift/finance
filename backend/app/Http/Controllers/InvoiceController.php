@@ -57,4 +57,17 @@ class InvoiceController extends Controller
         $invoice->delete();
         return response()->json(null, 200);
     }
+
+
+    public function statusUpdate(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'status' => 'required|string'
+        ]);
+
+        $invoice = Invoice::findOrFail($id);
+        $invoice->update($validated);
+
+        return response()->json($invoice);
+    }
 }

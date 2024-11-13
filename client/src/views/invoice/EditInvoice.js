@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CRow, CCol, CFormInput, CButton, CFormSelect } from '@coreui/react'
 import axios from 'axios'
 import { apiURL } from '../../context/client_store'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-const GenerateInvoice = () => {
+import { useParams } from 'react-router-dom'
+const EditInvoice = () => {
   const [invoice, setInvoice] = useState({
     firstName: '',
     lastName: '',
@@ -20,9 +21,15 @@ const GenerateInvoice = () => {
     products: [{ name: '', price: '', quantity: '' }],
     totalAmount: 0,
   })
-
+  const [data, setData] = useState(null)
   const navigate = useNavigate()
+  const { id } = useParams()
 
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  console.log(id)
   // Update state for any input change
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -30,6 +37,16 @@ const GenerateInvoice = () => {
       ...invoice,
       [name]: value,
     })
+  }
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${apiURL}/api/invoices/${id}`)
+
+      setData(response.data)
+    } catch (error) {
+      console.log(error?.response.data.message)
+    }
   }
 
   // Handle product fields change
@@ -337,4 +354,4 @@ const GenerateInvoice = () => {
   )
 }
 
-export default GenerateInvoice
+export default EditInvoice

@@ -1,4 +1,5 @@
 import React, { lazy } from 'react'
+import EditInvoice from './views/invoice/EditInvoice.js'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const GenInvoice = lazy(() => import('./views/generate-invoice/generate-invoice.js'))
@@ -21,6 +22,7 @@ const routes = [
   { path: '/audit', name: 'Freight Audit', element: Audit },
   { path: '/financial-analytics', name: 'Financial Analytics', element: FinancialAnalytics },
   { path: '/testForm', name: 'testForm', element: TestForm },
+  { path: '/edit_invoice/:id', name: 'Edit Invoice', element: EditInvoice },
 ]
 
 export default routes

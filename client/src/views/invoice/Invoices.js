@@ -70,6 +70,9 @@ const Invoices = () => {
                   <button class="bg-blue-500 btn btn-primary text-xs text-white px-2 py-1 rounded-lg mx-1 payBtn"  id="payBtn_${data.id}">
                     Pay
                   </button>
+                  <button class="bg-teal-500 text-xs btn btn-warning text-white px-2 py-1 rounded-lg mx-1 viewBtn" id="editBtn_${data.id}">
+                    Edit
+                  </button>
                   <button class="bg-teal-500 text-xs btn btn-info text-white px-2 py-1 rounded-lg mx-1 viewBtn" id="viewBtn_${data.id}">
                     View
                   </button>
@@ -88,12 +91,14 @@ const Invoices = () => {
           const payBtn = row.querySelector(`#payBtn_${data.id}`)
           const deleteBtn = row.querySelector(`#deleteBtn_${data.id}`)
           const viewBtn = row.querySelector(`#viewBtn_${data.id}`)
+          const editBtn = row.querySelector(`#editBtn_${data.id}`)
 
           approveBtn?.addEventListener('click', () => handleApproval(data.id))
           rejectBtn?.addEventListener('click', () => handleRejection(data.id))
           payBtn?.addEventListener('click', () => handlePayment(data.id))
           deleteBtn?.addEventListener('click', () => handleDelete(data.id))
           viewBtn?.addEventListener('click', () => navigate(`/invoice-details/${data.id}`))
+          editBtn?.addEventListener('click', () => navigate(`/edit_invoice/${data.id}`))
         },
       })
       // <button class="bg-green-500 text-xs text-white px-2 py-1 rounded-lg mx-1 approveBtn" ${
