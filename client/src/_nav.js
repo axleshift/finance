@@ -26,13 +26,13 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Generate Invoice',
-    to: '/generate-invoice',
+    to: '/generateInvoice',
     icon: <FontAwesomeIcon icon={faFileInvoice} className="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Invoice',
-    to: '/invoice',
+    to: '/invoices',
     icon: <FontAwesomeIcon icon={faReceipt} className="nav-icon" />,
   },
   {

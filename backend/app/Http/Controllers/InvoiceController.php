@@ -55,6 +55,6 @@ class InvoiceController extends Controller
     {
         $invoice = Invoice::findOrFail($id);
         $invoice->delete();
-        return response()->json(null, 204);
+        return response()->json(null, 200);
     }
 }
