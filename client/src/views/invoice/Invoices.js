@@ -32,6 +32,7 @@ const Invoices = () => {
       const table = new DataTable('#myTable', {
         data: invoiceData,
         columns: [
+          { title: 'Id', data: 'id' },
           { title: 'First Name', data: 'firstName' },
           { title: 'Last Name', data: 'lastName' },
           { title: 'Currency', data: 'selectedCurrency' },
@@ -84,7 +85,7 @@ const Invoices = () => {
             },
           },
         ],
-        order: [[2, 'desc']],
+        order: [[0, 'desc']],
         rowCallback: (row, data) => {
           const approveBtn = row.querySelector(`#approveBtn_${data.id}`)
           const rejectBtn = row.querySelector(`#rejectBtn_${data.id}`)

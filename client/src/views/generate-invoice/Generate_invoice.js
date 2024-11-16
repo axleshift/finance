@@ -15,7 +15,7 @@ const GenerateInvoice = () => {
     paymentMethod: '',
     // showReceipt: false,
     // editInvoice: false,
-    selectedCurrency: 'PHP',
+    selectedCurrency: '',
     status: 'Pending',
     products: [{ name: '', price: '', quantity: '' }],
     totalAmount: 0,
@@ -215,9 +215,10 @@ const GenerateInvoice = () => {
                   value={invoice.selectedCurrency}
                   onChange={handleChange}
                 >
-                  <option value="PHP" selected>
-                    PHP
+                  <option value="" selected>
+                    Selected option
                   </option>
+                  <option value="PHP">PHP</option>
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
                   <option value="INR">INR</option>
@@ -235,9 +236,10 @@ const GenerateInvoice = () => {
                   value={invoice?.paymentMethod}
                   onChange={handleChange}
                 >
-                  <option value="GCash" selected>
-                    GCash
+                  <option value="" selected>
+                    Selected option
                   </option>
+                  <option value="GCash">GCash</option>
                   <option value="Cash On Delivery">Cash On Delivery</option>
                   <option value="Bank Account">Bank Account</option>
                 </CFormSelect>

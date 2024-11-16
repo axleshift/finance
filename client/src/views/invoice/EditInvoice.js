@@ -3,10 +3,46 @@ import { CRow, CCol, CFormInput, CButton, CFormSelect } from '@coreui/react'
 import axios from 'axios'
 import { apiURL } from '../../context/client_store'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+
 const EditInvoice = () => {
+  const [data, setData] = useState(null)
+  const navigate = useNavigate()
+  const { id } = useParams()
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${apiURL}/api/invoices/${id}`)
+      const fetchedData = response.data
+
+      // Parse products JSON string into array if it exists
+      const products = fetchedData.products ? JSON.parse(fetchedData.products) : []
+
+      console.log(response.data)
+
+      // Set the invoice data with fetched values
+      setInvoice({
+        id: fetchedData.id || '',
+        firstName: fetchedData.firstName || '',
+        lastName: fetchedData.lastName || '',
+        address: fetchedData.address || '',
+        invoices: fetchedData.invoices || '',
+        email: fetchedData.email || '',
+        phone: fetchedData.phone || '',
+        paymentMethod: fetchedData.paymentMethod || '',
+        selectedCurrency: fetchedData.selectedCurrency || 'PHP',
+        status: fetchedData.status || 'Pending',
+        products: products.length > 0 ? products : [{ name: '', price: '', quantity: '' }],
+        totalAmount: fetchedData.totalAmount || 0,
+      })
+    } catch (error) {
+      console.log(error?.response?.data?.message)
+    }
+  }
+
+  // State for invoice
   const [invoice, setInvoice] = useState({
+    id: '',
     firstName: '',
     lastName: '',
     address: '',
@@ -14,39 +50,23 @@ const EditInvoice = () => {
     email: '',
     phone: '',
     paymentMethod: '',
-    // showReceipt: false,
-    // editInvoice: false,
     selectedCurrency: 'PHP',
     status: 'Pending',
     products: [{ name: '', price: '', quantity: '' }],
     totalAmount: 0,
   })
-  const [data, setData] = useState(null)
-  const navigate = useNavigate()
-  const { id } = useParams()
 
   useEffect(() => {
     fetchData()
   }, [])
 
-  console.log(id)
-  // Update state for any input change
+  // Update state for input changes
   const handleChange = (e) => {
     const { name, value } = e.target
     setInvoice({
       ...invoice,
       [name]: value,
     })
-  }
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`${apiURL}/api/invoices/${id}`)
-
-      setData(response.data)
-    } catch (error) {
-      console.log(error?.response.data.message)
-    }
   }
 
   // Handle product fields change
@@ -71,13 +91,11 @@ const EditInvoice = () => {
   // Remove product row and update total
   const handleRemoveProduct = (index) => {
     const newProducts = invoice.products.filter((_, i) => i !== index)
-    setInvoice(
-      (prevInvoice) => ({
-        ...prevInvoice,
-        products: newProducts,
-      }),
-      () => calculateTotal(newProducts),
-    )
+    setInvoice({
+      ...invoice,
+      products: newProducts,
+    })
+    calculateTotal(newProducts)
   }
 
   // Calculate total amount
@@ -93,76 +111,57 @@ const EditInvoice = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(invoice)
-    console.log(invoice.totalAmount)
-    const response = await axios.post(`${apiURL}/api/invoices`, invoice)
 
-    navigate(`/invoice-details/${response.data?.invoice?.id}`)
-    toast.success('Created invoice successfully!')
-    setInvoice({
-      firstName: '',
-      lastName: '',
-      address: '',
-      invoices: '',
-      email: '',
-      phone: '',
-      paymentMethod: '',
-      selectedCurrency: 'PHP',
-      status: 'Pending',
-      products: [{ name: '', price: '', quantity: '' }],
-      totalAmount: 0,
-    })
-    // Here you can send the form data to an API or handle the submission
+    console.log(invoice)
+    try {
+      await axios.put(`${apiURL}/api/invoices/${id}`, invoice)
+      navigate(`/invoice-details/${id}`)
+      toast.success('Invoice updated successfully!')
+    } catch (error) {
+      console.log(error)
+      toast.error('Failed to update invoice')
+    }
   }
 
   return (
     <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-      <h2 className="text-red-500">Generate Invoice</h2>
+      <h2 className="text-red-500">Edit Invoice</h2>
       <form onSubmit={handleSubmit}>
         <CRow>
           <CCol>
             <label>Invoice Number</label>
             <CFormInput
               type="text"
-              name="invoices"
-              value={invoice.invoices}
+              name="id"
+              value={invoice?.id}
               onChange={handleChange}
               required
             />
           </CCol>
         </CRow>
 
-        <div className="row ">
-          <div className="col">
-            <CRow>
-              <CCol>
-                <label>First Name</label>
-                <CFormInput
-                  type="text"
-                  name="firstName"
-                  value={invoice.firstName}
-                  onChange={handleChange}
-                  required
-                />
-              </CCol>
-            </CRow>
-          </div>
-
-          <div className="col">
-            <CRow>
-              <CCol>
-                <label>Last Name</label>
-                <CFormInput
-                  type="text"
-                  name="lastName"
-                  value={invoice.lastName}
-                  onChange={handleChange}
-                  required
-                />
-              </CCol>
-            </CRow>
-          </div>
-        </div>
+        <CRow>
+          <CCol>
+            <label>First Name</label>
+            <CFormInput
+              type="text"
+              name="firstName"
+              value={invoice?.firstName}
+              onChange={handleChange}
+              required
+            />
+          </CCol>
+          <CCol>
+            <label>Last Name</label>
+            <CFormInput
+              type="text"
+              name="lastName"
+              value={invoice?.lastName}
+              onChange={handleChange}
+              required
+            />
+          </CCol>
+        </CRow>
 
         <div className="row ">
           <div className="col ">
@@ -195,14 +194,13 @@ const EditInvoice = () => {
             </CRow>
           </div>
         </div>
-
         <CRow>
           <CCol>
             <label>Address</label>
             <CFormInput
               type="text"
               name="address"
-              value={invoice.address}
+              value={invoice?.address}
               onChange={handleChange}
               required
             />
@@ -262,6 +260,7 @@ const EditInvoice = () => {
             </CRow>
           </div>
         </div>
+        {/* Other fields here */}
 
         <h3 className="py-3">Products</h3>
         {invoice.products.map((product, index) => (
@@ -298,8 +297,8 @@ const EditInvoice = () => {
             </CCol>
             <CCol>
               <button
-                className="btn btn-primary"
                 type="button"
+                className="btn btn-primary"
                 onClick={() => handleRemoveProduct(index)}
               >
                 Remove
@@ -316,35 +315,11 @@ const EditInvoice = () => {
           Total Amount: {invoice.totalAmount} {invoice.selectedCurrency}
         </h4>
 
-        {/* <CRow>
-          <CCol>
-            <label>Show Receipt</label>
-            <input
-              type="checkbox"
-              name="showReceipt"
-              checked={invoice.showReceipt}
-              onChange={() => setInvoice({ ...invoice, showReceipt: !invoice.showReceipt })}
-            />
-          </CCol>
-        </CRow>
-
-        <CRow>
-          <CCol>
-            <label>Edit Invoice</label>
-            <input
-              type="checkbox"
-              name="editInvoice"
-              checked={invoice.editInvoice}
-              onChange={() => setInvoice({ ...invoice, editInvoice: !invoice.editInvoice })}
-            />
-          </CCol>
-        </CRow> */}
-
         <CRow>
           <CCol>
             <div className="d-flex justify-content-center">
-              <button className="btn btn-primary " type="submit">
-                Create Invoice
+              <button className="btn btn-primary" type="submit">
+                Update Invoice
               </button>
             </div>
           </CCol>
