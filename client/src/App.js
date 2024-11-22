@@ -1,13 +1,14 @@
-import React, { Suspense, useEffect } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import './index.css'
-
 import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
+import { apiURL } from './context/client_store'
 // Containers
+import client_store from './context/client_store'
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
 // Pages
@@ -17,8 +18,10 @@ const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
 const App = () => {
+  const { token } = client_store()
   const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
   const storedTheme = useSelector((state) => state.theme)
+  const [userData, setUserData] = useState(null)
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.href.split('?')[1])
@@ -33,6 +36,21 @@ const App = () => {
 
     setColorMode(storedTheme)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(`${apiURL}/api/user/account`, { headers: { token: token } })
+
+      setUserData(response?.data)
+    } catch (error) {
+      console.error(error?.response.data.message)
+    }
+  }
+
+  useEffect(() => {
+    fetchUserData()
+    console.log()
+  }, [])
 
   return (
     <div>

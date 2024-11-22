@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useEffect } from 'react'
+import DataTable from 'datatables.net-dt'
 import { apiURL } from '../../context/client_store'
 const AccountRequest = () => {
   // const [accountData, setAccountData] = useState([])
@@ -90,9 +91,9 @@ const AccountRequest = () => {
 
   return (
     <div>
-      <h1>Account List</h1>
+      <h1>Account Lists</h1>
 
-      <table id="myTable1" className="display"></table>
+      <table id="myTable" className="display text-dark"></table>
     </div>
   )
 }

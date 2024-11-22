@@ -1,5 +1,6 @@
 import budgetModel from "../model/budgetModel.js";
 import expressAsyncHandler from "express-async-handler";
+
 import outFlowModel from "../model/outFlowModel.js";
 // Get all budgets
 export const getAll = async (req, res) => {
@@ -115,23 +116,23 @@ export const statusUpdate = expressAsyncHandler(async (req, res) => {
     return `${date} ${time}`;
   }
 
-  const outFlowCustomize = {
-    dateTime: getCurrentDateTime(),
-    approver,
-    approverId,
-    category,
-    department,
-    totalAmount,
-  };
-  const outFlow = new outFlowModel(outFlowCustomize);
+  // const outFlowCustomize = {
+  //   dateTime: getCurrentDateTime(),
+  //   approver,
+  //   approverId,
+  //   category,
+  //   department,
+  //   totalAmount,
+  // };
+  // const outFlow = new outFlowModel(outFlowCustomize);
 
-  if (!outFlow) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Outflow not found!" });
-  }
+  // if (!outFlow) {
+  //   return res
+  //     .status(404)
+  //     .json({ success: false, message: "Outflow not found!" });
+  // }
 
-  outFlow.save();
+  // outFlow.save();
 
   res.status(200).json({
     success: true,

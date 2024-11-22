@@ -43,6 +43,8 @@ const getUsers = asyncHandler(async (req, res) => {
 
 const getSpecificId = asyncHandler(async (req, res) => {
   const { userId } = req.params;
+
+  console.log(userId);
   try {
     const getId = await userModel.findById(userId);
 
@@ -52,7 +54,7 @@ const getSpecificId = asyncHandler(async (req, res) => {
         .json({ success: false, message: "User not found!" });
     }
 
-    res.status(200).json({ success: true, data: getId });
+    res.status(200).json(getId);
   } catch (error) {
     res.status(500).json({ success: false, message: "Server Error" });
   }
@@ -108,12 +110,12 @@ const loginUser = asyncHandler(async (req, res) => {
   // Compare provided password with hashed password
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    return res
-      .status(401)
-      .json({ message: "Invalid credentials",  });
+    return res.status(401).json({ message: "Invalid credentials" });
   }
 
-  res.status(200).json({ message: "Login successful", user ,token: createToken(user._id) });
+  res
+    .status(200)
+    .json({ message: "Login successful", user, token: createToken(user._id) });
 });
 
 const createToken = (id) => {
