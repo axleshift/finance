@@ -11,6 +11,7 @@ import {
   faClipboard,
   faChartSimple,
 } from '@fortawesome/free-solid-svg-icons'
+import BudgetList from './components/Budget/BudgetList'
 
 const _nav = [
   {
@@ -43,8 +44,30 @@ const _nav = [
   },
   {
     component: CNavItem,
+    name: 'Budget',
+    to: '/budgetList',
+    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Training Budget Report',
+    to: '/trainingBudgetReport',
+    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
+  },
+  {
+    component: CNavItem,
     name: 'Financial Analytics',
     to: '/financial-analytics',
+    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
+  },
+  {
+    component: CNavTitle,
+    name: 'Account Management',
+  },
+  {
+    component: CNavItem,
+    name: 'Account Request',
+    to: '/account-request',
     icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
   },
 

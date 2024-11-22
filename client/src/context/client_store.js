@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import axios from 'axios'
 
-export const apiURL = 'http://127.0.0.1:8000'
+export const apiURL = 'http://localhost:4000'
 
 const client_store = create((set) => ({
   token: localStorage.getItem('token') || null,

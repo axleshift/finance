@@ -10,36 +10,6 @@ const EditInvoice = () => {
   const navigate = useNavigate()
   const { id } = useParams()
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`${apiURL}/api/invoices/${id}`)
-      const fetchedData = response.data
-
-      // Parse products JSON string into array if it exists
-      const products = fetchedData.products ? JSON.parse(fetchedData.products) : []
-
-      console.log(response.data)
-
-      // Set the invoice data with fetched values
-      setInvoice({
-        id: fetchedData.id || '',
-        firstName: fetchedData.firstName || '',
-        lastName: fetchedData.lastName || '',
-        address: fetchedData.address || '',
-        invoices: fetchedData.invoices || '',
-        email: fetchedData.email || '',
-        phone: fetchedData.phone || '',
-        paymentMethod: fetchedData.paymentMethod || '',
-        selectedCurrency: fetchedData.selectedCurrency || 'PHP',
-        status: fetchedData.status || 'Pending',
-        products: products.length > 0 ? products : [{ name: '', price: '', quantity: '' }],
-        totalAmount: fetchedData.totalAmount || 0,
-      })
-    } catch (error) {
-      console.log(error?.response?.data?.message)
-    }
-  }
-
   // State for invoice
   const [invoice, setInvoice] = useState({
     id: '',
@@ -60,6 +30,32 @@ const EditInvoice = () => {
     fetchData()
   }, [])
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${apiURL}/api/invoice/getSpecificId/${id}`)
+      const fetchedData = response.data.data
+
+      console.log(fetchedData)
+
+      // Set the invoice data with fetched values
+      setInvoice({
+        id: fetchedData?._id || '',
+        firstName: fetchedData?.firstName || '',
+        lastName: fetchedData.lastName || '',
+        address: fetchedData.address || '',
+        invoices: fetchedData.invoices || '',
+        email: fetchedData.email || '',
+        phone: fetchedData.phone || '',
+        paymentMethod: fetchedData.paymentMethod || '',
+        selectedCurrency: fetchedData.selectedCurrency || 'PHP',
+        status: fetchedData.status || 'Pending',
+        products: products.length > 0 ? products : [{ name: '', price: '', quantity: '' }],
+        totalAmount: fetchedData.totalAmount || 0,
+      })
+    } catch (error) {
+      console.log(error?.response?.data?.message)
+    }
+  }
   // Update state for input changes
   const handleChange = (e) => {
     const { name, value } = e.target

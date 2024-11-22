@@ -78,9 +78,9 @@ const GenerateInvoice = () => {
     e.preventDefault()
     console.log(invoice)
     console.log(invoice.totalAmount)
-    const response = await axios.post(`${apiURL}/api/invoices`, invoice)
+    const response = await axios.post(`${apiURL}/api/invoice/create`, invoice)
 
-    navigate(`/invoice-details/${response.data?.invoice?.id}`)
+    navigate(`/invoice-details/${response.data?.data?._id}`)
     toast.success('Created invoice successfully!')
     setInvoice({
       firstName: '',

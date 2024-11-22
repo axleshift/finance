@@ -19,9 +19,9 @@ const Invoices = () => {
 
   const fetchInvoiceData = async () => {
     try {
-      const response = await axios.get(`${apiURL}/api/invoices`)
-      setInvoiceData(response.data)
-      console.log(response.data)
+      const response = await axios.get(`${apiURL}/api/invoice/getAll`)
+      setInvoiceData(response.data.data)
+      console.log(response.data.data)
     } catch (error) {
       toast.error('Failed to fetch invoice data')
     }
@@ -32,7 +32,7 @@ const Invoices = () => {
       const table = new DataTable('#myTable', {
         data: invoiceData,
         columns: [
-          { title: 'Id', data: 'id' },
+          { title: 'Id', data: '_id' },
           { title: 'First Name', data: 'firstName' },
           { title: 'Last Name', data: 'lastName' },
           { title: 'Currency', data: 'selectedCurrency' },
@@ -71,13 +71,13 @@ const Invoices = () => {
                   <button class="bg-blue-500 btn btn-primary text-xs text-white px-2 py-1 rounded-lg mx-1 payBtn"  id="payBtn_${data.id}">
                     Pay
                   </button>
-                  <button class="bg-teal-500 text-xs btn btn-warning text-white px-2 py-1 rounded-lg mx-1 viewBtn" id="editBtn_${data.id}">
+                  <button class="bg-teal-500 text-xs btn btn-warning text-white px-2 py-1 rounded-lg mx-1 viewBtn" id="editBtn_${data._id}">
                     Edit
                   </button>
-                  <button class="bg-teal-500 text-xs btn btn-info text-white px-2 py-1 rounded-lg mx-1 viewBtn" id="viewBtn_${data.id}">
+                  <button class="bg-teal-500 text-xs btn btn-info text-white px-2 py-1 rounded-lg mx-1 viewBtn" id="viewBtn_${data._id}">
                     View
                   </button>
-                  <button class="bg-gray-500 text-xs btn btn-danger text-white px-2 py-1 rounded-lg mx-1 deleteBtn" id="deleteBtn_${data.id}">
+                  <button class="bg-gray-500 text-xs btn btn-danger text-white px-2 py-1 rounded-lg mx-1 deleteBtn" id="deleteBtn_${data._id}">
                     Delete
                   </button>
                 </div>
@@ -90,16 +90,16 @@ const Invoices = () => {
           const approveBtn = row.querySelector(`#approveBtn_${data.id}`)
           const rejectBtn = row.querySelector(`#rejectBtn_${data.id}`)
           const payBtn = row.querySelector(`#payBtn_${data.id}`)
-          const deleteBtn = row.querySelector(`#deleteBtn_${data.id}`)
-          const viewBtn = row.querySelector(`#viewBtn_${data.id}`)
-          const editBtn = row.querySelector(`#editBtn_${data.id}`)
+          const deleteBtn = row.querySelector(`#deleteBtn_${data._id}`)
+          const viewBtn = row.querySelector(`#viewBtn_${data._id}`)
+          const editBtn = row.querySelector(`#editBtn_${data._id}`)
 
           approveBtn?.addEventListener('click', () => handleApproval(data.id))
           rejectBtn?.addEventListener('click', () => handleRejection(data.id))
           payBtn?.addEventListener('click', () => handlePayment(data.id))
-          deleteBtn?.addEventListener('click', () => handleDelete(data.id))
-          viewBtn?.addEventListener('click', () => navigate(`/invoice-details/${data.id}`))
-          editBtn?.addEventListener('click', () => navigate(`/edit_invoice/${data.id}`))
+          deleteBtn?.addEventListener('click', () => handleDelete(data._id))
+          viewBtn?.addEventListener('click', () => navigate(`/invoice-details/${data._id}`))
+          editBtn?.addEventListener('click', () => navigate(`/edit_invoice/${data._id}`))
         },
       })
       // <button class="bg-green-500 text-xs text-white px-2 py-1 rounded-lg mx-1 approveBtn" ${
@@ -150,8 +150,9 @@ const Invoices = () => {
   const confirmDelete = async () => {
     console.log(`Deleting invoice with ID: ${selectedInvoiceId}`)
     try {
-      await axios.delete(`${apiURL}/api/invoices/${selectedInvoiceId}`)
+      await axios.delete(`${apiURL}/api/invoice/delete/${selectedInvoiceId}`)
       toast.warn('Deleted Successfully')
+      fetchInvoiceData()
       setInvoiceData((prevData) => prevData.filter((invoice) => invoice.id !== selectedInvoiceId)) // Update state to remove deleted invoice
     } catch (error) {
       toast.error('Failed to delete invoice')

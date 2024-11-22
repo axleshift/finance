@@ -9,7 +9,7 @@ const Invoice_details = () => {
   const [status, setStatus] = useState('Pending')
   const { id } = useParams()
   const [data, setData] = useState(null)
-  const [products, setProducts] = useState([])
+  // const [products, setProducts] = useState([])
 
   useEffect(() => {
     fetchSpecificId()
@@ -17,14 +17,11 @@ const Invoice_details = () => {
 
   const fetchSpecificId = async () => {
     try {
-      const response = await axios.get(`${apiURL}/api/invoices/${id}`)
-      console.log(response.data)
+      const response = await axios.get(`${apiURL}/api/invoice/getSpecificId/${id}`)
+      console.log(response.data.data)
 
       // Parse products JSON string if it exists
-      const invoiceData = response.data
-      invoiceData.products = invoiceData.products ? JSON.parse(invoiceData.products) : []
-
-      setData(invoiceData)
+      setData(response.data.data)
       setProducts(invoiceData.products)
       setStatus(invoiceData.status)
       console.log(invoiceData)
@@ -37,8 +34,8 @@ const Invoice_details = () => {
     const status = 'Paid'
     console.log(invoiceId)
     try {
-      const response = await axios.put(`${apiURL}/api/invoices/status/${invoiceId}`, { status })
-
+      const response = await axios.put(`${apiURL}/api/invoice/status/${invoiceId}`, { status })
+      fetchSpecificId()
       toast.success('Updated Successfully!')
     } catch (error) {
       console.log(error?.response?.data.message)
@@ -58,11 +55,11 @@ const Invoice_details = () => {
           <strong>Address:</strong> {data?.address}
         </p>
         <p>
-          <strong>Invoice Number:</strong> {data?.id}
+          <strong>Invoice Number:</strong> {data?._id}
         </p>
         <p>
           <strong>Date:</strong>
-          {new Date(data?.created_at).toLocaleDateString('en-US', {
+          {new Date(data?.createdAt).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -82,7 +79,7 @@ const Invoice_details = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((product, index) => (
+            {data?.products.map((product, index) => (
               <tr key={index}>
                 <td style={styles.cell}>{product?.name}</td>
                 <td style={styles.cell}>{product?.quantity}</td>
@@ -99,9 +96,9 @@ const Invoice_details = () => {
             <strong>Total Amount: ${data?.totalAmount}</strong>
           </p>
           <p>
-            <strong>Status:</strong> <span className="btn btn-primary">{status}</span>
+            <strong>Status:</strong> <span className="btn btn-primary">{data?.status}</span>
           </p>
-          {status === 'Pending' && (
+          {data?.status === 'Pending' && (
             <button
               className="btn btn-primary"
               style={styles.button}

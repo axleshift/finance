@@ -13,7 +13,7 @@
   "license": "MIT",
   "author": "The Freight Capsone Team (https://github.com/orgs/freight-capstone/people) && The CoreUI Team (https://github.com/orgs/coreui/people)",
   "scripts": {
-    "build": "env-cmd -f ./.env vite build",
+    "buil d": "env-cmd -f ./.env vite build",
     "lint": "eslint \"src/**/*.js\"",
     "lint-fix": "eslint \"src/**/*.js\" --fix",
     "serve": "vite preview",

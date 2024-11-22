@@ -1,6 +1,7 @@
 import userModel from "../model/userModel.js";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 const create = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -89,16 +90,34 @@ const updateUser = asyncHandler(async (req, res) => {
         .json({ success: false, message: "User not found!" });
     }
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Updated Successfully",
-        data: updatedUser,
-      });
+    res.status(200).json({
+      success: true,
+      message: "Updated Successfully",
+      data: updatedUser,
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server Error!" });
   }
 });
 
-export { create, getUsers, getSpecificId, deleteUser, updateUser };
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await userModel.findOne({ email: email });
+
+  // Compare provided password with hashed password
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return res
+      .status(401)
+      .json({ message: "Invalid credentials",  });
+  }
+
+  res.status(200).json({ message: "Login successful", user ,token: createToken(user._id) });
+});
+
+const createToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET);
+};
+
+export { create, getUsers, getSpecificId, deleteUser, updateUser, loginUser };
