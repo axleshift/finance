@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import userRouter from "./router/userRouter.js";
 import invoiceRouter from "./router/invoiceRouter.js";
 import budgetRouter from "./router/budgetRouter.js";
+import outFlowRouter from "./router/outFlowRouter.js";
 
 const port = process.env.PORT || 4000;
 
@@ -24,7 +25,7 @@ app.use("/api/user", userRouter);
 app.use("/api/invoice", invoiceRouter);
 app.use("/api/budget", budgetRouter);
 app.use("/api/accountRequest", budgetRouter);
-
+app.use("/api/outFlow", outFlowRouter);
 app.listen(port, () => {
   console.log(`Server Starter on http://localhost:${port}`);
 });
