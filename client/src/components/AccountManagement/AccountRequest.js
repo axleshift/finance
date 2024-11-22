@@ -90,7 +90,7 @@ const AccountRequest = () => {
 
   return (
     <div>
-      <h1>Account Lists</h1>
+      <h1>Account List</h1>
 
       <table id="myTable1" className="display"></table>
     </div>
