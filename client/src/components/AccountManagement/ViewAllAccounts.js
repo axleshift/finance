@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { apiURL } from '../../context/client_store'
 import {
+  CAvatar,
   CButton,
   CForm,
   CFormInput,
@@ -28,6 +29,7 @@ const ViewAllAccounts = () => {
     email: '',
     password: '',
     role: '',
+    image: '',
   })
 
   useEffect(() => {
@@ -47,9 +49,20 @@ const ViewAllAccounts = () => {
     const table = new DataTable('#myTable', {
       data: usersData,
       columns: [
+        {
+          title: 'Image',
+          data: null,
+          render: (data) => {
+            return `
+              <img class="w-50 rounded" src="${data?.image}" alt="Random Image" />
+            `
+          },
+        },
+
+        { title: 'ID', data: '_id' },
         { title: 'Full Name', data: 'fullName' },
         { title: 'Email', data: 'email' },
-        { title: 'Password', data: 'password' },
+        // { title: 'Password', data: 'password' },
         { title: 'Role', data: 'role' },
         {
           title: 'Action',
@@ -69,6 +82,13 @@ const ViewAllAccounts = () => {
               </div>
             `
           },
+        },
+      ],
+      columnDefs: [
+        {
+          targets: 0, // Image column
+          width: '150px', // Set the width of the Image column
+          className: 'text-center', // Optional: Centers content
         },
       ],
       order: [[0, 'desc']],
@@ -139,23 +159,36 @@ const ViewAllAccounts = () => {
       <table id="myTable" className="display w-full text-sm bg-primary text-dark font-bold"></table>
 
       {/* View Modal */}
-      <CModal visible={visibleView} onClose={() => setVisibleView(false)}>
+      <CModal alignment="center" visible={visibleView} onClose={() => setVisibleView(false)}>
         <CModalHeader>
           <CModalTitle>View Account Request</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <div>
-            <p>
-              <strong>Full Name:</strong> {selectedData?.fullName}
-            </p>
-            <p>
-              <strong>Email:</strong> {selectedData?.email}
-            </p>
-            <p>
-              <strong>Role:</strong> {selectedData?.role}
-            </p>
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <p>
+                  <strong>Full Name:</strong> {selectedData?.fullName}
+                </p>
+                <p>
+                  <strong>Email:</strong> {selectedData?.email}
+                </p>
+                <p>
+                  <strong>Role:</strong> {selectedData?.role}
+                </p>
+              </div>
+
+              {/* Center the avatar image */}
+              <div
+                className="d-flex justify-content-center align-items-center"
+                style={{ width: '100%' }}
+              >
+                <img color="secondary" src={selectedData?.image} className="w-50" />
+              </div>
+            </div>
           </div>
         </CModalBody>
+
         <CModalFooter>
           <CButton color="secondary" onClick={() => setVisibleView(false)}>
             Close
@@ -164,7 +197,7 @@ const ViewAllAccounts = () => {
       </CModal>
 
       {/* Edit Modal */}
-      <CModal visible={visibleEdit} onClose={() => setVisibleEdit(false)}>
+      <CModal alignment="center" visible={visibleEdit} onClose={() => setVisibleEdit(false)}>
         <CModalHeader>
           <CModalTitle>Edit Account</CModalTitle>
         </CModalHeader>
@@ -211,7 +244,7 @@ const ViewAllAccounts = () => {
       </CModal>
 
       {/* Delete Confirmation Modal */}
-      <CModal visible={visibleDelete} onClose={() => setVisibleDelete(false)}>
+      <CModal alignment="center" visible={visibleDelete} onClose={() => setVisibleDelete(false)}>
         <CModalHeader>
           <CModalTitle>Delete Confirmation</CModalTitle>
         </CModalHeader>

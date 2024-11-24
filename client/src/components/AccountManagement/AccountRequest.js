@@ -26,8 +26,15 @@ const AccountRequest = () => {
     email: '',
     password: '',
     role: '',
+    image: null,
   })
-  const [newAccount, setNewAccount] = useState({ fullName: '', email: '', password: '', role: '' })
+  const [newAccount, setNewAccount] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    role: '',
+    image: null,
+  })
 
   useEffect(() => {
     fetchAccountData()
@@ -82,7 +89,7 @@ const AccountRequest = () => {
 
   const handleView = (id) => {
     const selected = accountData.find((item) => item._id === id)
-    setSelectedData(selected || { fullName: '', email: '', password: '', role: '' })
+    setSelectedData(selected || { fullName: '', email: '', password: '', role: '', image: null })
     setVisibleView(true)
   }
 
@@ -103,12 +110,19 @@ const AccountRequest = () => {
   }
 
   const handleAddRequest = async () => {
+    const formData = new FormData()
+    Object.entries(newAccount).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+
     try {
-      const response = await axios.post(`${apiURL}/api/accountRequest`, newAccount)
+      await axios.post(`${apiURL}/api/accountRequest`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
       fetchAccountData()
       toast.success('Account Request Added Successfully!')
       setVisibleAdd(false)
-      setNewAccount({ fullName: '', email: '', password: '', role: '' }) // Reset form
+      setNewAccount({ fullName: '', email: '', password: '', role: '', image: null }) // Reset form
     } catch (error) {
       console.error('Failed to add account request:', error)
       toast.error('Failed to add account request')
@@ -116,12 +130,14 @@ const AccountRequest = () => {
   }
 
   const handleCreateAccount = async () => {
+    const formData = new FormData()
+    Object.entries(selectedData).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+
     try {
-      const response = await axios.post(`${apiURL}/api/user/create`, {
-        fullName: selectedData.fullName,
-        email: selectedData.email,
-        password: selectedData.password,
-        role: selectedData.role,
+      await axios.post(`${apiURL}/api/user/create`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       })
       toast.success('Account Created Successfully!')
       setVisibleView(false) // Close modal after creating account
@@ -133,7 +149,7 @@ const AccountRequest = () => {
 
   return (
     <div>
-      <h1>Account Lists</h1>
+      <h1>Account Request</h1>
 
       <CButton className="mb-3 btn btn-primary" onClick={() => setVisibleAdd(true)}>
         Add Request
@@ -142,7 +158,7 @@ const AccountRequest = () => {
       <table id="myTable" className="display text-dark"></table>
 
       {/* View Modal */}
-      <CModal visible={visibleView} onClose={() => setVisibleView(false)}>
+      <CModal alignment="center" visible={visibleView} onClose={() => setVisibleView(false)}>
         <CModalHeader>
           <CModalTitle>View Account Request</CModalTitle>
         </CModalHeader>
@@ -181,6 +197,13 @@ const AccountRequest = () => {
               <option value="staff">Staff</option>
               <option value="user">User</option>
             </CFormSelect>
+            <CFormInput
+              type="file"
+              label="Upload Image"
+              accept="image/*"
+              onChange={(e) => setSelectedData({ ...selectedData, image: e.target.files[0] })}
+              className="mb-3"
+            />
           </CForm>
         </CModalBody>
         <CModalFooter>
@@ -194,7 +217,7 @@ const AccountRequest = () => {
       </CModal>
 
       {/* Delete Confirmation Modal */}
-      <CModal visible={visibleDelete} onClose={() => setVisibleDelete(false)}>
+      <CModal alignment="center" visible={visibleDelete} onClose={() => setVisibleDelete(false)}>
         <CModalHeader>
           <CModalTitle>Delete Account</CModalTitle>
         </CModalHeader>
@@ -212,7 +235,7 @@ const AccountRequest = () => {
       </CModal>
 
       {/* Add Request Modal */}
-      <CModal visible={visibleAdd} onClose={() => setVisibleAdd(false)}>
+      <CModal alignment="center" visible={visibleAdd} onClose={() => setVisibleAdd(false)}>
         <CModalHeader>
           <CModalTitle>Add Account Request</CModalTitle>
         </CModalHeader>
@@ -233,13 +256,20 @@ const AccountRequest = () => {
               onChange={(e) => setNewAccount({ ...newAccount, email: e.target.value })}
               placeholder="Enter email"
             />
+            <CFormInput
+              type="file"
+              label="Upload Image"
+              accept="image/*"
+              onChange={(e) => setNewAccount({ ...newAccount, image: e.target.files[0] })}
+              className="mb-3"
+            />
           </CForm>
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setVisibleAdd(false)}>
-            Cancel
+            Close
           </CButton>
-          <CButton color="success" onClick={handleAddRequest}>
+          <CButton color="primary" onClick={handleAddRequest}>
             Add Request
           </CButton>
         </CModalFooter>

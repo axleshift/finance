@@ -129,7 +129,12 @@ const BudgetList = () => {
       <table id="myTable" className="display w-full text-sm bg-primary text-dark font-bold"></table>
 
       {/* View Modal */}
-      <CModal scrollable visible={visibleView} onClose={() => setVisibleView(false)}>
+      <CModal
+        alignment="center"
+        scrollable
+        visible={visibleView}
+        onClose={() => setVisibleView(false)}
+      >
         <CModalHeader>
           <CModalTitle>View Budget Details</CModalTitle>
         </CModalHeader>

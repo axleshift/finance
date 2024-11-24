@@ -158,7 +158,7 @@ const Invoices = () => {
       <table id="myTable" className="display w-full text-sm bg-primary text-dark font-bold"></table>
 
       {/* Rejection Confirmation Modal */}
-      <CModal visible={visibleReject} onClose={() => setVisibleReject(false)}>
+      <CModal alignment="center" visible={visibleReject} onClose={() => setVisibleReject(false)}>
         <CModalHeader>
           <CModalTitle>Reject Invoice</CModalTitle>
         </CModalHeader>
@@ -176,7 +176,7 @@ const Invoices = () => {
       </CModal>
 
       {/* Delete Confirmation Modal */}
-      <CModal visible={visibleDelete} onClose={() => setVisibleDelete(false)}>
+      <CModal alignment="center" visible={visibleDelete} onClose={() => setVisibleDelete(false)}>
         <CModalHeader>
           <CModalTitle>Delete Invoice</CModalTitle>
         </CModalHeader>
