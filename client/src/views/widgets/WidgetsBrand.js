@@ -102,7 +102,7 @@ const WidgetsBrand = (props) => {
             />
           }
           title={<span style={titleStyle}>TOTAL SPENT</span>} // Apply custom title style
-          value={<span style={valueStyle}>₱3,000.00</span>} // Apply custom value style
+          value={<span style={valueStyle}>₱30,000.00</span>} // Apply custom value style
         />
       </CCol>
     </CRow>
