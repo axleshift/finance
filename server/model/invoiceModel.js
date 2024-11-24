@@ -15,7 +15,7 @@ const invoiceSchema = mongoose.Schema(
       },
     ],
     selectedCurrency: { type: String },
-    status: { type: String },
+    status: { type: String, enum: ["Paid", "UnPaid"], default: "UnPaid" },
     email: { type: String },
     phone: { type: String },
     totalAmount: { type: Number },

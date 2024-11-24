@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import invoiceModel from "../model/invoiceModel.js";
+import Counter from "../model/Counter.js";
 
 // Create a new invoice
 const createInvoice = asyncHandler(async (req, res) => {
@@ -17,30 +18,39 @@ const createInvoice = asyncHandler(async (req, res) => {
     paymentMethod,
   } = req.body;
 
-  try {
-    const newInvoice = new invoiceModel({
-      invoiceNumber,
-      firstName,
-      lastName,
-      address,
-      products,
-      selectedCurrency,
-      status,
-      email,
-      phone,
-      totalAmount,
-      paymentMethod,
-    });
+  const counter = await Counter.findByIdAndUpdate(
+    {
+      _id: "invoiceNumber",
+    },
+    {
+      $inc: { sequence_value: 1 },
+    },
+    { new: true }
+  );
 
-    const savedInvoice = await newInvoice.save();
-    res.status(201).json({
-      success: true,
-      message: "Invoice created successfully!",
-      data: savedInvoice,
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Server Error!" });
-  }
+  const invoiceNumbers = counter.sequence_value.toString().padStart(3, "0");
+
+  const reference = `INV-${invoiceNumbers}`;
+  const newInvoice = new invoiceModel({
+    invoiceNumber: reference,
+    firstName,
+    lastName,
+    address,
+    products,
+    selectedCurrency,
+    status,
+    email,
+    phone,
+    totalAmount,
+    paymentMethod,
+  });
+
+  const savedInvoice = await newInvoice.save();
+  res.status(201).json({
+    success: true,
+    message: "Invoice created successfully!",
+    data: savedInvoice,
+  });
 });
 
 // Get all invoices

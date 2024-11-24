@@ -11,4 +11,6 @@ const accountRequestRouter = express.Router();
 accountRequestRouter.get("/", getAll);
 accountRequestRouter.post("/", create);
 accountRequestRouter.put("/", updateAccountRequest);
-accountRequestRouter.delete("/", deleteAccountRequest);
+accountRequestRouter.delete("/:id", deleteAccountRequest);
+
+export default accountRequestRouter;

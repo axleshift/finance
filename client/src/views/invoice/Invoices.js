@@ -32,45 +32,36 @@ const Invoices = () => {
       const table = new DataTable('#myTable', {
         data: invoiceData,
         columns: [
-          { title: 'Id', data: '_id' },
+          { title: 'Invoice#', data: 'invoiceNumber' },
           { title: 'First Name', data: 'firstName' },
           { title: 'Last Name', data: 'lastName' },
           { title: 'Currency', data: 'selectedCurrency' },
           { title: 'Status', data: 'status' },
-          {
-            title: 'Products',
-            data: 'products',
-            render: (data) => {
-              try {
-                const products = JSON.parse(data)
-                return products
-                  .map(
-                    (product) => `
-                  <div>
-                    ${product.name}: $${product.price} x ${product.quantity}
-                  </div>
-                `,
-                  )
-                  .join('')
-              } catch {
-                return 'N/A'
-              }
-            },
-          },
+          // { title: 'Email', data: 'email' },
+          { title: 'Payment Method', data: 'paymentMethod' },
+          { title: 'Total Amount', data: 'totalAmount' },
+          // {
+          //   title: 'Products',
+          //   data: 'products',
+          //   render: (data) => {
+          //     if (!Array.isArray(data)) return 'N/A' // Handle cases where products might not be an array
+          //     return data
+          //       .map(
+          //         (product) => `
+          //           <div>
+          //             ${product?.name || 'Unnamed Product'}: $${product?.price} x ${product?.quantity}
+          //           </div>
+          //         `,
+          //       )
+          //       .join('')
+          //   },
+          // },
           {
             title: 'Action',
             data: null,
             render: (data) => {
-              // const isPaid = data?.status === 'Paid'
-              // ${
-              //   isPaid ? "style='display:none;'" : ''
-              // }
               return `
                 <div>
-
-                  <button class="bg-blue-500 btn btn-primary text-xs text-white px-2 py-1 rounded-lg mx-1 payBtn"  id="payBtn_${data.id}">
-                    Pay
-                  </button>
                   <button class="bg-teal-500 text-xs btn btn-warning text-white px-2 py-1 rounded-lg mx-1 viewBtn" id="editBtn_${data._id}">
                     Edit
                   </button>

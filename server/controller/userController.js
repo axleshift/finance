@@ -2,8 +2,10 @@ import userModel from "../model/userModel.js";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import expressAsyncHandler from "express-async-handler";
+import accountRequestModel from "../model/accountRequestModel.js";
 const create = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { fullName, email, password, role } = req.body;
 
   try {
     const existingUser = await userModel.findOne({ email });
@@ -13,9 +15,10 @@ const create = asyncHandler(async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const createdUser = new userModel({
-      name,
+      fullName,
       email,
       password: hashedPassword,
+      role,
     });
 
     await createdUser.save();
@@ -82,15 +85,25 @@ const updateUser = asyncHandler(async (req, res) => {
   const { userId } = req.params;
 
   try {
-    const updatedUser = await userModel.findByIdAndUpdate(userId, req.body, {
-      new: true,
-    });
+    const user = await userModel.findById(userId);
 
-    if (!updatedUser) {
+    if (!user) {
       return res
         .status(404)
         .json({ success: false, message: "User not found!" });
     }
+
+    // Check if password needs updating
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      req.body.password = await bcrypt.hash(req.body.password, salt);
+    } else {
+      delete req.body.password; // Remove password from update payload if not provided
+    }
+
+    const updatedUser = await userModel.findByIdAndUpdate(userId, req.body, {
+      new: true,
+    });
 
     res.status(200).json({
       success: true,
@@ -98,10 +111,10 @@ const updateUser = asyncHandler(async (req, res) => {
       data: updatedUser,
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ success: false, message: "Server Error!" });
   }
 });
-
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -121,5 +134,9 @@ const loginUser = asyncHandler(async (req, res) => {
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
 };
+
+// const getRequestAccount = expressAsyncHandler(async(req,res) => {
+//   const getAll = await userModel.
+// })
 
 export { create, getUsers, getSpecificId, deleteUser, updateUser, loginUser };

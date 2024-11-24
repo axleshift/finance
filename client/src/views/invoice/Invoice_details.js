@@ -55,7 +55,10 @@ const Invoice_details = () => {
           <strong>Address:</strong> {data?.address}
         </p>
         <p>
-          <strong>Invoice Number:</strong> {data?._id}
+          <strong>Invoice Number:</strong> {data?.invoiceNumber}
+        </p>
+        <p>
+          <strong>Email:</strong> {data?.email}
         </p>
         <p>
           <strong>Date:</strong>

@@ -1,8 +1,10 @@
 import { create } from 'zustand'
 import axios from 'axios'
 
-export const apiURL = 'http://localhost:4000'
-
+export const apiURL =
+  window.location.hostname === 'localhost'
+    ? 'http://localhost:5054'
+    : 'https://backend-finance.axleshift.com'
 const client_store = create((set) => ({
   token: localStorage.getItem('token') || null,
   fetchUserData: async () => {

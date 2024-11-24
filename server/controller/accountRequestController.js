@@ -9,7 +9,16 @@ const create = expressAsyncHandler(async (req, res) => {
     email,
   });
 
+  if(!created){
+    return res.status(404).json({success:false, message:'Account Request Not found'})
+  }
+  
   created.save();
+
+  res.status(201).json({success:true, message:'Created Account Request'})
+
+
+
 });
 
 const getAll = expressAsyncHandler(async (req, res) => {

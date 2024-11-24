@@ -13,8 +13,6 @@ const GenerateInvoice = () => {
     email: '',
     phone: '',
     paymentMethod: '',
-    // showReceipt: false,
-    // editInvoice: false,
     selectedCurrency: '',
     status: 'Pending',
     products: [{ name: '', price: '', quantity: '' }],
@@ -86,7 +84,7 @@ const GenerateInvoice = () => {
       firstName: '',
       lastName: '',
       address: '',
-      invoices: '',
+      // invoices: '',
       email: '',
       phone: '',
       paymentMethod: '',
@@ -102,7 +100,7 @@ const GenerateInvoice = () => {
     <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
       <h2 className="text-red-500">Generate Invoice</h2>
       <form onSubmit={handleSubmit}>
-        <CRow>
+        {/* <CRow>
           <CCol>
             <label>Invoice Number</label>
             <CFormInput
@@ -113,7 +111,7 @@ const GenerateInvoice = () => {
               required
             />
           </CCol>
-        </CRow>
+        </CRow> */}
 
         <div className="row ">
           <div className="col">

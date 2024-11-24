@@ -26,7 +26,7 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Generate Invoice',
+    name: 'Billing Invoice',
     to: '/generateInvoice',
     icon: <FontAwesomeIcon icon={faFileInvoice} className="nav-icon" />,
   },
@@ -68,6 +68,12 @@ const _nav = [
     component: CNavItem,
     name: 'Account Request',
     to: '/account-request',
+    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'View All Accounts',
+    to: '/viewAllAccounts',
     icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
   },
 
