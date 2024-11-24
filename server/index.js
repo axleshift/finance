@@ -8,6 +8,7 @@ import invoiceRouter from "./router/invoiceRouter.js";
 import budgetRouter from "./router/budgetRouter.js";
 import outFlowRouter from "./router/outFlowRouter.js";
 import accountRequestRouter from "./router/accountRequest.js";
+import depositRouter from "./router/depositRouter.js";
 
 const port = process.env.PORT || 5054;
 
@@ -45,6 +46,7 @@ app.use("/api/invoice", invoiceRouter);
 app.use("/api/budget", budgetRouter);
 app.use("/api/accountRequest", accountRequestRouter);
 app.use("/api/outFlow", outFlowRouter);
+app.use("/api/deposit", depositRouter);
 app.listen(port, () => {
   console.log(`Server Starter on http://localhost:${port}`);
 });
