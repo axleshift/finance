@@ -179,6 +179,7 @@ const Dashboard = () => {
   return (
     <>
       <WidgetsDropdown className="mb-4" />
+      <WidgetsBrand className="mb-4" withCharts />
       <CCard className="mb-4">
         <CCardBody>
           <CRow>
@@ -233,7 +234,6 @@ const Dashboard = () => {
           </CRow>
         </CCardFooter>
       </CCard>
-      <WidgetsBrand className="mb-4" withCharts />
       <CRow>
         <CCol xs>
           <CCard className="mb-4">
