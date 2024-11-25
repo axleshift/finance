@@ -16,10 +16,11 @@ import { cilChartPie } from '@coreui/icons'
 import axios from 'axios'
 import { apiURL } from '../../context/client_store'
 import client_store from '../../context/client_store'
+import { toast } from 'react-toastify'
 
 const cashData = [
   { title: 'Total Cash of the Company', value: '$100,000', color: 'primary' },
-  { title: 'Cash Deposit', value: '$25,000', color: 'success' },
+  { title: 'Cash Deposit', color: 'success' },
   { title: 'Cash Withdrawal', value: '$15,000', color: 'danger' },
 ]
 
@@ -35,7 +36,7 @@ const CashSummary = () => {
   const [passwordModalVisible, setPasswordModalVisible] = useState(false)
   const [transactionAmount, setTransactionAmount] = useState('')
   const [password, setPassword] = useState('')
-
+  const [totalCompanyCash, setTotalCompanyCash] = useState(null)
   const handleTransaction = async () => {
     // Logic for handling Deposit/Withdraw
     console.log(`${operation} Amount:`, transactionAmount)
@@ -44,11 +45,15 @@ const CashSummary = () => {
     if (operation === 'Deposit') {
       try {
         const response = await axios.post(`${apiURL}/api/deposit/create`, {
-          // email
+          email: userData?.email,
           password: password,
           totalAmount: transactionAmount,
         })
-      } catch (error) {}
+
+        toast.success(response.data.message)
+      } catch (error) {
+        toast.error(error?.response.data.message)
+      }
     } else {
       try {
       } catch (error) {}

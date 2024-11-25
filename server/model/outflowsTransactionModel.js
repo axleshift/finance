@@ -1,8 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const schema = mongoose.Schema;
-
-const outflowsTransactionSchema = new schema({
+const outflowsTransactionSchema = mongoose.Schema({
   dateTime: { type: String, required: true },
   approver: { type: String, required: true },
   approverId: { type: String, required: true },

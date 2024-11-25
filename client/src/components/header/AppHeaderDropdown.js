@@ -28,6 +28,11 @@ import avatar8 from './../../assets/images/avatars/8.jpg'
 const AppHeaderDropdown = () => {
   const navigate = useNavigate()
 
+  const handleLogout = async () => {
+    localStorage.removeItem('token')
+    navigate('/login')
+  }
+
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
@@ -87,7 +92,7 @@ const AppHeaderDropdown = () => {
           </CBadge>
         </CDropdownItem>
         <CDropdownDivider />
-        <CDropdownItem href="/login">
+        <CDropdownItem onClick={handleLogout}>
           <CIcon icon={cilLockLocked} className="me-2" />
           Logout
         </CDropdownItem>

@@ -1,8 +1,10 @@
+import expressAsyncHandler from "express-async-handler";
 import depositModel from "./depositModel.js";
 import inflowsTransactionModel from "./inflowsTransactionModel.js";
 import outflowsTransactionModel from "./outflowsTransactionModel.js";
 import withdrawModel from "./withdrawModel.js";
 
+// Function to calculate total inflows amount
 const totalInflowsAmount = async () => {
   const inflows = await inflowsTransactionModel.aggregate([
     {
@@ -16,7 +18,7 @@ const totalInflowsAmount = async () => {
   return inflows.length > 0 ? inflows[0].totalAmount : 0;
 };
 
-//TOTAL OUTFLOW MONEY
+// Function to calculate total outflows amount
 const totalOutflowsAmount = async () => {
   const outflows = await outflowsTransactionModel.aggregate([
     {
@@ -27,24 +29,24 @@ const totalOutflowsAmount = async () => {
     },
   ]);
 
-  //TOTAL DEPOSITS RECORD
-  const totalDepositAmount = async () => {
-    const depositAmount = await depositModel.aggregate([
-      {
-        $group: {
-          _id: null,
-          totalAmount: { $sum: "$totalAmount" },
-        },
-      },
-    ]);
-
-    return depositAmount.length > 0 ? depositAmount[0].totalAmount : 0;
-  };
-
   return outflows.length > 0 ? outflows[0].totalAmount : 0;
 };
 
-//TOTAL WITHDRAW RECORD
+// Function to calculate total deposit amount
+const totalDepositAmount = async () => {
+  const depositAmount = await depositModel.aggregate([
+    {
+      $group: {
+        _id: null,
+        totalAmount: { $sum: "$totalAmount" },
+      },
+    },
+  ]);
+
+  return depositAmount.length > 0 ? depositAmount[0].totalAmount : 0;
+};
+
+// Function to calculate total withdraw amount
 const totalWithdrawAmount = async () => {
   const withdrawAmount = await withdrawModel.aggregate([
     {
@@ -58,8 +60,8 @@ const totalWithdrawAmount = async () => {
   return withdrawAmount.length > 0 ? withdrawAmount[0].totalAmount : 0;
 };
 
-// Calculate total cash
-const totalCompanyCash = async () => {
+// Calculate total cash of the company
+const totalCompanyCash = expressAsyncHandler(async (req, res) => {
   const inflows = await totalInflowsAmount();
   const outflows = await totalOutflowsAmount();
   const deposit = await totalDepositAmount();
@@ -68,7 +70,7 @@ const totalCompanyCash = async () => {
   const totalInflows = inflows + deposit;
   const totalOutflows = outflows + withdraw;
 
-  return totalInflows - totalOutflows;
-};
+  res.status(200).json(totalInflows - totalOutflows);
+});
 
 export { totalCompanyCash };
