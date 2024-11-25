@@ -36,6 +36,7 @@ const _nav = [
     component: CNavTitle,
     name: 'Finance',
   },
+
   {
     component: CNavItem,
     name: 'Billing Invoice',
@@ -54,22 +55,28 @@ const _nav = [
     to: '/audit',
     icon: <FontAwesomeIcon icon={faClipboard} className="nav-icon" />,
   },
+
   {
     component: CNavItem,
-    name: 'Budget',
+    name: 'Financial Analytics',
+    to: '/financial-analytics',
+    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
+  },
+
+  {
+    component: CNavTitle,
+    name: 'BUDGET MANAGEMENT',
+  },
+  {
+    component: CNavItem,
+    name: 'Budget Requests',
     to: '/budgetList',
     icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
   },
   {
     component: CNavItem,
-    name: 'Training Budget Report',
+    name: 'Budget Reports',
     to: '/trainingBudgetReport',
-    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Financial Analytics',
-    to: '/financial-analytics',
     icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
   },
   {
