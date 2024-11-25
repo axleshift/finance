@@ -3,6 +3,7 @@ import EditInvoice from './views/invoice/EditInvoice.js'
 import BudgetList from './components/Budget/BudgetList.js'
 import AccountRequest from './components/AccountManagement/AccountRequest.js'
 import ViewAllAccounts from './components/AccountManagement/ViewAllAccounts.js'
+import ViewCollection from './views/CashManagement/ViewCollection.js'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const GenInvoice = lazy(() => import('./views/generate-invoice/generate-invoice.js'))
@@ -28,6 +29,8 @@ const routes = [
   { path: '/budgetList', name: 'Budget List', element: BudgetList },
   { path: '/account-request', name: 'Account Request', element: AccountRequest },
   { path: '/viewAllAccounts', name: 'View All Account', element: ViewAllAccounts },
+
+  { path: '/viewCollection', name: 'ViewCollection', element: ViewCollection },
 ]
 
 export default routes

@@ -25,5 +25,6 @@ userRouter.get("/account", authMiddleware, getSpecificId);
 userRouter.delete("/delete/:userId", deleteUser);
 userRouter.put("/update/:userId", updateUser);
 userRouter.post("/login", loginUser);
+userRouter.get("/accountData", authMiddleware, getSpecificId);
 
 export default userRouter;

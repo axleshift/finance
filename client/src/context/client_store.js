@@ -7,6 +7,7 @@ export const apiURL =
     : 'https://backend-finance.axleshift.com'
 const client_store = create((set) => ({
   token: localStorage.getItem('token') || null,
+  userData: null,
   fetchUserData: async () => {
     const token = localStorage.getItem('token')
     if (!token) {
@@ -16,7 +17,7 @@ const client_store = create((set) => ({
 
     try {
       set({ loading: true })
-      const response = await axios.get(`${apiURL}/api/user`, {
+      const response = await axios.get(`${apiURL}/api/user/accountData`, {
         headers: {
           token: token,
         },

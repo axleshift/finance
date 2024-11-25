@@ -22,6 +22,18 @@ const _nav = [
   },
   {
     component: CNavTitle,
+    name: 'Cash Management',
+  },
+  {
+    component: CNavItem,
+    name: 'View Collection',
+    to: '/viewCollection',
+    icon: <FontAwesomeIcon icon={faFileInvoice} className="nav-icon" />,
+  },
+  // End
+
+  {
+    component: CNavTitle,
     name: 'Finance',
   },
   {

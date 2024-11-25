@@ -73,22 +73,16 @@ const getUsers = asyncHandler(async (req, res) => {
 });
 
 const getSpecificId = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
+  const { userId } = req.body;
 
   console.log(userId);
-  try {
-    const getId = await userModel.findById(userId);
+  const getId = await userModel.findById(userId);
 
-    if (!getId) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found!" });
-    }
-
-    res.status(200).json(getId);
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Server Error" });
+  if (!getId) {
+    return res.status(404).json({ success: false, message: "User not found!" });
   }
+
+  res.status(200).json(getId);
 });
 
 const deleteUser = asyncHandler(async (req, res) => {
