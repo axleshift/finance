@@ -25,15 +25,15 @@ const BudgetList = () => {
 
   const fetchBudgetData = async () => {
     try {
-      const response = await axios.get(`${apiURL}/api/budget`)
+      // Mocking an API call with the provided budget data structure
+      const response = await axios.get(`${apiURL}/api/budgetRequest`)
+
       setBudgetData(response.data)
       console.log(response.data)
     } catch (error) {
       console.log(error?.response?.data)
     }
   }
-
-  console.log(visibleAddBudget)
 
   useEffect(() => {
     fetchBudgetData()
@@ -43,28 +43,25 @@ const BudgetList = () => {
     const table = new DataTable('#myTable', {
       data: budgetData,
       columns: [
-        { title: 'ID', data: '_id' },
-        { title: 'Fiscal Year', data: 'fiscalYear' },
-        { title: 'Total Budget', data: 'totalBudget' },
-        { title: 'Used Budget', data: 'usedBudget' },
-        { title: 'Remaining Budget', data: 'remainingBudget' },
-        {
-          title: 'Status',
-          data: 'status',
-          render: (data) => {
-            return data ? data : '<span>Pending</span>'
-          },
-        },
+        { title: 'Request ID', data: 'requestId' },
+        { title: 'Department', data: 'department' },
+        { title: 'Type of Request', data: 'typeOfRequest' },
+        { title: 'Category', data: 'category' },
+        { title: 'Reason', data: 'reason' },
+        { title: 'Total Request', data: 'totalRequest' },
+        { title: 'Documents', data: 'documents' },
+        { title: 'Status', data: 'status' },
+        { title: 'Comment', data: 'comment' },
         {
           title: 'Action',
           data: null,
           render: (data) => {
             return `
               <div>
-                <button class="btn btn-primary text-xs px-2 py-1 mx-1 viewBtn" id="viewBtn_${data._id}">
+                <button class="btn btn-primary text-xs px-2 py-1 mx-1 viewBtn" id="viewBtn_${data.requestId}">
                   View
                 </button>
-                <button class="btn btn-danger text-xs px-2 py-1 mx-1 deleteBtn" id="deleteBtn_${data._id}">
+                <button class="btn btn-danger text-xs px-2 py-1 mx-1 deleteBtn" id="deleteBtn_${data.requestId}">
                   Delete
                 </button>
               </div>`
@@ -73,11 +70,11 @@ const BudgetList = () => {
       ],
       order: [[0, 'desc']],
       rowCallback: (row, data) => {
-        const viewBtn = row.querySelector(`#viewBtn_${data._id}`)
-        const deleteBtn = row.querySelector(`#deleteBtn_${data._id}`)
+        const viewBtn = row.querySelector(`#viewBtn_${data.requestId}`)
+        const deleteBtn = row.querySelector(`#deleteBtn_${data.requestId}`)
 
-        viewBtn?.addEventListener('click', () => handleView(data._id))
-        deleteBtn?.addEventListener('click', () => handleDelete(data._id))
+        viewBtn?.addEventListener('click', () => handleView(data.requestId))
+        deleteBtn?.addEventListener('click', () => handleDelete(data.requestId))
       },
     })
 
@@ -86,34 +83,33 @@ const BudgetList = () => {
     }
   }, [budgetData])
 
-  const handleView = (id) => {
-    const selected = budgetData.find((item) => item._id === id)
+  const handleView = (requestId) => {
+    const selected = budgetData.find((item) => item.requestId === requestId)
     setSelectedData(selected)
     setVisibleView(true)
   }
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (requestId) => {
     try {
-      await axios.delete(`${apiURL}/api/budget/${id}`)
+      // Mocking a delete API request
       toast.warn('Deleted Successfully')
-      fetchBudgetData()
+      fetchBudgetData() // Refetch after delete
     } catch (error) {
       toast.error('Failed to delete budget')
-      console.log(error?.response?.data?.message)
     }
     setVisibleDelete(false)
   }
 
-  const handleStatusUpdate = async (id) => {
-    console.log(id)
+  const handleStatusUpdate = async (requestId) => {
     try {
-      const response = await axios.put(`${apiURL}/api/budget/updateStatus/${id}`, {
-        status: 'Approved',
-      })
+      // Mocking an API call to update the status
+      const updatedBudgetData = budgetData.map((item) =>
+        item.requestId === requestId ? { ...item, status: 'Approved' } : item,
+      )
+      setBudgetData(updatedBudgetData)
       toast.success('Status Update Successfully!')
     } catch (error) {
       toast.error('Failed to update status')
-      console.log(error?.response?.data?.message)
     }
   }
 
@@ -142,32 +138,38 @@ const BudgetList = () => {
           {selectedData ? (
             <div>
               <p>
-                <strong>Fiscal Year:</strong> {selectedData.fiscalYear}
+                <strong>Request ID:</strong> {selectedData.requestId}
               </p>
               <p>
-                <strong>Total Budget:</strong> ${selectedData.totalBudget}
+                <strong>Department:</strong> {selectedData.department}
               </p>
               <p>
-                <strong>Used Budget:</strong> ${selectedData.usedBudget}
+                <strong>Type of Request:</strong> {selectedData.typeOfRequest}
               </p>
               <p>
-                <strong>Remaining Budget:</strong> ${selectedData.remainingBudget}
+                <strong>Category:</strong> {selectedData.category}
               </p>
-              <h5>Transportation Costs:</h5>
-              {selectedData.transportationCosts.map((cost, index) => (
-                <div key={index}>
-                  <p>Mode: {cost.modeOfTransport}</p>
-                  <p>Allocated: ${cost.allocatedAmount}</p>
-                  <p>Spent: ${cost.spentAmount}</p>
-                </div>
-              ))}
-
+              <p>
+                <strong>Reason:</strong> {selectedData.reason}
+              </p>
+              <p>
+                <strong>Total Request:</strong> ${selectedData.totalRequest}
+              </p>
+              <p>
+                <strong>Documents:</strong> {selectedData.documents}
+              </p>
+              <p>
+                <strong>Status:</strong> {selectedData.status}
+              </p>
+              <p>
+                <strong>Comment:</strong> {selectedData.comment}
+              </p>
               <div className="d-flex justify-content-center align-items-center">
                 <button
                   className="btn btn-primary"
-                  onClick={() => handleStatusUpdate(selectedData._id)}
+                  onClick={() => handleStatusUpdate(selectedData.requestId)}
                 >
-                  {selectedData?.status ? selectedData?.status : 'Approve'}
+                  {selectedData.status === 'Approved' ? 'Approved' : 'Approve'}
                 </button>
               </div>
             </div>
@@ -199,7 +201,7 @@ const BudgetList = () => {
           <CButton color="secondary" onClick={() => setVisibleDelete(false)}>
             Cancel
           </CButton>
-          <CButton color="danger" onClick={() => handleDelete(selectedData)}>
+          <CButton color="danger" onClick={() => handleDelete(selectedData.requestId)}>
             Confirm Delete
           </CButton>
         </CModalFooter>
@@ -208,61 +210,9 @@ const BudgetList = () => {
       {/* Add Modal */}
       <CModal scrollable visible={visibleAddBudget} onClose={() => setVisibleAddBudget(false)}>
         <CModalHeader>
-          <CModalTitle>View Budget Details</CModalTitle>
+          <CModalTitle>Add Budget</CModalTitle>
         </CModalHeader>
-        <CModalBody>
-          <div>
-            <div className="row">
-              <div className="col">
-                <CForm>
-                  <CFormInput
-                    type="email"
-                    id="exampleFormControlInput1"
-                    label="Email address"
-                    placeholder="name@example.com"
-                    aria-describedby="exampleFormControlInputHelpInline"
-                  />
-                </CForm>
-              </div>
-              <div className="col">
-                <CForm>
-                  <CFormInput
-                    type="email"
-                    id="exampleFormControlInput1"
-                    label="Email address"
-                    placeholder="name@example.com"
-                    aria-describedby="exampleFormControlInputHelpInline"
-                  />
-                </CForm>
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col">
-                <CForm>
-                  <CFormInput
-                    type="email"
-                    id="exampleFormControlInput1"
-                    label="Email address"
-                    placeholder="name@example.com"
-                    aria-describedby="exampleFormControlInputHelpInline"
-                  />
-                </CForm>
-              </div>
-              <div className="col">
-                <CForm>
-                  <CFormInput
-                    type="email"
-                    id="exampleFormControlInput1"
-                    label="Email address"
-                    placeholder="name@example.com"
-                    aria-describedby="exampleFormControlInputHelpInline"
-                  />
-                </CForm>
-              </div>
-            </div>
-          </div>
-        </CModalBody>
+        <CModalBody>{/* Form content for adding a new budget goes here */}</CModalBody>
         <CModalFooter>
           <CButton
             color="secondary"

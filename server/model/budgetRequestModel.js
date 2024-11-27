@@ -1,0 +1,20 @@
+import mongoose from "mongoose";
+
+const budgetRequestSchema = mongoose.Schema(
+  {
+    requestId: { type: String, required: true },
+    department: { type: String, required: true },
+    typeOfRequest: { type: String, required: true },
+    category: { type: String, required: true },
+    reason: { type: String, required: true },
+    totalRequest: { type: Number, required: true },
+    documents: { type: String, required: true },
+    status: { type: String, required: true },
+    comment: { type: String },
+  },
+  { timestamps: true }
+);
+
+const budgetRequestModel = mongoose.model("budgetRequest", budgetRequestSchema);
+
+export default budgetRequestModel;
