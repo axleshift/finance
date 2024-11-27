@@ -17,56 +17,83 @@ import axios from 'axios'
 import { apiURL } from '../../context/client_store'
 import client_store from '../../context/client_store'
 import { toast } from 'react-toastify'
-
-const cashData = [
-  { title: 'Total Cash of the Company', value: '$100,000', color: 'primary' },
-  { title: 'Cash Deposit', color: 'success' },
-  { title: 'Cash Withdrawal', value: '$15,000', color: 'danger' },
-]
+import { FaRegPlusSquare } from 'react-icons/fa'
 
 const CashSummary = () => {
   const { userData, fetchUserData } = client_store()
 
-  useEffect(() => {
-    fetchUserData()
-  }, [])
-  console.log(userData)
+  // State variables
   const [operation, setOperation] = useState('') // To differentiate Deposit/Withdraw
   const [amountModalVisible, setAmountModalVisible] = useState(false)
   const [passwordModalVisible, setPasswordModalVisible] = useState(false)
   const [transactionAmount, setTransactionAmount] = useState('')
   const [password, setPassword] = useState('')
   const [totalCompanyCash, setTotalCompanyCash] = useState(null)
-  const handleTransaction = async () => {
-    // Logic for handling Deposit/Withdraw
-    console.log(`${operation} Amount:`, transactionAmount)
-    console.log('Password:', password)
 
-    if (operation === 'Deposit') {
-      try {
-        const response = await axios.post(`${apiURL}/api/deposit/create`, {
-          email: userData?.email,
-          password: password,
-          totalAmount: transactionAmount,
-        })
+  // Fetch user data on component mount
+  useEffect(() => {
+    fetchUserData()
+    fetchTotalCompanyCash()
+  }, [])
 
-        toast.success(response.data.message)
-      } catch (error) {
-        toast.error(error?.response.data.message)
-      }
-    } else {
-      try {
-      } catch (error) {}
+  // Fetch total cash of the company
+  const fetchTotalCompanyCash = async () => {
+    try {
+      const response = await axios.get(`${apiURL}/api/totalCash`)
+      setTotalCompanyCash(response.data)
+    } catch (error) {
+      console.error('Error fetching total company cash:', error?.response?.data?.message || error)
     }
+  }
+
+  // Handle deposit or withdrawal
+  const handleTransaction = async () => {
+    if (!transactionAmount || !password) {
+      toast.error('Please enter an amount and password.')
+      return
+    }
+
+    try {
+      const endpoint =
+        operation === 'Deposit' ? `${apiURL}/api/deposit/create` : `${apiURL}/api/withdraw/create`
+
+      const payload = {
+        email: userData?.email,
+        password,
+        totalAmount: transactionAmount,
+      }
+
+      const response = await axios.post(endpoint, payload)
+      toast.success(response.data.message)
+
+      // Refresh total cash after transaction
+      fetchTotalCompanyCash()
+    } catch (error) {
+      toast.error(error?.response?.data?.message || 'Transaction failed.')
+    }
+
+    // Reset modal states
     setPasswordModalVisible(false)
     setTransactionAmount('')
     setPassword('')
   }
 
+  // Open transaction modals
   const openTransactionModals = (transactionType) => {
     setOperation(transactionType)
     setAmountModalVisible(true)
   }
+
+  // Dynamic cash data
+  const cashData = [
+    {
+      title: 'Total Cash of the Company',
+      value: totalCompanyCash !== null ? `$${totalCompanyCash}` : 'Loading...',
+      color: 'primary',
+    },
+    { title: 'Cash Deposit', color: 'success' },
+    { title: 'Cash Withdrawal', value: '$15,000', color: 'danger' },
+  ]
 
   return (
     <CRow>
@@ -77,7 +104,7 @@ const CashSummary = () => {
             color={cashItem.color}
             icon={<CIcon icon={cilChartPie} height={24} />}
             title={cashItem.title}
-            value={cashItem.value}
+            value={cashItem.value || ''}
             onClick={() =>
               cashItem.title === 'Cash Deposit'
                 ? openTransactionModals('Deposit')
@@ -95,7 +122,7 @@ const CashSummary = () => {
         onClose={() => setAmountModalVisible(false)}
       >
         <CModalHeader>
-          <CModalTitle>Enter {operation === 'Deposit' ? 'Deposit' : 'Withdraw'} Amount</CModalTitle>
+          <CModalTitle>Enter {operation} Amount</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput

@@ -1,6 +1,7 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
 import { cilSpeedometer, cilStar } from '@coreui/icons'
+import { AiOutlineAudit } from 'react-icons/ai'
 
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -49,12 +50,6 @@ const _nav = [
     to: '/invoices',
     icon: <FontAwesomeIcon icon={faReceipt} className="nav-icon" />,
   },
-  {
-    component: CNavItem,
-    name: 'Freight Audit',
-    to: '/audit',
-    icon: <FontAwesomeIcon icon={faClipboard} className="nav-icon" />,
-  },
 
   {
     component: CNavItem,
@@ -63,6 +58,18 @@ const _nav = [
     icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
   },
 
+  {
+    component: CNavGroup,
+    name: 'Freight Audit',
+    icon: <AiOutlineAudit className="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Payroll',
+        to: '/audit',
+      },
+    ],
+  },
   {
     component: CNavTitle,
     name: 'BUDGET MANAGEMENT',
