@@ -4,61 +4,73 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cloudinary from "../utils/cloudinary.js";
 import fs from "fs";
+import Counter from "../model/Counter.js";
 
 const create = asyncHandler(async (req, res) => {
   const { fullName, email, password, role, phone, address } = req.body;
 
-  try {
-    // Check if the email is already in use
-    const existingUser = await userModel.findOne({ email });
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Email already in use" });
-    }
+  const counter = await Counter.findByIdAndUpdate(
+    {
+      _id: "userNumber",
+    },
+    {
+      $inc: { sequence_value: 1 },
+    },
+    { new: true, upsert: true }
+  );
 
-    // Handle image upload if a file is provided
-    let image = null;
-    if (req.file) {
-      try {
-        const result = await cloudinary.uploader.upload(req.file.path, {
-          folder: "FREIGHT_USER_PROFILE",
-        });
+  const userNumber = counter.sequence_value.toString().padStart(3, "0");
 
-        // Remove the local file after uploading
-        fs.unlinkSync(req.file.path);
-        image = result.secure_url;
-      } catch (error) {
-        return res
-          .status(500)
-          .json({ success: false, message: "Image upload failed", error });
-      }
-    }
+  const reference = `USER-${userNumber}`;
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create the user
-    const createdUser = new userModel({
-      fullName,
-      email,
-      password: hashedPassword,
-      role,
-      phone,
-      address,
-      image,
-    });
-
-    await createdUser.save();
-
-    res.status(201).json({
-      success: true,
-      message: "User created successfully!",
-      data: createdUser,
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Server Error", error });
+  // Check if the email is already in use
+  const existingUser = await userModel.findOne({ email });
+  if (existingUser) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Email already in use" });
   }
+
+  // Handle image upload if a file is provided
+  let image = null;
+  if (req.file) {
+    try {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "FREIGHT_USER_PROFILE",
+      });
+
+      // Remove the local file after uploading
+      fs.unlinkSync(req.file.path);
+      image = result.secure_url;
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Image upload failed", error });
+    }
+  }
+
+  // Hash the password
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Create the user
+  const createdUser = new userModel({
+    userNumber: reference,
+    fullName,
+    email,
+    password: hashedPassword,
+    role,
+    phone,
+    address,
+    image,
+  });
+
+  await createdUser.save();
+
+  res.status(201).json({
+    success: true,
+    message: "User created successfully!",
+    data: createdUser,
+  });
 });
 
 const getUsers = asyncHandler(async (req, res) => {

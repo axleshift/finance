@@ -25,7 +25,7 @@ const createInvoice = asyncHandler(async (req, res) => {
     {
       $inc: { sequence_value: 1 },
     },
-    { new: true }
+    { new: true, upsert: true }
   );
 
   const invoiceNumbers = counter.sequence_value.toString().padStart(3, "0");

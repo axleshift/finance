@@ -59,7 +59,11 @@ const ViewAllAccounts = () => {
           },
         },
 
-        { title: 'ID', data: '_id' },
+        {
+          title: '#Id',
+          data: null,
+          render: (data) => (data?.userNumber ? data?.userNumber : 'N/A'),
+        },
         { title: 'Full Name', data: 'fullName' },
         { title: 'Email', data: 'email' },
         // { title: 'Password', data: 'password' },

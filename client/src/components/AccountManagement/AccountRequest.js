@@ -111,18 +111,21 @@ const AccountRequest = () => {
 
   const handleAddRequest = async () => {
     const formData = new FormData()
-    Object.entries(newAccount).forEach(([key, value]) => {
-      formData.append(key, value)
-    })
+    formData.append('fullName', newAccount.fullName)
+    formData.append('email', newAccount.email)
+
+    if (newAccount.image) {
+      formData.append('image', newAccount.image)
+    }
 
     try {
       await axios.post(`${apiURL}/api/accountRequest`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
-      fetchAccountData()
+      fetchAccountData() // Refresh the data after adding the request
       toast.success('Account Request Added Successfully!')
       setVisibleAdd(false)
-      setNewAccount({ fullName: '', email: '', password: '', role: '', image: null }) // Reset form
+      setNewAccount({ fullName: '', email: '', password: '', role: '', image: null }) // Reset the form fields
     } catch (error) {
       console.error('Failed to add account request:', error)
       toast.error('Failed to add account request')
@@ -131,9 +134,15 @@ const AccountRequest = () => {
 
   const handleCreateAccount = async () => {
     const formData = new FormData()
-    Object.entries(selectedData).forEach(([key, value]) => {
-      formData.append(key, value)
-    })
+
+    // Append data correctly
+    formData.append('fullName', selectedData.fullName)
+    formData.append('email', selectedData.email)
+    formData.append('password', selectedData.password)
+    formData.append('role', selectedData.role)
+    if (selectedData.image) {
+      formData.append('image', selectedData.image) // Append image only if it exists
+    }
 
     try {
       await axios.post(`${apiURL}/api/user/create`, formData, {
@@ -256,13 +265,13 @@ const AccountRequest = () => {
               onChange={(e) => setNewAccount({ ...newAccount, email: e.target.value })}
               placeholder="Enter email"
             />
-            <CFormInput
+            {/* <CFormInput
               type="file"
               label="Upload Image"
               accept="image/*"
               onChange={(e) => setNewAccount({ ...newAccount, image: e.target.files[0] })}
               className="mb-3"
-            />
+            /> */}
           </CForm>
         </CModalBody>
         <CModalFooter>
