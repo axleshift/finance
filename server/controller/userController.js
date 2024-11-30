@@ -169,8 +169,75 @@ const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
 };
 
-// const getRequestAccount = expressAsyncHandler(async(req,res) => {
-//   const getAll = await userModel.
-// })
+const register = asyncHandler(async (req, res) => {
+  const { fullName, email, password, confirmPassword, role, phone, address } =
+    req.body;
 
-export { create, getUsers, getSpecificId, deleteUser, updateUser, loginUser };
+  // Check if password matches
+  if (password !== confirmPassword) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Passwords do not match!" });
+  }
+
+  const counter = await Counter.findByIdAndUpdate(
+    {
+      _id: "userNumber",
+    },
+    {
+      $inc: { sequence_value: 1 },
+    },
+    { new: true, upsert: true }
+  );
+
+  const userNumber = counter.sequence_value.toString().padStart(3, "0");
+
+  const reference = `USER-${userNumber}`;
+  // Check if email already exists
+  const userExists = await userModel.findOne({ email });
+  if (userExists) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Email already registered." });
+  }
+
+  // Create new user
+  const createUser = new userModel({
+    userNumber: reference,
+    fullName,
+    email,
+    password,
+    role,
+    phone,
+    address,
+  });
+
+  try {
+    const savedUser = await createUser.save();
+    res.status(201).json({
+      success: true,
+      message: "User created successfully",
+      user: {
+        _id: savedUser._id,
+        fullName: savedUser.fullName,
+        email: savedUser.email,
+        role: savedUser.role,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error, could not create user.",
+    });
+  }
+});
+
+export {
+  create,
+  getUsers,
+  getSpecificId,
+  deleteUser,
+  updateUser,
+  loginUser,
+  register,
+};

@@ -92,7 +92,7 @@ const CashSummary = () => {
       color: 'primary',
     },
     { title: 'Cash Deposit', color: 'success' },
-    { title: 'Cash Withdrawal', value: '$15,000', color: 'danger' },
+    { title: 'Cash Withdrawal', color: 'danger' },
   ]
 
   return (

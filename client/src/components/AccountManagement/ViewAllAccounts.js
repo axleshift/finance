@@ -54,11 +54,10 @@ const ViewAllAccounts = () => {
           data: null,
           render: (data) => {
             return `
-              <img class="w-50 rounded" src="${data?.image}" alt="Random Image" />
+              <img class="w-50 rounded" src="${data?.image || '/default-avatar.png'}" alt="User Image" />
             `
           },
         },
-
         {
           title: '#Id',
           data: null,
@@ -66,7 +65,6 @@ const ViewAllAccounts = () => {
         },
         { title: 'Full Name', data: 'fullName' },
         { title: 'Email', data: 'email' },
-        // { title: 'Password', data: 'password' },
         { title: 'Role', data: 'role' },
         {
           title: 'Action',
@@ -115,7 +113,7 @@ const ViewAllAccounts = () => {
   const handleView = (id) => {
     setVisibleView(true)
     const selected = usersData.find((item) => item._id === id)
-    setSelectedData(selected || { fullName: '', email: '', password: '', role: '' })
+    setSelectedData(selected || { fullName: '', email: '', password: '', role: '', image: '' })
   }
 
   const handleEdit = (id) => {
@@ -126,6 +124,7 @@ const ViewAllAccounts = () => {
       email: selected?.email,
       password: selected?.password,
       role: selected?.role,
+      image: selected?.image || '',
     })
     setVisibleEdit(true)
   }
@@ -148,7 +147,16 @@ const ViewAllAccounts = () => {
 
   const handleSaveEdit = async () => {
     try {
-      await axios.put(`${apiURL}/api/user/update/${newData?._id}`, newData)
+      const formData = new FormData()
+      formData.append('fullName', newData.fullName)
+      formData.append('email', newData.email)
+      formData.append('password', newData.password)
+      formData.append('role', newData.role)
+      if (newData.image && typeof newData.image !== 'string') {
+        formData.append('image', newData.image)
+      }
+
+      await axios.put(`${apiURL}/api/user/update/${newData?._id}`, formData)
       toast.success('Updated Successfully!')
       fetchAllUser() // Refresh the user list after editing
       setVisibleEdit(false)
@@ -187,12 +195,15 @@ const ViewAllAccounts = () => {
                 className="d-flex justify-content-center align-items-center"
                 style={{ width: '100%' }}
               >
-                <img color="secondary" src={selectedData?.image} className="w-50" />
+                <img
+                  src={selectedData?.image || '/default-avatar.png'}
+                  className="w-50"
+                  alt="User Image"
+                />
               </div>
             </div>
           </div>
         </CModalBody>
-
         <CModalFooter>
           <CButton color="secondary" onClick={() => setVisibleView(false)}>
             Close
@@ -234,6 +245,12 @@ const ViewAllAccounts = () => {
                 <option value="staff">Staff</option>
                 <option value="user">User</option>
               </CFormSelect>
+              <CFormInput
+                type="file"
+                label="Upload Image"
+                accept="image/*"
+                onChange={(e) => setNewData({ ...newData, image: e.target.files[0] })}
+              />
             </div>
           </CForm>
         </CModalBody>
@@ -241,21 +258,23 @@ const ViewAllAccounts = () => {
           <CButton color="secondary" onClick={() => setVisibleEdit(false)}>
             Close
           </CButton>
-          <CButton color="success" onClick={handleSaveEdit}>
-            Save Changes
+          <CButton color="primary" onClick={handleSaveEdit}>
+            Save changes
           </CButton>
         </CModalFooter>
       </CModal>
 
-      {/* Delete Confirmation Modal */}
+      {/* Delete Modal */}
       <CModal alignment="center" visible={visibleDelete} onClose={() => setVisibleDelete(false)}>
         <CModalHeader>
-          <CModalTitle>Delete Confirmation</CModalTitle>
+          <CModalTitle>Delete Account</CModalTitle>
         </CModalHeader>
-        <CModalBody>Are you sure you want to delete this account?</CModalBody>
+        <CModalBody>
+          <p>Are you sure you want to delete this account?</p>
+        </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setVisibleDelete(false)}>
-            Cancel
+            Close
           </CButton>
           <CButton color="danger" onClick={handleDelete}>
             Delete
