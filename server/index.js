@@ -13,6 +13,7 @@ import withdrawRouter from "./router/withdrawRouter.js";
 import totalCashRouter from "./router/totalCashRouter.js";
 import payrollRouter from "./router/payrollRouter.js";
 import budgetRequestRouter from "./router/budgetRequestRouter.js";
+import salesAndRevenueRouter from "./router/salesAndRevenueRouter.js";
 
 const port = process.env.PORT || 5054;
 
@@ -55,6 +56,7 @@ app.use("/api/withdraw", withdrawRouter);
 app.use("/api/totalCash", totalCashRouter);
 app.use("/api/payroll", payrollRouter);
 app.use("/api/budgetRequest", budgetRequestRouter);
+app.use("/api/salesAndRevenue", salesAndRevenueRouter);
 app.listen(port, () => {
   console.log(`Server Starter on http://localhost:${port}`);
 });

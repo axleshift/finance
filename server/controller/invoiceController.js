@@ -43,6 +43,7 @@ const createInvoice = asyncHandler(async (req, res) => {
     phone,
     totalAmount,
     paymentMethod,
+    createdAt: new Date(),
   });
 
   const savedInvoice = await newInvoice.save();
