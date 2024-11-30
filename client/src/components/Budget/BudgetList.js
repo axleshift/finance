@@ -61,7 +61,7 @@ const BudgetList = () => {
                 <button class="btn btn-primary text-xs px-2 py-1 mx-1 viewBtn" id="viewBtn_${data.requestId}">
                   View
                 </button>
-                <button class="btn btn-danger text-xs px-2 py-1 mx-1 deleteBtn" id="deleteBtn_${data.requestId}">
+                <button class="btn btn-danger text-light text-xs px-2 py-1 mx-1 deleteBtn" id="deleteBtn_${data.requestId}">
                   Delete
                 </button>
               </div>`
@@ -122,7 +122,9 @@ const BudgetList = () => {
           Add Budget
         </button>
       </div>
-      <table id="myTable" className="display w-full text-sm bg-primary text-dark font-bold"></table>
+      <table id="myTable" className="display w-full text-sm bg-primary text-dark font-bold">
+        <thead className="bg-primary text-light"></thead>
+      </table>
 
       {/* View Modal */}
       <CModal

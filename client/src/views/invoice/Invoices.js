@@ -155,7 +155,9 @@ const Invoices = () => {
   return (
     <div>
       <h1>Invoice</h1>
-      <table id="myTable" className="display w-full text-sm bg-primary text-dark font-bold"></table>
+      <table id="myTable" className="display w-full text-sm bg-primary text-dark font-bold">
+        <thead className="bg-primary text-light"></thead>
+      </table>
 
       {/* Rejection Confirmation Modal */}
       <CModal alignment="center" visible={visibleReject} onClose={() => setVisibleReject(false)}>

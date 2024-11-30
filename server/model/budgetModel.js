@@ -30,7 +30,7 @@ const budgetSchema = mongoose.Schema(
     ],
     status: {
       type: String,
-      enum: ["Approved", "Reject", "Pending"],
+      enum: ["Approved", "Reject", "Pending", "Declined"],
       default: "Pending",
     },
   },

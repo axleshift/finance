@@ -9,7 +9,11 @@ const budgetRequestSchema = mongoose.Schema(
     reason: { type: String, required: true },
     totalRequest: { type: Number, required: true },
     documents: { type: String, required: true },
-    status: { type: String, required: true },
+    status: {
+      type: String,
+      enum: ["Approved", "Reject", "Pending", "Declined"],
+      default: "Pending",
+    },
     comment: { type: String },
   },
   { timestamps: true }

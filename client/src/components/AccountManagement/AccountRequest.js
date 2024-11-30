@@ -164,7 +164,15 @@ const AccountRequest = () => {
         Add Request
       </CButton>
 
-      <table id="myTable" className="display text-dark"></table>
+      <table id="myTable" className="display text-dark">
+        <thead className="text-light bg-primary">
+          <tr>
+            <th>Full Name</th>
+            <th>email</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+      </table>
 
       {/* View Modal */}
       <CModal alignment="center" visible={visibleView} onClose={() => setVisibleView(false)}>

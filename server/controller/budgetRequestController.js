@@ -1,7 +1,12 @@
+import expressAsyncHandler from "express-async-handler";
 import budgetRequestModel from "../model/budgetRequestModel.js";
+import {
+  pendingRequest,
+  processedRequestBudget,
+} from "./budgetRequestAggregate.js";
 
 // Create a new budget request
-export const createBudgetRequest = async (req, res) => {
+const createBudgetRequest = async (req, res) => {
   try {
     const {
       requestId,
@@ -42,7 +47,7 @@ export const createBudgetRequest = async (req, res) => {
 };
 
 // Get all budget requests
-export const getAllBudgetRequests = async (req, res) => {
+const getAllBudgetRequests = async (req, res) => {
   try {
     const budgetRequests = await budgetRequestModel.find();
     res.status(200).json(budgetRequests);
@@ -55,7 +60,7 @@ export const getAllBudgetRequests = async (req, res) => {
 };
 
 // Get a single budget request by ID
-export const getBudgetRequestById = async (req, res) => {
+const getBudgetRequestById = async (req, res) => {
   try {
     const { id } = req.params;
     const budgetRequest = await budgetRequestModel.findById(id);
@@ -74,7 +79,7 @@ export const getBudgetRequestById = async (req, res) => {
 };
 
 // Update a budget request by ID
-export const updateBudgetRequest = async (req, res) => {
+const updateBudgetRequest = async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -122,7 +127,7 @@ export const updateBudgetRequest = async (req, res) => {
 };
 
 // Delete a budget request by ID
-export const deleteBudgetRequest = async (req, res) => {
+const deleteBudgetRequest = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -142,4 +147,38 @@ export const deleteBudgetRequest = async (req, res) => {
       error: error.message,
     });
   }
+};
+
+// Get pending budgets
+const getPendingBudget = expressAsyncHandler(async (req, res) => {
+  try {
+    await pendingRequest(req, res);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching pending budget data",
+      error: error.message,
+    });
+  }
+});
+
+// Get processed budgets
+const getProcessBudget = expressAsyncHandler(async (req, res) => {
+  try {
+    await processedRequestBudget(req, res);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching processed budget data",
+      error: error.message,
+    });
+  }
+});
+
+export {
+  createBudgetRequest,
+  getAllBudgetRequests,
+  getBudgetRequestById,
+  updateBudgetRequest,
+  deleteBudgetRequest,
+  getPendingBudget,
+  getProcessBudget,
 };

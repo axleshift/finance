@@ -128,7 +128,7 @@ const FreightAudit = () => {
       </CRow>
       <h2>Payroll Information</h2>
       <table id="myTable" className="display text-dark">
-        <thead className="text-light"></thead>
+        <thead className="text-light bg-primary"></thead>
       </table>
 
       {/* Delete Confirmation Modal */}

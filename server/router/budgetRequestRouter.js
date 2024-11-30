@@ -5,9 +5,14 @@ import {
   getBudgetRequestById,
   updateBudgetRequest,
   deleteBudgetRequest,
+  getPendingBudget,
+  getProcessBudget,
 } from "../controller/budgetRequestController.js";
 
 const budgetRequestRouter = express.Router();
+
+budgetRequestRouter.get("/pendingBudget", getPendingBudget);
+budgetRequestRouter.get("/proccessBudget", getProcessBudget);
 
 budgetRequestRouter.post("/", createBudgetRequest); // Create
 budgetRequestRouter.get("/", getAllBudgetRequests); // Read All
