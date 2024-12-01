@@ -118,12 +118,12 @@ const EditInvoice = () => {
     <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
       <h2 className="text-red-500">Edit Invoice</h2>
       <form onSubmit={handleSubmit}>
-        <CRow>
+        {/* <CRow>
           <CCol>
             <label>Invoice Number</label>
             <CFormInput type="text" name="id" value={invoice.id} onChange={handleChange} required />
           </CCol>
-        </CRow>
+        </CRow> */}
 
         <CRow>
           <CCol>

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const accountRequestSchema = mongoose.Schema(
   {
+    accountNumber: { type: String },
     fullName: { type: String, required: true },
     email: { type: String, required: true },
   },

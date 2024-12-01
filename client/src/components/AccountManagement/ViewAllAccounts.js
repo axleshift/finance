@@ -93,7 +93,7 @@ const ViewAllAccounts = () => {
           className: 'text-center', // Optional: Centers content
         },
       ],
-      order: [[0, 'desc']],
+      order: [[1, 'desc']],
       rowCallback: (row, data) => {
         const viewBtn = row.querySelector(`#viewBtn_${data._id}`)
         const editBtn = row.querySelector(`#editBtn_${data._id}`)

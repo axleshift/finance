@@ -1,10 +1,26 @@
 import expressAsyncHandler from "express-async-handler";
 import accountRequestModel from "../model/accountRequestModel.js";
+import Counter from "../model/Counter.js";
 
 const create = expressAsyncHandler(async (req, res) => {
   const { fullName, email } = req.body;
 
+  const counter = await Counter.findByIdAndUpdate(
+    {
+      _id: "accountNumber",
+    },
+    {
+      $inc: { sequence_value: 1 },
+    },
+    { new: true, upsert: true }
+  );
+
+  const accountNumber = counter.sequence_value.toString().padStart(3, "0");
+
+  const reference = `ACCREQ-${accountNumber}`;
+
   const created = new accountRequestModel({
+    accountNumber: reference,
     fullName,
     email,
   });

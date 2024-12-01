@@ -89,11 +89,19 @@ export const getSpecificId = async (req, res) => {
 
 export const statusUpdate = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { status, approver, approverId, category, department, totalAmount } =
-    req.body;
+  // const { status, approver, approverId, category, department, totalAmount } =
+  //   req.body;
+
+  const existing = await budgetModel.findById(id);
+
+  if (existing?.status === "approved") {
+    return res
+      .status(200)
+      .json({ success: false, message: "Already approved!" });
+  }
   const updated = await budgetModel.findByIdAndUpdate(
     id,
-    { status },
+    { status: "Approved" },
     { new: true }
   );
 
@@ -103,36 +111,18 @@ export const statusUpdate = expressAsyncHandler(async (req, res) => {
       .json({ success: false, message: "Budget id not found!" });
   }
 
-  function getCurrentDateTime() {
-    const now = new Date();
-    const date = now.toLocaleDateString("en-US");
-    const time = now.toLocaleTimeString("en-US", {
-      hour12: false,
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
+  // function getCurrentDateTime() {
+  //   const now = new Date();
+  //   const date = now.toLocaleDateString("en-US");
+  //   const time = now.toLocaleTimeString("en-US", {
+  //     hour12: false,
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //     second: "2-digit",
+  //   });
 
-    return `${date} ${time}`;
-  }
-
-  // const outFlowCustomize = {
-  //   dateTime: getCurrentDateTime(),
-  //   approver,
-  //   approverId,
-  //   category,
-  //   department,
-  //   totalAmount,
-  // };
-  // const outFlow = new outFlowModel(outFlowCustomize);
-
-  // if (!outFlow) {
-  //   return res
-  //     .status(404)
-  //     .json({ success: false, message: "Outflow not found!" });
+  //   return `${date} ${time}`;
   // }
-
-  // outFlow.save();
 
   res.status(200).json({
     success: true,

@@ -48,7 +48,15 @@ const BudgetList = () => {
         { title: 'Reason', data: 'reason' },
         { title: 'Total Request', data: 'totalRequest' },
         { title: 'Documents', data: 'documents' },
-        { title: 'Status', data: 'status' },
+        {
+          title: 'Status',
+          data: null,
+          render: (data) => {
+            return `<button class="btn ${data?.status === 'Approved' ? 'btn-success text-white' : 'btn-secondary'}">
+            ${data?.status === 'Approved' ? data.status : 'Pending'}
+          </button>`
+          },
+        },
         { title: 'Comment', data: 'comment' },
         {
           title: 'Action',
@@ -105,13 +113,16 @@ const BudgetList = () => {
 
   const handleStatusUpdate = async (requestId) => {
     try {
+      const response = await axios.put(`${apiURL}/api/budgetRequest/updateStatus/${requestId}`)
       const updatedBudgetData = budgetData.map((item) =>
         item.requestId === requestId ? { ...item, status: 'Approved' } : item,
       )
       setBudgetData(updatedBudgetData)
-      toast.success('Status Update Successfully!')
+      fetchBudgetData()
+      setVisibleView(false)
+      toast.success(response?.data.message)
     } catch (error) {
-      toast.error('Failed to update status')
+      toast.error(error?.response.data.message)
     }
   }
 
@@ -170,7 +181,7 @@ const BudgetList = () => {
               <div className="d-flex justify-content-center align-items-center">
                 <button
                   className={` ${selectedData.status === 'Approved' ? 'btn border-2 border-primary  bg-white text-dark font-bold' : 'btn btn-primary '}`}
-                  onClick={() => handleStatusUpdate(selectedData.requestId)}
+                  onClick={() => handleStatusUpdate(selectedData?._id)}
                 >
                   {selectedData.status === 'Approved' ? 'Approved' : 'Approve'}
                 </button>
@@ -193,7 +204,7 @@ const BudgetList = () => {
       </CModal>
 
       {/* Delete Confirmation Modal */}
-      <CModal visible={visibleDelete} onClose={() => setVisibleDelete(false)}>
+      <CModal alignment="center" visible={visibleDelete} onClose={() => setVisibleDelete(false)}>
         <CModalHeader>
           <CModalTitle>Delete Budget</CModalTitle>
         </CModalHeader>

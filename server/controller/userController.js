@@ -5,9 +5,21 @@ import jwt from "jsonwebtoken";
 import cloudinary from "../utils/cloudinary.js";
 import fs from "fs";
 import Counter from "../model/Counter.js";
+import accountRequestModel from "../model/accountRequestModel.js";
 
 const create = asyncHandler(async (req, res) => {
-  const { fullName, email, password, role, phone, address } = req.body;
+  const { fullName, email, password, role, phone, address, accountRequestId } =
+    req.body;
+  console.log(accountRequestId);
+
+  const deleteAccountRequest = await accountRequestModel.findByIdAndDelete(
+    accountRequestId
+  );
+  if (!deleteAccountRequest) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Account Request Id not found!" });
+  }
 
   const counter = await Counter.findByIdAndUpdate(
     {
@@ -132,6 +144,25 @@ const updateUser = asyncHandler(async (req, res) => {
   } else {
     delete req.body.password; // Remove password from update payload if not provided
   }
+
+  let image = null;
+
+  if (req.file) {
+    try {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "FREIGHT_USER_PROFILE",
+      });
+
+      fs.unlinkSync(req.file.path);
+      image = result.secure_url;
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Image upload failed", error });
+    }
+  }
+
+  req.body.image = image;
 
   const updatedUser = await userModel.findByIdAndUpdate(userId, req.body, {
     new: true,

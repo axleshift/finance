@@ -26,7 +26,7 @@ userRouter.get("/", getUsers);
 userRouter.post("/create", upload.single("image"), create);
 userRouter.get("/account", authMiddleware, getSpecificId);
 userRouter.delete("/delete/:userId", deleteUser);
-userRouter.put("/update/:userId", uploads.none(), updateUser);
+userRouter.put("/update/:userId", upload.single("image"), updateUser);
 userRouter.post("/login", loginUser);
 userRouter.post("/register", register);
 userRouter.get("/accountData", authMiddleware, getSpecificId);

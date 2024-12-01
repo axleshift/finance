@@ -53,6 +53,13 @@ const AccountRequest = () => {
     const table = new DataTable('#myTable', {
       data: accountData,
       columns: [
+        {
+          title: 'Full Name',
+          data: null,
+          render: (data) => {
+            return `<div> ${data?.accountNumber ? data?.accountNumber : 'N/A'} </div>`
+          },
+        },
         { title: 'Full Name', data: 'fullName' },
         { title: 'Email', data: 'email' },
         {
@@ -122,7 +129,8 @@ const AccountRequest = () => {
       await axios.post(`${apiURL}/api/accountRequest`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
-      fetchAccountData() // Refresh the data after adding the request
+      // fetchAccountData() // Refresh the data after adding the request
+      window.location.reload()
       toast.success('Account Request Added Successfully!')
       setVisibleAdd(false)
       setNewAccount({ fullName: '', email: '', password: '', role: '', image: null }) // Reset the form fields
@@ -134,12 +142,12 @@ const AccountRequest = () => {
 
   const handleCreateAccount = async () => {
     const formData = new FormData()
-
     // Append data correctly
     formData.append('fullName', selectedData.fullName)
     formData.append('email', selectedData.email)
     formData.append('password', selectedData.password)
     formData.append('role', selectedData.role)
+    formData.append('accountRequestId', selectedData._id)
     if (selectedData.image) {
       formData.append('image', selectedData.image) // Append image only if it exists
     }
@@ -148,6 +156,7 @@ const AccountRequest = () => {
       await axios.post(`${apiURL}/api/user/create`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
+      fetchAccountData()
       toast.success('Account Created Successfully!')
       setVisibleView(false) // Close modal after creating account
     } catch (error) {

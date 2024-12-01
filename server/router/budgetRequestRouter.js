@@ -7,6 +7,7 @@ import {
   deleteBudgetRequest,
   getPendingBudget,
   getProcessBudget,
+  statusUpdate,
 } from "../controller/budgetRequestController.js";
 
 const budgetRequestRouter = express.Router();
@@ -19,5 +20,6 @@ budgetRequestRouter.get("/", getAllBudgetRequests); // Read All
 budgetRequestRouter.get("/:id", getBudgetRequestById); // Read by ID
 budgetRequestRouter.put("/:id", updateBudgetRequest); // Update
 budgetRequestRouter.delete("/:id", deleteBudgetRequest); // Delete
+budgetRequestRouter.put("/updateStatus/:id", statusUpdate);
 
 export default budgetRequestRouter;

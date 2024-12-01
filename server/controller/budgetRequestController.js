@@ -173,6 +173,35 @@ const getProcessBudget = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const statusUpdate = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const existing = await budgetRequestModel.findById(id);
+
+  if (existing?.status === "approved") {
+    return res
+      .status(404)
+      .json({ success: false, message: "Already approved!" });
+  }
+  const updated = await budgetRequestModel.findByIdAndUpdate(
+    id,
+    { status: "Approved" },
+    { new: true }
+  );
+
+  if (!updated) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Budget id not found!" });
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Update Status Successfully",
+    data: updated,
+  });
+});
+
 export {
   createBudgetRequest,
   getAllBudgetRequests,
@@ -181,4 +210,5 @@ export {
   deleteBudgetRequest,
   getPendingBudget,
   getProcessBudget,
+  statusUpdate,
 };
