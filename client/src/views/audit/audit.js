@@ -52,6 +52,13 @@ const FreightAudit = () => {
     const table = new DataTable('#myTable', {
       data: payrollData,
       columns: [
+        {
+          title: 'Payroll #',
+          data: null,
+          render: (data) => {
+            return `<div>${data?.payrollNumber ? data?.payrollNumber : 'N/A'}</div>`
+          },
+        },
         { title: 'Employee Name', data: 'employeeName' },
         { title: 'Salary', data: 'salary' },
         { title: 'Overtime Hours', data: 'overtimeHours' },
@@ -114,7 +121,7 @@ const FreightAudit = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>Freight Audit</h1>
+      {/* <h1>Freight Audit</h1>
       <CRow>
         <CCol xs={3}>
           <CWidgetStatsF
@@ -125,7 +132,7 @@ const FreightAudit = () => {
             value="0" // Placeholder value
           />
         </CCol>
-      </CRow>
+      </CRow> */}
       <h2>Payroll Information</h2>
       <table id="myTable" className="display text-dark">
         <thead className="text-light bg-primary"></thead>

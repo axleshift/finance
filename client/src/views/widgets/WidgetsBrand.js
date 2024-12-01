@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { CWidgetStatsE, CRow, CCol } from '@coreui/react'
 import { CChartBar, CChartLine } from '@coreui/react-chartjs'
-
+import axios from 'axios'
+import { apiURL } from '../../context/client_store'
 const WidgetsBrand = (props) => {
+  const [revenue, setRevenue] = useState(null)
+  const [sales, setSales] = useState(null)
+
   const titleStyle = {
     fontSize: '1.2rem', // Custom font size for title
     fontWeight: 'bold', // Optional: make title bold
@@ -13,6 +17,24 @@ const WidgetsBrand = (props) => {
     fontSize: '1.5rem', // Custom font size for value
     fontWeight: '600', // Slightly bold for emphasis
     color: '#6261CC', // Optional: set a custom color for the value
+  }
+  const fetchYearlySalesAndRevenue = async () => {
+    try {
+      const response = await axios.get(`${apiURL}/api/salesAndRevenue/yearly-sales-revenue`)
+      console.log(response?.data)
+      setSales(response?.data.totalSales)
+      setRevenue(response?.data.totalRevenue)
+    } catch (error) {
+      console.log(error?.response.data.message)
+    }
+  }
+
+  useEffect(() => {
+    fetchYearlySalesAndRevenue()
+  }, [])
+
+  const formatCurrency = (amount) => {
+    return amount?.toLocaleString('en-US') // Adds commas as thousand separators
   }
 
   return (
@@ -53,8 +75,8 @@ const WidgetsBrand = (props) => {
               }}
             />
           }
-          title={<span style={titleStyle}>SALES</span>} // Apply custom title style
-          value={<span style={valueStyle}>₱3,250.00</span>} // Apply custom value style
+          title={<span style={titleStyle}>TOTAL YEAR SALES</span>} // Apply custom title style
+          value={<span style={valueStyle}>₱{formatCurrency(sales)}</span>} // Format sales with commas
         />
       </CCol>
       <CCol xs={6}>
@@ -101,8 +123,8 @@ const WidgetsBrand = (props) => {
               }}
             />
           }
-          title={<span style={titleStyle}>TOTAL SPENT</span>} // Apply custom title style
-          value={<span style={valueStyle}>₱30,000.00</span>} // Apply custom value style
+          title={<span style={titleStyle}>TOTAL YEAR REVENUE</span>} // Apply custom title style
+          value={<span style={valueStyle}>₱{formatCurrency(revenue)}</span>} // Format revenue with commas
         />
       </CCol>
     </CRow>

@@ -9,7 +9,7 @@ import {
 } from '@coreui/react-chartjs'
 import axios from 'axios'
 import { apiURL } from '../../context/client_store'
-
+import WidgetsBrand from '../widgets/WidgetsBrand'
 const FinancialAnalytics = () => {
   const [salesData, setSalesData] = useState(Array(12).fill(0)) // Sales for 12 months
   const [revenueData, setRevenueData] = useState(Array(12).fill(0)) // Revenue for 12 months
@@ -43,6 +43,7 @@ const FinancialAnalytics = () => {
   return (
     <CRow>
       {/* Sales Chart */}
+      <WidgetsBrand />
       <CCol xs={6}>
         <CCard className="mb-4">
           <CCardHeader>Sales</CCardHeader>
@@ -78,7 +79,6 @@ const FinancialAnalytics = () => {
           </CCardBody>
         </CCard>
       </CCol>
-
       {/* Revenue Chart */}
       <CCol xs={6}>
         <CCard className="mb-4">
@@ -112,7 +112,6 @@ const FinancialAnalytics = () => {
           </CCardBody>
         </CCard>
       </CCol>
-
       {/* Other charts */}
       <CCol xs={6}>
         <CCard className="mb-4">
@@ -136,7 +135,6 @@ const FinancialAnalytics = () => {
           </CCardBody>
         </CCard>
       </CCol>
-
       <CCol xs={6}>
         <CCard className="mb-4">
           <CCardHeader>Profit and Revenue</CCardHeader>
@@ -167,7 +165,6 @@ const FinancialAnalytics = () => {
           </CCardBody>
         </CCard>
       </CCol>
-
       {/* Additional charts can be added as necessary */}
     </CRow>
   )

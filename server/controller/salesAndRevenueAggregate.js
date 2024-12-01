@@ -84,5 +84,58 @@ const getMonthlySalesAndRevenue = async () => {
     return [];
   }
 };
+// Function to get total sales and revenue for the current year
+const getYearlySalesAndRevenue = async () => {
+  try {
+    const currentYear = new Date().getFullYear();
 
-export { getMonthlySalesAndRevenue };
+    // Perform aggregation for the current year
+    const yearlyData = await invoiceModel.aggregate([
+      {
+        $match: {
+          status: "Paid",
+          createdAt: {
+            $gte: new Date(`${currentYear}-01-01T00:00:00Z`),
+            $lte: new Date(`${currentYear}-12-31T23:59:59Z`),
+          },
+        },
+      },
+      { $unwind: "$products" },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$totalAmount" },
+          totalSales: {
+            $sum: {
+              $cond: [
+                {
+                  $and: [
+                    { $gt: ["$products.quantity", 0] },
+                    { $gt: ["$products.price", 0] },
+                  ],
+                },
+                { $multiply: ["$products.quantity", "$products.price"] },
+                0,
+              ],
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          totalRevenue: 1,
+          totalSales: 1,
+          _id: 0,
+        },
+      },
+    ]);
+
+    // Return the yearly sales and revenue
+    return yearlyData[0] || { totalRevenue: 0, totalSales: 0 };
+  } catch (error) {
+    console.error("Error fetching yearly sales and revenue:", error);
+    return { totalRevenue: 0, totalSales: 0 };
+  }
+};
+
+export { getMonthlySalesAndRevenue, getYearlySalesAndRevenue };

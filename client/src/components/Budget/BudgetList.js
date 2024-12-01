@@ -22,14 +22,12 @@ const BudgetList = () => {
   const [budgetData, setBudgetData] = useState([])
   const [visibleAddBudget, setVisibleAddBudget] = useState(false)
   const [status, setStatus] = useState(null)
+  const [requestIdToDelete, setRequestIdToDelete] = useState(null) // Store requestId for deletion
 
   const fetchBudgetData = async () => {
     try {
-      // Mocking an API call with the provided budget data structure
       const response = await axios.get(`${apiURL}/api/budgetRequest`)
-
       setBudgetData(response.data)
-      console.log(response.data)
     } catch (error) {
       console.log(error?.response?.data)
     }
@@ -58,10 +56,10 @@ const BudgetList = () => {
           render: (data) => {
             return `
               <div>
-                <button class="btn btn-primary text-xs px-2 py-1 mx-1 viewBtn" id="viewBtn_${data.requestId}">
+                <button class="btn btn-primary text-xs px-2 py-1 mx-1 viewBtn" id="viewBtn_${data._id}">
                   View
                 </button>
-                <button class="btn btn-danger text-light text-xs px-2 py-1 mx-1 deleteBtn" id="deleteBtn_${data.requestId}">
+                <button class="btn btn-danger text-light text-xs px-2 py-1 mx-1 deleteBtn" id="deleteBtn_${data._id}">
                   Delete
                 </button>
               </div>`
@@ -70,11 +68,11 @@ const BudgetList = () => {
       ],
       order: [[0, 'desc']],
       rowCallback: (row, data) => {
-        const viewBtn = row.querySelector(`#viewBtn_${data.requestId}`)
-        const deleteBtn = row.querySelector(`#deleteBtn_${data.requestId}`)
+        const viewBtn = row.querySelector(`#viewBtn_${data._id}`)
+        const deleteBtn = row.querySelector(`#deleteBtn_${data._id}`)
 
-        viewBtn?.addEventListener('click', () => handleView(data.requestId))
-        deleteBtn?.addEventListener('click', () => handleDelete(data.requestId))
+        viewBtn?.addEventListener('click', () => handleView(data._id))
+        deleteBtn?.addEventListener('click', () => handleDelete(data._id))
       },
     })
 
@@ -83,26 +81,30 @@ const BudgetList = () => {
     }
   }, [budgetData])
 
-  const handleView = (requestId) => {
-    const selected = budgetData.find((item) => item.requestId === requestId)
+  const handleView = (id) => {
+    const selected = budgetData.find((item) => item._id === id)
     setSelectedData(selected)
     setVisibleView(true)
   }
 
-  const handleDelete = async (requestId) => {
+  const handleDelete = (id) => {
+    setRequestIdToDelete(id) // Set the requestId to delete
+    setVisibleDelete(true) // Show the delete confirmation modal
+  }
+
+  const confirmationDelete = async () => {
     try {
-      // Mocking a delete API request
-      toast.warn('Deleted Successfully')
-      fetchBudgetData() // Refetch after delete
+      const response = await axios.delete(`${apiURL}/api/budgetRequest/${requestIdToDelete}`)
+      toast.warn(response?.data.message)
+      fetchBudgetData()
     } catch (error) {
       toast.error('Failed to delete budget')
     }
-    setVisibleDelete(false)
+    setVisibleDelete(false) // Close the modal after deleting
   }
 
   const handleStatusUpdate = async (requestId) => {
     try {
-      // Mocking an API call to update the status
       const updatedBudgetData = budgetData.map((item) =>
         item.requestId === requestId ? { ...item, status: 'Approved' } : item,
       )
@@ -116,7 +118,6 @@ const BudgetList = () => {
   return (
     <div>
       <h1>Budget Management</h1>
-
       <div>
         <button className="btn btn-primary my-2" onClick={() => setVisibleAddBudget(true)}>
           Add Budget
@@ -203,7 +204,7 @@ const BudgetList = () => {
           <CButton color="secondary" onClick={() => setVisibleDelete(false)}>
             Cancel
           </CButton>
-          <CButton color="danger" onClick={() => handleDelete(selectedData.requestId)}>
+          <CButton color="danger" onClick={confirmationDelete}>
             Confirm Delete
           </CButton>
         </CModalFooter>

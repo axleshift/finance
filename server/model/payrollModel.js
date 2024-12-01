@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const PayrollSchema = mongoose.Schema(
   {
+    payrollNumber: { type: String },
     employeeId: { type: String },
     employeeName: {
       type: String,

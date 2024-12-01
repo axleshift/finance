@@ -30,6 +30,19 @@ const createPayroll = asyncHandler(async (req, res) => {
   }
 
   try {
+    const counter = await Counter.findByIdAndUpdate(
+      {
+        _id: "payrollNumber",
+      },
+      {
+        $inc: { sequence_value: 1 },
+      },
+      { new: true, upsert: true }
+    );
+
+    const payrollNumber = counter.sequence_value.toString().padStart(3, "0");
+
+    const reference = `INV-${payrollNumber}`;
     // Calculate payroll details
     const overtimePay = overtimeHours * overtimeRate;
     const grossPay = salary + overtimePay + bonuses;
@@ -37,6 +50,7 @@ const createPayroll = asyncHandler(async (req, res) => {
 
     // Create payroll object
     const payroll = {
+      payrollNumber: reference,
       employeeId,
       department,
       employeeName,

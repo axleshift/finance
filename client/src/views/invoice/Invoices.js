@@ -93,16 +93,6 @@ const Invoices = () => {
           editBtn?.addEventListener('click', () => navigate(`/edit_invoice/${data._id}`))
         },
       })
-      // <button class="bg-green-500 text-xs text-white px-2 py-1 rounded-lg mx-1 approveBtn" ${
-      //   isPaid ? "style='display:none;'" : ''
-      // } id="approveBtn_${data.id}">
-      //   Approve
-      // </button>
-      // <button class="bg-red-500 text-xs text-white px-2 py-1 rounded-lg mx-1 rejectBtn" ${
-      //   isPaid ? "style='display:none;'" : ''
-      // } id="rejectBtn_${data.id}">
-      //   Reject
-      // </button>
 
       return () => {
         table.destroy()

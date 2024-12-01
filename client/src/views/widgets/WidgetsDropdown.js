@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -14,11 +14,55 @@ import { getStyle } from '@coreui/utils'
 import { CChartBar, CChartLine } from '@coreui/react-chartjs'
 import CIcon from '@coreui/icons-react'
 import { cilArrowBottom, cilArrowTop, cilOptions } from '@coreui/icons'
+import axios from 'axios'
+import { apiURL } from '../../context/client_store'
 
 const WidgetsDropdown = (props) => {
   const widgetChartRef1 = useRef(null)
   const widgetChartRef2 = useRef(null)
+  const [requestAccount, setRequestAccount] = useState([])
+  const [invoiceData, setInvoiceData] = useState([])
+  const [budgetRequest, setBudgetRequest] = useState([])
+  useEffect(() => {
+    fetchAccountRequest()
+    fetchInvoiceData()
+    fetchBudgetRequestData()
+  }, [])
+  const fetchAccountRequest = async () => {
+    try {
+      const response = await axios.get(`${apiURL}/api/accountRequest`)
 
+      const requestAccountLength = response.data.length
+      setRequestAccount(requestAccountLength)
+      console.log(requestAccountLength)
+    } catch (error) {
+      console.log(error?.response.data.message)
+    }
+  }
+
+  const fetchInvoiceData = async () => {
+    try {
+      const response = await axios.get(`${apiURL}/api/invoice/getAll`)
+
+      const invoiceDataLength = response.data.data.length
+      setInvoiceData(invoiceDataLength)
+      console.log(invoiceDataLength)
+    } catch (error) {
+      console.log(error?.response.data.message)
+    }
+  }
+
+  const fetchBudgetRequestData = async () => {
+    try {
+      const response = await axios.get(`${apiURL}/api/budgetRequest/`)
+
+      const budgetRequestDataLength = response.data.length
+      setBudgetRequest(budgetRequestDataLength)
+      console.log(budgetRequestDataLength)
+    } catch (error) {
+      console.log(error?.response.data.message)
+    }
+  }
   useEffect(() => {
     document.documentElement.addEventListener('ColorSchemeChange', () => {
       if (widgetChartRef1.current) {
@@ -44,9 +88,9 @@ const WidgetsDropdown = (props) => {
           color="primary"
           value={
             <>
-              50
+              {requestAccount}
               <span className="fs-6 fw-normal">
-                <CIcon icon={cilArrowBottom} />
+                <CIcon icon={cilArrowTop} />
               </span>
             </>
           }
@@ -134,9 +178,9 @@ const WidgetsDropdown = (props) => {
           color="info"
           value={
             <>
-              120
+              {invoiceData}
               <span className="fs-6 fw-normal">
-                <CIcon icon={cilArrowBottom} />
+                <CIcon icon={cilArrowTop} />
               </span>
             </>
           }
@@ -225,7 +269,7 @@ const WidgetsDropdown = (props) => {
             <>
               5
               <span className="fs-6 fw-normal">
-                <CIcon icon={cilArrowBottom} />
+                <CIcon icon={cilArrowTop} />
               </span>
             </>
           }
@@ -295,9 +339,9 @@ const WidgetsDropdown = (props) => {
           color="danger"
           value={
             <>
-              2
+              {budgetRequest}
               <span className="fs-6 fw-normal">
-                <CIcon icon={cilArrowBottom} />
+                <CIcon icon={cilArrowTop} />
               </span>
             </>
           }
