@@ -169,7 +169,7 @@ const BudgetList = () => {
               </p>
               <div className="d-flex justify-content-center align-items-center">
                 <button
-                  className="btn btn-primary"
+                  className={` ${selectedData.status === 'Approved' ? 'btn border-2 border-primary  bg-white text-dark font-bold' : 'btn btn-primary '}`}
                   onClick={() => handleStatusUpdate(selectedData.requestId)}
                 >
                   {selectedData.status === 'Approved' ? 'Approved' : 'Approve'}

@@ -57,7 +57,7 @@ const AppHeaderDropdown = () => {
           <CAvatar src={userData?.image} size="md" />
         </CDropdownToggle>
         <CDropdownMenu className="pt-0" placement="bottom-end">
-          <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">Account</CDropdownHeader>
+          {/* <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">Account</CDropdownHeader>
           <CDropdownItem href="#">
             <CIcon icon={cilBell} className="me-2" />
             Updates
@@ -78,7 +78,7 @@ const AppHeaderDropdown = () => {
             <CBadge color="danger" className="ms-2">
               42
             </CBadge>
-          </CDropdownItem>
+          </CDropdownItem> */}
           <CDropdownHeader className="bg-body-secondary fw-semibold my-2">Settings</CDropdownHeader>
           <CDropdownItem onClick={handleProfile}>
             <CIcon icon={cilUser} className="me-2" />

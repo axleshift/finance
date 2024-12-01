@@ -5,6 +5,7 @@ import AccountRequest from './components/AccountManagement/AccountRequest.js'
 import ViewAllAccounts from './components/AccountManagement/ViewAllAccounts.js'
 import ViewCollection from './views/CashManagement/ViewCollection.js'
 import Profile from './components/Profile/Profile.js'
+import TrainingBudgetReport from './components/Budget/TrainingBudgetReport.js'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const GenInvoice = lazy(() => import('./views/generate-invoice/generate-invoice.js'))
@@ -33,6 +34,7 @@ const routes = [
 
   { path: '/viewCollection', name: 'ViewCollection', element: ViewCollection },
   { path: '/profile', name: 'Profile', element: Profile },
+  { path: '/trainingBudgetReport', name: 'Training Budget Report', element: TrainingBudgetReport },
 ]
 
 export default routes

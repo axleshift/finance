@@ -122,7 +122,7 @@ const ViewAllAccounts = () => {
       _id: selected?._id,
       fullName: selected?.fullName,
       email: selected?.email,
-      password: selected?.password,
+      password: '',
       role: selected?.role,
       image: selected?.image || '',
     })

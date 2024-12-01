@@ -117,37 +117,31 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 const updateUser = asyncHandler(async (req, res) => {
   const { userId } = req.params;
+  // const { fullName, email, password } = req.body;
 
-  try {
-    const user = await userModel.findById(userId);
-
-    if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found!" });
-    }
-
-    // Check if password needs updating
-    if (req.body.password) {
-      const salt = await bcrypt.genSalt(10);
-      req.body.password = await bcrypt.hash(req.body.password, salt);
-    } else {
-      delete req.body.password; // Remove password from update payload if not provided
-    }
-
-    const updatedUser = await userModel.findByIdAndUpdate(userId, req.body, {
-      new: true,
-    });
-
-    res.status(200).json({
-      success: true,
-      message: "Updated Successfully",
-      data: updatedUser,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Server Error!" });
+  const user = await userModel.findById(userId);
+  console.log(user);
+  if (!user) {
+    return res.status(404).json({ success: false, message: "User not found!" });
   }
+
+  // Check if password needs updating
+  if (req.body.password) {
+    const salt = await bcrypt.genSalt(10);
+    req.body.password = await bcrypt.hash(req.body.password, salt);
+  } else {
+    delete req.body.password; // Remove password from update payload if not provided
+  }
+
+  const updatedUser = await userModel.findByIdAndUpdate(userId, req.body, {
+    new: true,
+  });
+
+  res.status(201).json({
+    success: true,
+    message: "Updated Successfully",
+    data: updatedUser,
+  });
 });
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;

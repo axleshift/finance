@@ -20,11 +20,13 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
+
+const uploads = multer();
 userRouter.get("/", getUsers);
 userRouter.post("/create", upload.single("image"), create);
 userRouter.get("/account", authMiddleware, getSpecificId);
 userRouter.delete("/delete/:userId", deleteUser);
-userRouter.put("/update/:userId", updateUser);
+userRouter.put("/update/:userId", uploads.none(), updateUser);
 userRouter.post("/login", loginUser);
 userRouter.post("/register", register);
 userRouter.get("/accountData", authMiddleware, getSpecificId);
