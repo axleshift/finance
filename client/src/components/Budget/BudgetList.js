@@ -11,7 +11,9 @@ import {
   CModalTitle,
 } from '@coreui/react'
 import { toast } from 'react-toastify'
+
 import axios from 'axios'
+import client_store from '../../context/client_store'
 import { apiURL } from '../../context/client_store'
 
 const BudgetList = () => {
@@ -23,6 +25,8 @@ const BudgetList = () => {
   const [visibleAddBudget, setVisibleAddBudget] = useState(false)
   const [status, setStatus] = useState(null)
   const [requestIdToDelete, setRequestIdToDelete] = useState(null) // Store requestId for deletion
+
+  const { token } = client_store()
 
   const fetchBudgetData = async () => {
     try {
@@ -113,7 +117,13 @@ const BudgetList = () => {
 
   const handleStatusUpdate = async (requestId) => {
     try {
-      const response = await axios.put(`${apiURL}/api/budgetRequest/updateStatus/${requestId}`)
+      const response = await axios.post(
+        `${apiURL}/api/budgetRequest/updateStatus/${requestId}`,
+        { department: 'Finance' },
+        {
+          headers: { token: token },
+        },
+      )
       const updatedBudgetData = budgetData.map((item) =>
         item.requestId === requestId ? { ...item, status: 'Approved' } : item,
       )

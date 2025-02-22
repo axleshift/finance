@@ -14,7 +14,7 @@ const GenerateInvoice = () => {
     phone: '',
     paymentMethod: '',
     selectedCurrency: '',
-    status: 'Pending',
+    status: 'UnPaid',
     products: [{ name: '', price: '', quantity: '' }],
     totalAmount: 0,
   })
@@ -155,7 +155,7 @@ const GenerateInvoice = () => {
                     Pending
                   </option>
                   <option value="Paid">Paid</option>
-                  <option value="Unpaid">Unpaid</option>
+                  <option value="UnPaid">UnPaid</option>
                 </CFormSelect>
               </CCol>
             </CRow>

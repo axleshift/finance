@@ -226,12 +226,14 @@ const register = asyncHandler(async (req, res) => {
       .json({ success: false, message: "Email already registered." });
   }
 
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   // Create new user
   const createUser = new userModel({
     userNumber: reference,
     fullName,
     email,
-    password,
+    password: hashedPassword,
     role,
     phone,
     address,

@@ -4,6 +4,9 @@ import {
   pendingRequest,
   processedRequestBudget,
 } from "./budgetRequestAggregate.js";
+import userModel from "../model/userModel.js";
+import outflowsTransactionModel from "../model/outflowsTransactionModel.js";
+import Counter from "../model/Counter.js";
 
 // Create a new budget request
 const createBudgetRequest = async (req, res) => {
@@ -20,8 +23,20 @@ const createBudgetRequest = async (req, res) => {
       comment,
     } = req.body;
 
+    const counter = await Counter.findByIdAndUpdate(
+      {
+        _id: "budgetNumber",
+      },
+      { $inc: { sequence_value: 1 } },
+      { new: true, upsert: true }
+    );
+
+    const budgetNumber = counter.sequence_value.toString().padStart(3, "0");
+
+    const reference = `BR-${budgetNumber}`;
+
     const newRequest = new budgetRequestModel({
-      requestId,
+      requestId:reference,
       department,
       typeOfRequest,
       category,
@@ -175,6 +190,16 @@ const getProcessBudget = expressAsyncHandler(async (req, res) => {
 
 const statusUpdate = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
+  const { userId, department } = req.body;
+
+  const existUser = await userModel.findById(userId);
+  if (!existUser) {
+    return res
+      .status(404)
+      .json({ success: false, message: "User Id not found!" });
+  }
+
+  console.log(existUser);
 
   const existing = await budgetRequestModel.findById(id);
 
@@ -194,6 +219,21 @@ const statusUpdate = expressAsyncHandler(async (req, res) => {
       .status(404)
       .json({ success: false, message: "Budget id not found!" });
   }
+
+  const outflow = new outflowsTransactionModel({
+    approver: existUser?.fullName,
+    approverId: existUser?._id,
+    totalAmount: existing?.totalRequest,
+    department: department,
+  });
+
+  if (!outflow) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Outflow not found!" });
+  }
+
+  await outflow.save();
 
   res.status(200).json({
     success: true,

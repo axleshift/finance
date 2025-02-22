@@ -23,10 +23,9 @@ const App = () => {
   const { token } = client_store()
   const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
   const storedTheme = useSelector((state) => state.theme)
-  const [userData, setUserData] = useState(null)
-  const navigate = useNavigate()
   const [isTokenVerified, setIsTokenVerified] = useState(false)
   const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
@@ -37,45 +36,37 @@ const App = () => {
   }, [storedTheme, isColorModeSet, setColorMode])
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(`${apiURL}/api/user/account`, {
-          headers: { token: token },
-        })
-        setUserData(response.data)
-        console.log(response.data)
-      } catch (error) {
-        console.error(error?.response?.data?.message)
-      }
-    }
-
     const verifyToken = async () => {
       const storedToken = localStorage.getItem('token')
-      if (!storedToken && location.pathname !== '/login') {
+      if (!storedToken && !['/login', '/register'].includes(location.pathname)) {
         navigate('/login')
         return
       }
-      try {
-        const response = await axios.post(`${apiURL}/api/verifyToken`, { token: storedToken })
-        if (response.data.valid) {
-          setIsTokenVerified(true)
-        } else {
+
+      if (storedToken) {
+        try {
+          const response = await axios.post(`${apiURL}/api/verifyToken`, { token: storedToken })
+          if (response.data.valid) {
+            setIsTokenVerified(true)
+          } else {
+            handleInvalidToken()
+          }
+        } catch (error) {
           handleInvalidToken()
         }
-      } catch (error) {
-        handleInvalidToken()
       }
     }
 
     const handleInvalidToken = () => {
       localStorage.removeItem('token')
       setIsTokenVerified(false)
-      navigate('/login')
+      if (!['/login', '/register'].includes(location.pathname)) {
+        navigate('/login')
+      }
     }
 
-    if (!isTokenVerified) verifyToken()
-    if (!userData) fetchUserData()
-  }, [navigate, location.pathname, isTokenVerified, token, userData])
+    verifyToken()
+  }, [location.pathname, navigate])
 
   return (
     <div>
@@ -88,11 +79,11 @@ const App = () => {
         }
       >
         <Routes>
-          <Route exact path="/login" name="Login Page" element={<Login />} />
-          <Route exact path="/register" name="Register Page" element={<Register />} />
-          <Route exact path="/404" name="Page 404" element={<Page404 />} />
-          <Route exact path="/500" name="Page 500" element={<Page500 />} />
-          <Route path="*" name="Home" element={<DefaultLayout />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/404" element={<Page404 />} />
+          <Route path="/500" element={<Page500 />} />
+          <Route path="*" element={<DefaultLayout />} />
         </Routes>
       </Suspense>
     </div>

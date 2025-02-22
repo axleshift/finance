@@ -107,7 +107,7 @@ const EditInvoice = () => {
     try {
       await axios.put(`${apiURL}/api/invoice/update/${id}`, invoice)
       toast.success('Invoice updated successfully!')
-      navigate(`/invoice-details/${id}`)
+      navigate(`/invoice-details?id=${id}`)
     } catch (error) {
       console.error('Error updating invoice:', error?.response?.data?.message || error.message)
       toast.error('Failed to update invoice.')

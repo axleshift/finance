@@ -14,6 +14,7 @@ import totalCashRouter from "./router/totalCashRouter.js";
 import payrollRouter from "./router/payrollRouter.js";
 import budgetRequestRouter from "./router/budgetRequestRouter.js";
 import salesAndRevenueRouter from "./router/salesAndRevenueRouter.js";
+import predictiveAnalytics from "./Ai/predictiveAnalytics.js";
 
 const port = process.env.PORT || 5054;
 
@@ -57,6 +58,9 @@ app.use("/api/totalCash", totalCashRouter);
 app.use("/api/payroll", payrollRouter);
 app.use("/api/budgetRequest", budgetRequestRouter);
 app.use("/api/salesAndRevenue", salesAndRevenueRouter);
+app.use("/api/predictiveAnalytics", predictiveAnalytics);
+// app.use("/api/payroll", payrollRouter)
+
 app.listen(port, () => {
   console.log(`Server Starter on http://localhost:${port}`);
 });

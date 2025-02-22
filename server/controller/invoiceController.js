@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import invoiceModel from "../model/invoiceModel.js";
 import Counter from "../model/Counter.js";
+import QRCode from "qrcode";
 
 // Create a new invoice
 const createInvoice = asyncHandler(async (req, res) => {
@@ -46,6 +47,10 @@ const createInvoice = asyncHandler(async (req, res) => {
     createdAt: new Date(),
   });
 
+  // Create QrCode
+  const qrCodeData = `https://finance.axleshift.com/invoice-details?id=${newInvoice._id}`;
+  newInvoice.qrCode = await QRCode.toDataURL(qrCodeData);
+
   const savedInvoice = await newInvoice.save();
   res.status(201).json({
     success: true,
@@ -70,6 +75,8 @@ const getInvoices = asyncHandler(async (req, res) => {
 // Get a single invoice by ID
 const getInvoiceById = asyncHandler(async (req, res) => {
   const { id } = req.params;
+
+  console.log(id);
 
   try {
     const invoice = await invoiceModel.findById(id);

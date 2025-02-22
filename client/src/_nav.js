@@ -86,6 +86,18 @@ const _nav = [
     to: '/trainingBudgetReport',
     icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
   },
+
+  {
+    component: CNavTitle,
+    name: 'Account Payble',
+  },
+  {
+    component: CNavItem,
+    name: 'Review Payable',
+    to: '/reviewPayables',
+    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
+  },
+
   {
     component: CNavTitle,
     name: 'GENERAL LEDGER',

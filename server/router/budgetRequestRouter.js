@@ -9,17 +9,18 @@ import {
   getProcessBudget,
   statusUpdate,
 } from "../controller/budgetRequestController.js";
+import { authMiddleware } from "../middleware/Auth.js";
 
 const budgetRequestRouter = express.Router();
 
 budgetRequestRouter.get("/pendingBudget", getPendingBudget);
 budgetRequestRouter.get("/proccessBudget", getProcessBudget);
 
-budgetRequestRouter.post("/", createBudgetRequest); // Create
 budgetRequestRouter.get("/", getAllBudgetRequests); // Read All
+budgetRequestRouter.post("/", createBudgetRequest); // Create
 budgetRequestRouter.get("/:id", getBudgetRequestById); // Read by ID
 budgetRequestRouter.put("/:id", updateBudgetRequest); // Update
 budgetRequestRouter.delete("/:id", deleteBudgetRequest); // Delete
-budgetRequestRouter.put("/updateStatus/:id", statusUpdate);
+budgetRequestRouter.post("/updateStatus/:id", authMiddleware, statusUpdate);
 
 export default budgetRequestRouter;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom' // Add useLocation hook to get query params
 import axios from 'axios'
 import { apiURL } from '../../context/client_store'
 import { toast } from 'react-toastify'
@@ -7,67 +7,80 @@ import { toast } from 'react-toastify'
 const Invoice_details = () => {
   // State for payment status
   const [status, setStatus] = useState('Pending')
-  const { id } = useParams()
+  const { search } = useLocation() // Get the current location's search (query parameters)
+  const queryParams = new URLSearchParams(search) // Parse the query params
+  const invoiceId = queryParams.get('id') // Get the invoice ID from query params
   const [data, setData] = useState(null)
-  // const [products, setProducts] = useState([])
 
   useEffect(() => {
-    fetchSpecificId()
-  }, [])
+    if (invoiceId) {
+      fetchSpecificId(invoiceId)
+    }
+  }, [invoiceId])
 
-  const fetchSpecificId = async () => {
+  const fetchSpecificId = async (id) => {
     try {
       const response = await axios.get(`${apiURL}/api/invoice/getSpecificId/${id}`)
       console.log(response.data.data)
 
-      // Parse products JSON string if it exists
+      // Set data to the state
       setData(response.data.data)
-      setProducts(invoiceData.products)
-      setStatus(invoiceData.status)
-      console.log(invoiceData)
+      setStatus(response.data.data.status) // Set status based on fetched data
     } catch (error) {
-      console.log(error?.response.data.message)
+      console.log(error?.response?.data?.message)
+      toast.error('Failed to fetch invoice details!')
     }
   }
 
-  const handleUpdateStatus = async (invoiceId) => {
-    const status = 'Paid'
-    console.log(invoiceId)
+  const handleUpdateStatus = async () => {
+    const updatedStatus = 'Paid'
     try {
-      const response = await axios.put(`${apiURL}/api/invoice/status/${invoiceId}`, { status })
-      fetchSpecificId()
+      const response = await axios.put(`${apiURL}/api/invoice/status/${invoiceId}`, {
+        status: updatedStatus,
+      })
+      fetchSpecificId(invoiceId) // Re-fetch the invoice data to update the status
       toast.success('Updated Successfully!')
     } catch (error) {
-      console.log(error?.response?.data.message)
-      toast.error(error?.response?.data.message)
+      console.log(error?.response?.data?.message)
+      toast.error(error?.response?.data?.message)
     }
   }
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       {/* Upper left: Invoice details */}
-      <div style={{ borderBottom: '1px solid black', paddingBottom: '10px' }}>
-        <h2>Invoice</h2>
-        <p>
-          <strong>Name:</strong> {data?.firstName} {data?.lastName}
-        </p>
-        <p>
-          <strong>Address:</strong> {data?.address}
-        </p>
-        <p>
-          <strong>Invoice Number:</strong> {data?.invoiceNumber}
-        </p>
-        <p>
-          <strong>Email:</strong> {data?.email}
-        </p>
-        <p>
-          <strong>Date:</strong>
-          {new Date(data?.createdAt).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}
-        </p>
+
+      <div className="d-flex justify-content-between">
+        <div style={{ borderBottom: '1px solid black', paddingBottom: '10px' }}>
+          <h2>Invoice</h2>
+          <p>
+            <strong>Name:</strong> {data?.firstName} {data?.lastName}
+          </p>
+          <p>
+            <strong>Address:</strong> {data?.address}
+          </p>
+          <p>
+            <strong>Invoice Number:</strong> {data?.invoiceNumber}
+          </p>
+          <p>
+            <strong>Email:</strong> {data?.email}
+          </p>
+          <p>
+            <strong>Date:</strong>
+            {new Date(data?.createdAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </p>
+        </div>
+        <div>
+          <img
+            width={150}
+            src="https://th.bing.com/th/id/OIP.sRDxelheGapUF3Q9NlEJ6gHaEg?rs=1&pid=ImgDetMain"
+            alt=""
+          />
+        </div>
       </div>
 
       {/* Bottom section: Product details */}
@@ -82,7 +95,7 @@ const Invoice_details = () => {
             </tr>
           </thead>
           <tbody>
-            {data?.products.map((product, index) => (
+            {data?.products?.map((product, index) => (
               <tr key={index}>
                 <td style={styles.cell}>{product?.name}</td>
                 <td style={styles.cell}>{product?.quantity}</td>
@@ -105,7 +118,7 @@ const Invoice_details = () => {
             <button
               className="btn btn-primary"
               style={styles.button}
-              onClick={() => handleUpdateStatus(id)}
+              onClick={handleUpdateStatus} // Use the function without passing `id`
             >
               Mark as Paid
             </button>

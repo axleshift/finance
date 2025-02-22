@@ -6,6 +6,7 @@ import ViewAllAccounts from './components/AccountManagement/ViewAllAccounts.js'
 import ViewCollection from './views/CashManagement/ViewCollection.js'
 import Profile from './components/Profile/Profile.js'
 import TrainingBudgetReport from './components/Budget/TrainingBudgetReport.js'
+import ReviewPayable from './components/AccountPayable/ReviewPayable.js'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const GenInvoice = lazy(() => import('./views/generate-invoice/generate-invoice.js'))
@@ -23,7 +24,7 @@ const routes = [
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/generate-invoice', name: 'Billings', element: GenInvoice },
   { path: '/generateInvoice', name: 'Generate_invoice', element: Generate_invoice },
-  { path: '/invoice-details/:id', name: 'Invoice', element: Invoice_details },
+  { path: '/invoice-details', name: 'Invoice', element: Invoice_details },
   { path: '/invoices', name: 'Invoices', element: Invoices },
   { path: '/audit', name: 'Freight Audit', element: Audit },
   { path: '/financial-analytics', name: 'Financial Analytics', element: FinancialAnalytics },
@@ -35,6 +36,7 @@ const routes = [
   { path: '/viewCollection', name: 'ViewCollection', element: ViewCollection },
   { path: '/profile', name: 'Profile', element: Profile },
   { path: '/trainingBudgetReport', name: 'Training Budget Report', element: TrainingBudgetReport },
+  { path: '/reviewPayables', name: 'Payables', element: ReviewPayable },
 ]
 
 export default routes
