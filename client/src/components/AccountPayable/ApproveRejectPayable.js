@@ -16,7 +16,7 @@ import axios from 'axios'
 import client_store from '../../context/client_store'
 import { apiURL } from '../../context/client_store'
 
-const BudgetList = () => {
+const ApproveRejectPayable = () => {
   const [loading, setLoading] = useState(false)
   const [visibleView, setVisibleView] = useState(false)
   const [visibleDelete, setVisibleDelete] = useState(false)
@@ -32,7 +32,7 @@ const BudgetList = () => {
     try {
       const response = await axios.get(`${apiURL}/api/budgetRequest`)
 
-      const pendingData = response.data.filter((item) => item.status === 'Pending')
+      const pendingData = response.data.filter((item) => item.status === 'Approved')
       setBudgetData(pendingData)
     } catch (error) {
       console.log(error?.response?.data)
@@ -58,8 +58,8 @@ const BudgetList = () => {
           title: 'Status',
           data: null,
           render: (data) => {
-            return `<button class="btn btn-secondary text-light">
-            ${data?.status === 'Pending' ? data.status : 'N/A'}
+            return `<button class="btn ${data?.status === 'Approved' ? 'btn-success text-white' : 'btn-secondary'}">
+            ${data?.status === 'Approved' ? data.status : 'Pending'}
           </button>`
           },
         },
@@ -117,19 +117,19 @@ const BudgetList = () => {
     setVisibleDelete(false) // Close the modal after deleting
   }
 
-  const handleStatusUpdate = async ({ id, updateStatus }) => {
+  const handleStatusUpdate = async (requestId) => {
     try {
       const response = await axios.post(
-        `${apiURL}/api/budgetRequest/onProcessStatus/${id}`,
-        { department: 'Finance', status: updateStatus },
+        `${apiURL}/api/budgetRequest/onProcessStatus/${requestId}`,
+        { department: 'Finance' },
         {
           headers: { token: token },
         },
       )
-      // const updatedBudgetData = budgetData.map((item) =>
-      //   item.requestId === requestId ? { ...item, status: 'Approved' } : item,
-      // )
-      // setBudgetData(updatedBudgetData)
+      const updatedBudgetData = budgetData.map((item) =>
+        item.requestId === requestId ? { ...item, status: 'Approved' } : item,
+      )
+      setBudgetData(updatedBudgetData)
       fetchBudgetData()
       setVisibleView(false)
       toast.success(response?.data.message)
@@ -190,22 +190,12 @@ const BudgetList = () => {
               <p>
                 <strong>Comment:</strong> {selectedData.comment}
               </p>
-              <div className="d-flex justify-content-center align-items-center gap-2">
+              <div className="d-flex justify-content-center align-items-center">
                 <button
-                  className={`btn border-2 border-success  bg-success text-light font-bold`}
-                  onClick={() =>
-                    handleStatusUpdate({ id: selectedData?._id, updateStatus: 'On Process' })
-                  }
+                  className={` ${selectedData.status === 'Approved' ? 'btn border-2 border-primary  bg-white text-dark font-bold' : 'btn btn-primary '}`}
+                  onClick={() => handleStatusUpdate(selectedData?._id)}
                 >
-                  Process
-                </button>
-                <button
-                  className={` btn border-2 border-danger  bg-danger text-light font-bold `}
-                  onClick={() =>
-                    handleStatusUpdate({ id: selectedData?._id, updateStatus: 'Decline' })
-                  }
-                >
-                  Decline
+                  {selectedData.status === 'Approved' ? 'Approved' : 'Approve'}
                 </button>
               </div>
             </div>
@@ -264,4 +254,4 @@ const BudgetList = () => {
   )
 }
 
-export default BudgetList
+export default ApproveRejectPayable

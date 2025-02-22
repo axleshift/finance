@@ -36,7 +36,7 @@ const createBudgetRequest = async (req, res) => {
     const reference = `BR-${budgetNumber}`;
 
     const newRequest = new budgetRequestModel({
-      requestId:reference,
+      requestId: reference,
       department,
       typeOfRequest,
       category,
@@ -190,7 +190,7 @@ const getProcessBudget = expressAsyncHandler(async (req, res) => {
 
 const statusUpdate = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { userId, department } = req.body;
+  const { userId, department, status } = req.body;
 
   const existUser = await userModel.findById(userId);
   if (!existUser) {
@@ -210,7 +210,7 @@ const statusUpdate = expressAsyncHandler(async (req, res) => {
   }
   const updated = await budgetRequestModel.findByIdAndUpdate(
     id,
-    { status: "Approved" },
+    { status: status },
     { new: true }
   );
 
@@ -220,20 +220,76 @@ const statusUpdate = expressAsyncHandler(async (req, res) => {
       .json({ success: false, message: "Budget id not found!" });
   }
 
-  const outflow = new outflowsTransactionModel({
-    approver: existUser?.fullName,
-    approverId: existUser?._id,
-    totalAmount: existing?.totalRequest,
-    department: department,
-  });
+  if (updated.status === "Approve") {
+    const outflow = new outflowsTransactionModel({
+      approver: existUser?.fullName,
+      approverId: existUser?._id,
+      totalAmount: existing?.totalRequest,
+      department: department,
+    });
 
-  if (!outflow) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Outflow not found!" });
+    if (!outflow) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Outflow not found!" });
+    }
+
+    await outflow.save();
   }
 
-  await outflow.save();
+  res.status(200).json({
+    success: true,
+    message: "Update Status Successfully",
+    data: updated,
+  });
+});
+
+const onprocessUpdate = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { userId, department, status } = req.body;
+
+  const existUser = await userModel.findById(userId);
+  if (!existUser) {
+    return res
+      .status(404)
+      .json({ success: false, message: "User Id not found!" });
+  }
+
+  console.log(existUser);
+
+  const existing = await budgetRequestModel.findById(id);
+
+  if (existing?.status === "approved") {
+    return res
+      .status(404)
+      .json({ success: false, message: "Already approved!" });
+  }
+  const updated = await budgetRequestModel.findByIdAndUpdate(
+    id,
+    { status: status },
+    { new: true }
+  );
+
+  if (!updated) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Budget id not found!" });
+  }
+
+  // const outflow = new outflowsTransactionModel({
+  //   approver: existUser?.fullName,
+  //   approverId: existUser?._id,
+  //   totalAmount: existing?.totalRequest,
+  //   department: department,
+  // });
+
+  // if (!outflow) {
+  //   return res
+  //     .status(404)
+  //     .json({ success: false, message: "Outflow not found!" });
+  // }
+
+  // await outflow.save();
 
   res.status(200).json({
     success: true,
@@ -251,4 +307,5 @@ export {
   getPendingBudget,
   getProcessBudget,
   statusUpdate,
+  onprocessUpdate,
 };

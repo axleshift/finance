@@ -89,12 +89,18 @@ const _nav = [
 
   {
     component: CNavTitle,
-    name: 'Account Payble',
+    name: 'Account Payable',
   },
   {
     component: CNavItem,
     name: 'Review Payable',
     to: '/reviewPayables',
+    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Approve/Reject',
+    to: '/approveRejectPayables',
     icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
   },
 
@@ -150,6 +156,12 @@ const _nav = [
     component: CNavItem,
     name: 'View All Accounts',
     to: '/viewAllAccounts',
+    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'ApproveRejectPayable',
+    to: '/approveRejectPayables',
     icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
   },
 

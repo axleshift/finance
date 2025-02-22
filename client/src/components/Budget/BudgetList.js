@@ -31,7 +31,8 @@ const BudgetList = () => {
   const fetchBudgetData = async () => {
     try {
       const response = await axios.get(`${apiURL}/api/budgetRequest`)
-      setBudgetData(response.data)
+      const onProcessData = response.data.filter((item) => item.status === 'On Process')
+      setBudgetData(onProcessData)
     } catch (error) {
       console.log(error?.response?.data)
     }
@@ -49,15 +50,15 @@ const BudgetList = () => {
         { title: 'Department', data: 'department' },
         { title: 'Type of Request', data: 'typeOfRequest' },
         { title: 'Category', data: 'category' },
-        { title: 'Reason', data: 'reason' },
+        // { title: 'Reason', data: 'reason' },
         { title: 'Total Request', data: 'totalRequest' },
         { title: 'Documents', data: 'documents' },
         {
           title: 'Status',
           data: null,
           render: (data) => {
-            return `<button class="btn ${data?.status === 'Approved' ? 'btn-success text-white' : 'btn-secondary'}">
-            ${data?.status === 'Approved' ? data.status : 'Pending'}
+            return `<button class="btn btn-xs ${data?.status === 'On Process' ? 'btn-info text-white' : 'btn-secondary'}">
+          ${data?.status === 'On Process' ? 'On_Process' : 'N/A'}
           </button>`
           },
         },
@@ -115,11 +116,11 @@ const BudgetList = () => {
     setVisibleDelete(false) // Close the modal after deleting
   }
 
-  const handleStatusUpdate = async (requestId) => {
+  const handleStatusUpdate = async ({ id, updateStatus }) => {
     try {
       const response = await axios.post(
-        `${apiURL}/api/budgetRequest/updateStatus/${requestId}`,
-        { department: 'Finance' },
+        `${apiURL}/api/budgetRequest/updateStatus/${id}`,
+        { department: 'Finance', status: updateStatus },
         {
           headers: { token: token },
         },
@@ -188,12 +189,22 @@ const BudgetList = () => {
               <p>
                 <strong>Comment:</strong> {selectedData.comment}
               </p>
-              <div className="d-flex justify-content-center align-items-center">
+              <div className="d-flex justify-content-center align-items-center gap-2">
                 <button
-                  className={` ${selectedData.status === 'Approved' ? 'btn border-2 border-primary  bg-white text-dark font-bold' : 'btn btn-primary '}`}
-                  onClick={() => handleStatusUpdate(selectedData?._id)}
+                  className={`btn bg-primary text-white font-bold`}
+                  onClick={() =>
+                    handleStatusUpdate({ id: selectedData?._id, updateStatus: 'Approve' })
+                  }
                 >
-                  {selectedData.status === 'Approved' ? 'Approved' : 'Approve'}
+                  Process
+                </button>
+                <button
+                  className={` btn border-2 border-primary  bg-white text-dark font-bold btn btn-primary `}
+                  onClick={() =>
+                    handleStatusUpdate({ id: selectedData?._id, updateStatus: 'Decline' })
+                  }
+                >
+                  Decline
                 </button>
               </div>
             </div>

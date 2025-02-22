@@ -8,6 +8,7 @@ import {
   getPendingBudget,
   getProcessBudget,
   statusUpdate,
+  onprocessUpdate,
 } from "../controller/budgetRequestController.js";
 import { authMiddleware } from "../middleware/Auth.js";
 
@@ -22,5 +23,10 @@ budgetRequestRouter.get("/:id", getBudgetRequestById); // Read by ID
 budgetRequestRouter.put("/:id", updateBudgetRequest); // Update
 budgetRequestRouter.delete("/:id", deleteBudgetRequest); // Delete
 budgetRequestRouter.post("/updateStatus/:id", authMiddleware, statusUpdate);
+budgetRequestRouter.post(
+  "/onProcessStatus/:id",
+  authMiddleware,
+  onprocessUpdate
+);
 
 export default budgetRequestRouter;

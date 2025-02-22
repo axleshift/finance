@@ -37,6 +37,7 @@ const routes = [
   { path: '/profile', name: 'Profile', element: Profile },
   { path: '/trainingBudgetReport', name: 'Training Budget Report', element: TrainingBudgetReport },
   { path: '/reviewPayables', name: 'Payables', element: ReviewPayable },
+  { path: '/approveRejectPayables', name: 'Approve/Rejected', element: ReviewPayable },
 ]
 
 export default routes
