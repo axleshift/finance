@@ -70,11 +70,12 @@ const BudgetList = () => {
           render: (data) => {
             return `
               <div>
-                <button class="btn btn-primary text-xs px-2 py-1 mx-1 viewBtn" id="viewBtn_${data._id}">
-                  View
+                <button class="btn btn-info text-white btn-sm viewBtn" id="viewBtn_${data._id}">
+                  <i class="fa fa-eye"></i>
                 </button>
-                <button class="btn btn-danger text-light text-xs px-2 py-1 mx-1 deleteBtn" id="deleteBtn_${data._id}">
-                  Delete
+                <button class="btn btn-danger text-white btn-sm deleteBtn" id="deleteBtn_${data._id}">
+        <i class="fa fa-trash"></i> 
+
                 </button>
               </div>`
           },
@@ -199,14 +200,14 @@ const BudgetList = () => {
                 >
                   Process
                 </button>
-                <button
+                {/* <button
                   className={` btn border-2 border-danger  bg-danger text-light font-bold `}
                   onClick={() =>
                     handleStatusUpdate({ id: selectedData?._id, updateStatus: 'Decline' })
                   }
                 >
                   Decline
-                </button>
+                </button> */}
               </div>
             </div>
           ) : (

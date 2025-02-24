@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { FaRegTrashAlt } from 'react-icons/fa'
+
 import {
   CButton,
   CCard,
@@ -66,7 +68,11 @@ const FreightAudit = () => {
         { title: 'Bonuses', data: 'bonuses' },
         { title: 'Net Pay', data: 'netPay' },
         { title: 'Payment Status', data: 'paymentStatus' },
-        { title: 'Payment Date', data: 'paymentDate' },
+        {
+          title: 'Payment Date',
+          data: 'paymentDate',
+          render: (data) => `${data ? new Date(data).toLocaleDateString() : 'N/A'}`,
+        },
         {
           title: 'Action',
           data: null,
@@ -74,10 +80,10 @@ const FreightAudit = () => {
             return `
               <div>
                 <button class="btn btn-info text-white btn-sm viewBtn" id="viewBtn_${data._id}">
-                  View
+                  <i class="fa fa-eye"></i>
                 </button>
                 <button class="btn btn-danger text-white btn-sm deleteBtn" id="deleteBtn_${data._id}">
-                  Delete
+<i class="fa fa-trash"></i> 
                 </button>
               </div>`
           },

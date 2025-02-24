@@ -7,10 +7,14 @@ import ViewCollection from './views/CashManagement/ViewCollection.js'
 import Profile from './components/Profile/Profile.js'
 import TrainingBudgetReport from './components/Budget/TrainingBudgetReport.js'
 import ReviewPayable from './components/AccountPayable/ReviewPayable.js'
+import ApproveRejectPayable from './components/AccountPayable/ApproveRejectPayable.js'
+import ReviewPayment from './views/InternalAudit/ReviewPayment.js'
+import Invoice_details from './views/invoice/invoice_detailsTest.js'
+import ViewAuditHistory from './views/InternalAudit/ViewAuditHistory.js'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const GenInvoice = lazy(() => import('./views/generate-invoice/generate-invoice.js'))
-const Invoice_details = lazy(() => import('./views/invoice/Invoice_details.js'))
+
 const Invoices = lazy(() => import('./views/invoice/Invoices.js'))
 const Audit = lazy(() => import('./views/audit/audit.js'))
 const FinancialAnalytics = React.lazy(
@@ -37,7 +41,9 @@ const routes = [
   { path: '/profile', name: 'Profile', element: Profile },
   { path: '/trainingBudgetReport', name: 'Training Budget Report', element: TrainingBudgetReport },
   { path: '/reviewPayables', name: 'Payables', element: ReviewPayable },
-  { path: '/approveRejectPayables', name: 'Approve/Rejected', element: ReviewPayable },
+  { path: '/approveRejectPayables', name: 'Approve/Rejected', element: ApproveRejectPayable },
+  { path: '/reviewPaymentTransactions', name: 'ReviewPayment', element: ReviewPayment },
+  { path: '/viewAuditHistory', name: 'viewAuditHistory', element: ViewAuditHistory },
 ]
 
 export default routes

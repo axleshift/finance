@@ -5,7 +5,8 @@ import {
   getInvoiceById,
   updateInvoice,
   deleteInvoice,
-  statusUpdate
+  statusUpdate,
+  AuditInvoice,
 } from "../controller/invoiceController.js";
 import { authMiddleware } from "../middleware/Auth.js";
 
@@ -22,6 +23,7 @@ invoiceRouter.get("/getSpecificId/:id", getInvoiceById);
 
 // Route for updating an invoice
 invoiceRouter.put("/update/:id", updateInvoice);
+invoiceRouter.post("/updateAudit/:id", authMiddleware, AuditInvoice);
 
 // Route for deleting an invoice
 invoiceRouter.delete("/delete/:id", deleteInvoice);

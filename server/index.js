@@ -15,6 +15,7 @@ import payrollRouter from "./router/payrollRouter.js";
 import budgetRequestRouter from "./router/budgetRequestRouter.js";
 import salesAndRevenueRouter from "./router/salesAndRevenueRouter.js";
 import predictiveAnalytics from "./Ai/predictiveAnalytics.js";
+import inflowRouter from "./router/inflowRouter.js";
 
 const port = process.env.PORT || 5054;
 
@@ -59,6 +60,7 @@ app.use("/api/payroll", payrollRouter);
 app.use("/api/budgetRequest", budgetRequestRouter);
 app.use("/api/salesAndRevenue", salesAndRevenueRouter);
 app.use("/api/predictiveAnalytics", predictiveAnalytics);
+app.use("/api/inflow", inflowRouter);
 // app.use("/api/payroll", payrollRouter)
 
 app.listen(port, () => {

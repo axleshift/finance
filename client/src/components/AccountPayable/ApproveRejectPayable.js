@@ -28,20 +28,19 @@ const ApproveRejectPayable = () => {
 
   const { token } = client_store()
 
+  useEffect(() => {
+    fetchBudgetData()
+  }, [])
   const fetchBudgetData = async () => {
     try {
-      const response = await axios.get(`${apiURL}/api/budgetRequest`)
+      const response = await axios.get(`${apiURL}/api/budgetRequest/approveRejectPayables`)
 
-      const pendingData = response.data.filter((item) => item.status === 'Approved')
-      setBudgetData(pendingData)
+      console.log(response.data)
+      setBudgetData(response?.data)
     } catch (error) {
       console.log(error?.response?.data)
     }
   }
-
-  useEffect(() => {
-    fetchBudgetData()
-  }, [])
 
   useEffect(() => {
     const table = new DataTable('#myTable', {
@@ -58,8 +57,8 @@ const ApproveRejectPayable = () => {
           title: 'Status',
           data: null,
           render: (data) => {
-            return `<button class="btn ${data?.status === 'Approved' ? 'btn-success text-white' : 'btn-secondary'}">
-            ${data?.status === 'Approved' ? data.status : 'Pending'}
+            return `<button class="btn ${data?.status === 'Approved' ? 'btn-success text-white' : data?.status === 'Declined' ? 'btn-danger text-white' : 'btn-secondary text-white'}">
+            ${data?.status}
           </button>`
           },
         },
@@ -70,11 +69,12 @@ const ApproveRejectPayable = () => {
           render: (data) => {
             return `
               <div>
-                <button class="btn btn-primary text-xs px-2 py-1 mx-1 viewBtn" id="viewBtn_${data._id}">
-                  View
+                <button class="btn btn-info text-white btn-sm viewBtn" id="viewBtn_${data._id}">
+                                    <i class="fa fa-eye"></i>
                 </button>
-                <button class="btn btn-danger text-light text-xs px-2 py-1 mx-1 deleteBtn" id="deleteBtn_${data._id}">
-                  Delete
+                <button class="btn btn-danger text-white btn-sm deleteBtn" id="deleteBtn_${data._id}">
+                                   <i class="fa fa-trash"></i> 
+
                 </button>
               </div>`
           },
@@ -140,7 +140,7 @@ const ApproveRejectPayable = () => {
 
   return (
     <div>
-      <h1>Pending Payables</h1>
+      <h1>Approved/Rejected Payables</h1>
       <div>
         <button className="btn btn-primary my-2" onClick={() => setVisibleAddBudget(true)}>
           Add Budget
@@ -190,14 +190,14 @@ const ApproveRejectPayable = () => {
               <p>
                 <strong>Comment:</strong> {selectedData.comment}
               </p>
-              <div className="d-flex justify-content-center align-items-center">
+              {/* <div className="d-flex justify-content-center align-items-center">
                 <button
                   className={` ${selectedData.status === 'Approved' ? 'btn border-2 border-primary  bg-white text-dark font-bold' : 'btn btn-primary '}`}
                   onClick={() => handleStatusUpdate(selectedData?._id)}
                 >
                   {selectedData.status === 'Approved' ? 'Approved' : 'Approve'}
                 </button>
-              </div>
+              </div> */}
             </div>
           ) : (
             <p>No data available</p>

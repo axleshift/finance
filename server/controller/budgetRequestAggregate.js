@@ -5,9 +5,6 @@ import budgetRequestModel from "../model/budgetRequestModel.js";
 // Pending requests aggregation
 const pendingRequest = expressAsyncHandler(async (req, res) => {
   try {
-
-
-    
     const pendingBudgetRequestsData = await budgetRequestModel.aggregate([
       {
         $match: { status: { $in: ["Pending", "On process"] } },

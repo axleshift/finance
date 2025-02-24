@@ -73,4 +73,19 @@ const totalCompanyCash = expressAsyncHandler(async (req, res) => {
   res.status(200).json(totalInflows - totalOutflows);
 });
 
-export { totalCompanyCash };
+// Calculate total cash of the company
+const getTotalCompanyCashReturn = expressAsyncHandler(async (req, res) => {
+  const inflows = await totalInflowsAmount();
+  const outflows = await totalOutflowsAmount();
+  const deposit = await totalDepositAmount();
+  const withdraw = await totalWithdrawAmount();
+
+  const totalInflows = inflows + deposit;
+  const totalOutflows = outflows + withdraw;
+
+  // res.status(200).json(totalInflows - totalOutflows);
+
+  return totalInflows - totalOutflows;
+});
+
+export { totalCompanyCash, getTotalCompanyCashReturn };

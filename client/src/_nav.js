@@ -116,12 +116,12 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Review Payment',
-        to: '/audit',
+        to: '/reviewPaymentTransactions',
       },
       {
         component: CNavItem,
         name: 'View Audit History',
-        to: '/audit',
+        to: '/viewAuditHistory',
       },
     ],
   },
@@ -142,28 +142,28 @@ const _nav = [
       },
     ],
   },
-  {
-    component: CNavTitle,
-    name: 'Account Management',
-  },
-  {
-    component: CNavItem,
-    name: 'Account Request',
-    to: '/account-request',
-    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'View All Accounts',
-    to: '/viewAllAccounts',
-    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'ApproveRejectPayable',
-    to: '/approveRejectPayables',
-    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
-  },
+  // {
+  //   component: CNavTitle,
+  //   name: 'Account Management',
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Account Request',
+  //   to: '/account-request',
+  //   icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'View All Accounts',
+  //   to: '/viewAllAccounts',
+  //   icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'ApproveRejectPayable',
+  //   to: '/approveRejectPayables',
+  //   icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
+  // },
 
   // {
   //   component: CNavGroup,

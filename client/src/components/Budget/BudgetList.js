@@ -69,11 +69,12 @@ const BudgetList = () => {
           render: (data) => {
             return `
               <div>
-                <button class="btn btn-primary text-xs px-2 py-1 mx-1 viewBtn" id="viewBtn_${data._id}">
-                  View
+                <button class="btn btn-info text-white btn-sm viewBtn" id="viewBtn_${data._id}">
+                                    <i class="fa fa-eye"></i>
+
                 </button>
-                <button class="btn btn-danger text-light text-xs px-2 py-1 mx-1 deleteBtn" id="deleteBtn_${data._id}">
-                  Delete
+                <button class="btn btn-danger text-white btn-sm deleteBtn" id="deleteBtn_${data._id}">
+                 <i class="fa fa-trash"></i> 
                 </button>
               </div>`
           },
@@ -125,10 +126,7 @@ const BudgetList = () => {
           headers: { token: token },
         },
       )
-      const updatedBudgetData = budgetData.map((item) =>
-        item.requestId === requestId ? { ...item, status: 'Approved' } : item,
-      )
-      setBudgetData(updatedBudgetData)
+
       fetchBudgetData()
       setVisibleView(false)
       toast.success(response?.data.message)
@@ -193,15 +191,15 @@ const BudgetList = () => {
                 <button
                   className={`btn bg-primary text-white font-bold`}
                   onClick={() =>
-                    handleStatusUpdate({ id: selectedData?._id, updateStatus: 'Approve' })
+                    handleStatusUpdate({ id: selectedData?._id, updateStatus: 'Approved' })
                   }
                 >
                   Process
                 </button>
                 <button
-                  className={` btn border-2 border-primary  bg-white text-dark font-bold btn btn-primary `}
+                  className={` btn bg-danger text-light font-bold  `}
                   onClick={() =>
-                    handleStatusUpdate({ id: selectedData?._id, updateStatus: 'Decline' })
+                    handleStatusUpdate({ id: selectedData?._id, updateStatus: 'Declined' })
                   }
                 >
                   Decline

@@ -1,4 +1,6 @@
+import expressAsyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
+import userModel from "../model/userModel.js";
 
 const authMiddleware = async (req, res, next) => {
   const { token } = req.headers;
@@ -37,4 +39,11 @@ const financeOnly = (req, res, next) => {
   }
 };
 
-export { authMiddleware, authorizeRoles, financeOnly };
+const userAccount = expressAsyncHandler(async (userId) => {
+  const existUser = await userModel.findById(userId);
+
+ 
+  return existUser;
+});
+
+export { authMiddleware, authorizeRoles, financeOnly, userAccount };

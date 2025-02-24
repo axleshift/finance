@@ -7,6 +7,7 @@ import {
 import userModel from "../model/userModel.js";
 import outflowsTransactionModel from "../model/outflowsTransactionModel.js";
 import Counter from "../model/Counter.js";
+import { getTotalCompanyCashReturn } from "../model/totalCashAggregation.js";
 
 // Create a new budget request
 const createBudgetRequest = async (req, res) => {
@@ -188,6 +189,69 @@ const getProcessBudget = expressAsyncHandler(async (req, res) => {
   }
 });
 
+// const statusUpdate = expressAsyncHandler(async (req, res) => {
+//   const { id } = req.params;
+//   const { userId, department, status } = req.body;
+
+//   const existUser = await userModel.findById(userId);
+//   if (!existUser) {
+//     return res
+//       .status(404)
+//       .json({ success: false, message: "User Id not found!" });
+//   }
+
+//   console.log(existUser);
+
+//   const existing = await budgetRequestModel.findById(id);
+
+//   if (totalCompanyCashReturn < existing?.totalRequest) {
+//     res.status(404).json({
+//       success: false,
+//       message: "Not enough company cash to approve this request.",
+//     });
+//   }
+
+//   if (existing?.status === "Approved") {
+//     return res
+//       .status(404)
+//       .json({ success: false, message: "Already approved!" });
+//   }
+//   const updated = await budgetRequestModel.findByIdAndUpdate(
+//     id,
+//     { status: status },
+//     { new: true }
+//   );
+
+//   if (!updated) {
+//     return res
+//       .status(404)
+//       .json({ success: false, message: "Budget id not found!" });
+//   }
+
+//   if (status === "Approved") {
+//     const outflow = new outflowsTransactionModel({
+//       approver: existUser?.fullName,
+//       approverId: existUser?._id,
+//       totalAmount: existing?.totalRequest,
+//       department: department,
+//     });
+
+//     if (!outflow) {
+//       return res
+//         .status(404)
+//         .json({ success: false, message: "Outflow not found!" });
+//     }
+
+//     await outflow.save();
+//   }
+
+//   res.status(200).json({
+//     success: true,
+//     message: "Update Status Successfully",
+//     data: updated,
+//   });
+// });
+
 const statusUpdate = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
   const { userId, department, status } = req.body;
@@ -202,12 +266,36 @@ const statusUpdate = expressAsyncHandler(async (req, res) => {
   console.log(existUser);
 
   const existing = await budgetRequestModel.findById(id);
-
-  if (existing?.status === "approved") {
+  if (!existing) {
     return res
       .status(404)
+      .json({ success: false, message: "Budget request not found!" });
+  }
+  // 🔹 Prevent updating if the status is already "Declined"
+  if (existing.status === "Declined") {
+    return res.status(400).json({
+      success: false,
+      message: "This request has already been declined and cannot be updated.",
+    });
+  }
+
+  // 🔹 Prevent updating if the status is already "Approved"
+  if (existing.status === "Approved") {
+    return res
+      .status(400)
       .json({ success: false, message: "Already approved!" });
   }
+
+  // 🔹 Wait for the total company cash return before checking the condition
+  const totalCash = await getTotalCompanyCashReturn();
+
+  if (totalCash < existing?.totalRequest) {
+    return res.status(400).json({
+      success: false,
+      message: "Not enough company cash to approve this request.",
+    });
+  }
+
   const updated = await budgetRequestModel.findByIdAndUpdate(
     id,
     { status: status },
@@ -220,19 +308,13 @@ const statusUpdate = expressAsyncHandler(async (req, res) => {
       .json({ success: false, message: "Budget id not found!" });
   }
 
-  if (updated.status === "Approve") {
+  if (status === "Approved") {
     const outflow = new outflowsTransactionModel({
-      approver: existUser?.fullName,
-      approverId: existUser?._id,
-      totalAmount: existing?.totalRequest,
+      approver: existUser.fullName,
+      approverId: existUser._id,
+      totalAmount: existing.totalRequest,
       department: department,
     });
-
-    if (!outflow) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Outflow not found!" });
-    }
 
     await outflow.save();
   }
@@ -298,6 +380,25 @@ const onprocessUpdate = expressAsyncHandler(async (req, res) => {
   });
 });
 
+const getProcessedBudgetRequest = expressAsyncHandler(async (req, res) => {
+  try {
+    const requestData = await budgetRequestModel.find({
+      status: { $in: ["Approved", "Declined"] },
+    });
+
+    if (!requestData.length) {
+      return res
+        .status(404)
+        .json({ message: "No processed budget requests found" });
+    }
+
+    res.status(200).json(requestData);
+  } catch (error) {
+    console.error("Error fetching processed budget requests:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 export {
   createBudgetRequest,
   getAllBudgetRequests,
@@ -308,4 +409,5 @@ export {
   getProcessBudget,
   statusUpdate,
   onprocessUpdate,
+  getProcessedBudgetRequest,
 };
