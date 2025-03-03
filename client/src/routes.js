@@ -11,6 +11,8 @@ import ApproveRejectPayable from './components/AccountPayable/ApproveRejectPayab
 import ReviewPayment from './views/InternalAudit/ReviewPayment.js'
 import Invoice_details from './views/invoice/invoice_detailsTest.js'
 import ViewAuditHistory from './views/InternalAudit/ViewAuditHistory.js'
+import FinancialReport from './views/FinancialReport/FinancialReport.js'
+import FinancialReportDetail from './views/FinancialReport/FinancialReportDetail.js'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const GenInvoice = lazy(() => import('./views/generate-invoice/generate-invoice.js'))
@@ -44,6 +46,8 @@ const routes = [
   { path: '/approveRejectPayables', name: 'Approve/Rejected', element: ApproveRejectPayable },
   { path: '/reviewPaymentTransactions', name: 'ReviewPayment', element: ReviewPayment },
   { path: '/viewAuditHistory', name: 'viewAuditHistory', element: ViewAuditHistory },
+  { path: '/financialReport', name: 'financialReport', element: FinancialReport },
+  { path: '/financialReportDetail', name: 'financialReportDetail', element: FinancialReportDetail },
 ]
 
 export default routes

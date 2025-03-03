@@ -38,18 +38,18 @@ const _nav = [
     name: 'Finance',
   },
 
-  {
-    component: CNavItem,
-    name: 'Billing Invoice',
-    to: '/generateInvoice',
-    icon: <FontAwesomeIcon icon={faFileInvoice} className="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Invoice',
-    to: '/invoices',
-    icon: <FontAwesomeIcon icon={faReceipt} className="nav-icon" />,
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Billing Invoice',
+  //   to: '/generateInvoice',
+  //   icon: <FontAwesomeIcon icon={faFileInvoice} className="nav-icon" />,
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Invoice',
+  //   to: '/invoices',
+  //   icon: <FontAwesomeIcon icon={faReceipt} className="nav-icon" />,
+  // },
 
   {
     component: CNavItem,
@@ -133,7 +133,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Financial Report',
-        to: '/audit',
+        to: '/financialReport',
       },
       {
         component: CNavItem,
