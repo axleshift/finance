@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 
-const financialSchema = new mongoose.Schema({
+const financialSchema = new mongoose.Schema(
+  {
     date: { type: String, required: true, unique: true },
 
     // ASSETS
-    cash: { type: Number, required: true }, 
+    cash: { type: Number, required: true },
     accountsReceivable: { type: Number, required: true }, // Unpaid customer invoices
     fleetValue: { type: Number, required: true }, // Value of trucks & equipment
     totalAssets: { type: Number, required: true },
@@ -26,12 +27,13 @@ const financialSchema = new mongoose.Schema({
     driverSalaries: { type: Number, required: true },
     maintenanceCosts: { type: Number, required: true },
     insuranceCosts: { type: Number, required: true },
-    tollsAndPermits: { type: Number, required: true },
     officeAndAdmin: { type: Number, required: true }, // Office rent, utilities, admin salaries
     totalExpenses: { type: Number, required: true },
 
     // NET INCOME
     netIncome: { type: Number, required: true }, // Revenue - Expenses
-}, { timestamps: true });
+  },
+  { timestamps: true }
+);
 
 export default mongoose.model("FinancialReport", financialSchema);

@@ -19,6 +19,7 @@ import inflowRouter from "./router/inflowRouter.js";
 import generateFinancialReport from "./controller/financialReportController.js";
 import financialReportModel from "./model/financialReportModel.js";
 import financialReportRouter from "./router/financialReportRouter.js";
+import predictiveAnalyticsRouter from "./router/predictiveAnalyticsRouter.js";
 
 const port = process.env.PORT || 5054;
 
@@ -65,6 +66,7 @@ app.use("/api/salesAndRevenue", salesAndRevenueRouter);
 app.use("/api/predictiveAnalytics", predictiveAnalytics);
 app.use("/api/inflow", inflowRouter);
 app.use("/api/financialReport", financialReportRouter);
+app.use("/api/predictive-analytics", predictiveAnalyticsRouter);
 // app.use("/api/payroll", payrollRouter)
 
 generateFinancialReport();

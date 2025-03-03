@@ -58,7 +58,7 @@ const generateFinancialReport = async () => {
       driverSalaries,
       maintenanceCosts,
       insuranceCosts,
-      tollsAndPermits,
+      // tollsAndPermits,
       officeAndAdmin,
       totalExpenses,
       netIncome,
