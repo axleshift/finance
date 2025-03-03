@@ -1,97 +1,134 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useParams } from 'react-router-dom'
+import { apiURL } from '../../context/client_store'
+import {
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CTable,
+  CTableBody,
+  CTableRow,
+  CTableHeaderCell,
+  CTableDataCell,
+  CButton,
+} from '@coreui/react'
 
 const FinancialReportDetail = () => {
   const [financialData, setFinancialData] = useState(null)
+  const { id } = useParams()
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${apiURL}/api/financialReport/getAll`)
-
-        console.log(response.data)
+        const response = await axios.get(`${apiURL}/api/financialReport/get/${id}`)
         setFinancialData(response.data)
       } catch (error) {
         console.log(error?.response.data.message)
       }
     }
-
     fetchData()
-  }, [])
+  }, [id])
 
   if (!financialData) {
     return <p>Loading financial data...</p>
   }
 
   return (
-    <div className="p-6 bg-white rounded-xl shadow-lg">
-      <h1 className="text-2xl font-bold text-blue-700">Financial Report</h1>
-      <p className="text-gray-500">Date: {financialData.date}</p>
+    <CCard className="p-3 shadow-lg">
+      <CCardHeader>
+        <h1 className="text-2xl font-bold text-primary">Financial Report</h1>
+        <p className="text-muted">Date: {financialData.date}</p>
+      </CCardHeader>
+      <CCardBody>
+        {/* Narrative Report */}
+        <CCard className="mb-4 p-3 bg-light">
+          <h2 className="text-lg font-semibold">Narrative Report</h2>
+          <p>
+            Financial Narrative Report - {financialData.date} <br />
+            Revenue: ₱{financialData.revenue.toLocaleString()} | Expenses: ₱
+            {financialData.totalExpenses.toLocaleString()} | Net Income: ₱
+            {financialData.netIncome.toLocaleString()}.
+          </p>
+        </CCard>
 
-      {/* Narrative Report */}
-      <div className="mt-4 p-4 border rounded bg-gray-100">
-        <h2 className="text-lg font-semibold">Narrative Report</h2>
-        <p className="text-gray-700">
-          Financial Narrative Report - {financialData.date} <br />
-          This report summarizes financial performance for the period ending {financialData.date}.
-          Revenue: ₱{financialData.revenue.toLocaleString()} with total expenses of ₱
-          {financialData.totalExpenses.toLocaleString()}. Net income stands at ₱
-          {financialData.netIncome.toLocaleString()}.
-        </p>
+        {/* Balance Sheet */}
+        <h2 className="mt-4 text-xl font-bold text-primary">Balance Sheet</h2>
+        <CTable striped bordered responsive>
+          <CTableBody>
+            <CTableRow>
+              <CTableHeaderCell>Assets</CTableHeaderCell>
+              <CTableDataCell>Cash: ₱{financialData.cash.toLocaleString()}</CTableDataCell>
+            </CTableRow>
+            <CTableRow>
+              <CTableHeaderCell>Liabilities</CTableHeaderCell>
+              <CTableDataCell>
+                Accounts Payable: ₱{financialData.accountsPayable.toLocaleString()}
+              </CTableDataCell>
+            </CTableRow>
+            <CTableRow>
+              <CTableHeaderCell>Equity</CTableHeaderCell>
+              <CTableDataCell>
+                Owner’s Equity: ₱{financialData.ownersEquity.toLocaleString()}
+              </CTableDataCell>
+            </CTableRow>
+          </CTableBody>
+        </CTable>
+
+        {/* Income Statement */}
+        <h2 className="mt-4 text-xl font-bold text-primary">Income Statement</h2>
+        <CTable striped bordered responsive>
+          <CTableBody>
+            <CTableRow>
+              <CTableHeaderCell>Revenue</CTableHeaderCell>
+              <CTableDataCell>₱{financialData.revenue.toLocaleString()}</CTableDataCell>
+            </CTableRow>
+            <CTableRow>
+              <CTableHeaderCell>Operating Expenses</CTableHeaderCell>
+              <CTableDataCell>
+                ₱
+                {(
+                  financialData.driverSalaries +
+                  financialData.fuelCosts +
+                  financialData.insuranceCosts +
+                  financialData.officeAndAdmin
+                ).toLocaleString()}
+              </CTableDataCell>
+            </CTableRow>
+            <CTableRow>
+              <CTableHeaderCell>Net Profit</CTableHeaderCell>
+              <CTableDataCell>₱{financialData.netIncome.toLocaleString()}</CTableDataCell>
+            </CTableRow>
+          </CTableBody>
+        </CTable>
+
+        {/* Cash Flow */}
+        <h2 className="mt-4 text-xl font-bold text-primary">Cash Flow</h2>
+        <CTable striped bordered responsive>
+          <CTableBody>
+            <CTableRow>
+              <CTableHeaderCell>Cash Inflows</CTableHeaderCell>
+              <CTableDataCell>₱{financialData.revenue.toLocaleString()}</CTableDataCell>
+            </CTableRow>
+            <CTableRow>
+              <CTableHeaderCell>Operating Cash Outflows</CTableHeaderCell>
+              <CTableDataCell>
+                ₱{(financialData.totalExpenses + financialData.maintenanceCosts).toLocaleString()}
+              </CTableDataCell>
+            </CTableRow>
+            <CTableRow>
+              <CTableHeaderCell>Ending Balance</CTableHeaderCell>
+              <CTableDataCell>
+                ₱{financialData.totalLiabilitiesAndEquity.toLocaleString()}
+              </CTableDataCell>
+            </CTableRow>
+          </CTableBody>
+        </CTable>
+      </CCardBody>
+      <div className="text-center mt-4">
+        <CButton color="primary">Export to PDF</CButton>
       </div>
-
-      {/* Balance Sheet */}
-      <h2 className="mt-6 text-xl font-bold text-blue-700">Balance Sheet</h2>
-      <div className="grid grid-cols-3 gap-4">
-        <div>
-          <h3 className="font-semibold">Assets</h3>
-          <p>Cash: ₱{financialData.cash.toLocaleString()}</p>
-          <p>Accounts Receivable: ₱{financialData.accountsReceivable.toLocaleString()}</p>
-          <p>Total Assets: ₱{financialData.totalAssets.toLocaleString()}</p>
-        </div>
-        <div>
-          <h3 className="font-semibold">Liabilities</h3>
-          <p>Accounts Payable: ₱{financialData.accountsPayable.toLocaleString()}</p>
-          <p>Loans Payable: ₱{financialData.loansPayable.toLocaleString()}</p>
-          <p>Total Liabilities: ₱{financialData.totalLiabilities.toLocaleString()}</p>
-        </div>
-        <div>
-          <h3 className="font-semibold">Equity</h3>
-          <p>Owner’s Equity: ₱{financialData.ownersEquity.toLocaleString()}</p>
-        </div>
-      </div>
-
-      {/* Income Statement */}
-      <h2 className="mt-6 text-xl font-bold text-blue-700">Income Statement</h2>
-      <div className="grid grid-cols-4 gap-4">
-        <p>Revenue: ₱{financialData.revenue.toLocaleString()}</p>
-        <p>COGS: ₱{financialData.totalExpenses.toLocaleString()}</p>
-        <p>
-          Operating Expenses: ₱
-          {(
-            financialData.driverSalaries +
-            financialData.fuelCosts +
-            financialData.insuranceCosts +
-            financialData.officeAndAdmin
-          ).toLocaleString()}
-        </p>
-        <p>Net Profit: ₱{financialData.netIncome.toLocaleString()}</p>
-      </div>
-
-      {/* Cash Flow */}
-      <h2 className="mt-6 text-xl font-bold text-blue-700">Cash Flow</h2>
-      <div className="grid grid-cols-3 gap-4">
-        <p>Cash Inflows: ₱{financialData.revenue.toLocaleString()}</p>
-        <p>
-          Operating Cash Outflows: ₱
-          {(financialData.totalExpenses + financialData.maintenanceCosts).toLocaleString()}
-        </p>
-        <p>Ending Balance: ₱{financialData.totalLiabilitiesAndEquity.toLocaleString()}</p>
-      </div>
-
-      {/* Export to PDF Button */}
-      <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg">Export to PDF</button>
-    </div>
+    </CCard>
   )
 }
 

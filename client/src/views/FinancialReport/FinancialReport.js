@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import DataTable from 'datatables.net'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import { apiURL } from '../../context/client_store'
 const FinancialReport = () => {
   const [data, setData] = useState([])
-
+  const navigate = useNavigate()
   const fetchData = async () => {
     try {
       const response = await axios.get(`${apiURL}/api/financialReport/getAll`)
@@ -47,7 +48,7 @@ const FinancialReport = () => {
           render: (data) => {
             return `
 <div>
-                  <button class="bg-teal-500 text-xs btn btn-info text-white px-2 py-1 rounded-lg mx-1 viewBtn" id="viewBtn_${data._id}">
+                  <button class="bg-teal-500 text-xs btn btn-info text-white px-2 py-1 rounded-lg mx-1 viewBtn"  id="detailBtn_${data._id}">
                     View
                   </button>
 
@@ -55,6 +56,15 @@ const FinancialReport = () => {
           },
         },
       ],
+      rowCallback: (row, data) => {
+        const detailBtn = row.querySelector(`#detailBtn_${data._id}`)
+
+        detailBtn.addEventListener('click', () => {
+          const url = `/financialReportDetail/${data?._id}`
+
+          navigate(url)
+        })
+      },
       order: [[0], 'desc'],
     })
 

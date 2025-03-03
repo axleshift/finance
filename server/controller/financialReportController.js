@@ -92,4 +92,16 @@ export const getAllFinancialReports = expressAsyncHandler(async (req, res) => {
   res.status(200).json(data);
 });
 
+export const getFinancialReportById = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const data = await financialReportModel.findById(id);
+
+  if (!data) {
+    return res.status(404).json({ success: false, message: "Data not found!" });
+  }
+
+  res.status(200).json(data);
+});
+
 export default generateFinancialReport;

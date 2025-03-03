@@ -47,7 +47,11 @@ const routes = [
   { path: '/reviewPaymentTransactions', name: 'ReviewPayment', element: ReviewPayment },
   { path: '/viewAuditHistory', name: 'viewAuditHistory', element: ViewAuditHistory },
   { path: '/financialReport', name: 'financialReport', element: FinancialReport },
-  { path: '/financialReportDetail', name: 'financialReportDetail', element: FinancialReportDetail },
+  {
+    path: '/financialReportDetail/:id',
+    name: 'financialReportDetail',
+    element: FinancialReportDetail,
+  },
 ]
 
 export default routes
