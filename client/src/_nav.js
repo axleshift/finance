@@ -80,12 +80,12 @@ const _nav = [
     to: '/budgetList',
     icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
   },
-  {
-    component: CNavItem,
-    name: 'Budget Reports',
-    to: '/trainingBudgetReport',
-    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Budget Reports',
+  //   to: '/trainingBudgetReport',
+  //   icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
+  // },
 
   {
     component: CNavTitle,
@@ -135,63 +135,13 @@ const _nav = [
         name: 'Financial Report',
         to: '/financialReport',
       },
-      {
-        component: CNavItem,
-        name: 'Transaction Records',
-        to: '/audit',
-      },
+      // {
+      //   component: CNavItem,
+      //   name: 'Transaction Records',
+      //   to: '/audit',
+      // },
     ],
   },
-  // {
-  //   component: CNavTitle,
-  //   name: 'Account Management',
-  // },
-  // {
-  //   component: CNavItem,
-  //   name: 'Account Request',
-  //   to: '/account-request',
-  //   icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
-  // },
-  // {
-  //   component: CNavItem,
-  //   name: 'View All Accounts',
-  //   to: '/viewAllAccounts',
-  //   icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
-  // },
-  // {
-  //   component: CNavItem,
-  //   name: 'ApproveRejectPayable',
-  //   to: '/approveRejectPayables',
-  //   icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
-  // },
-
-  // {
-  //   component: CNavGroup,
-  //   name: 'Pages',
-  //   icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
-  //   items: [
-  //     {
-  //       component: CNavItem,
-  //       name: 'Login',
-  //       to: '/login',
-  //     },
-  //     {
-  //       component: CNavItem,
-  //       name: 'Register',
-  //       to: '/register',
-  //     },
-  //     {
-  //       component: CNavItem,
-  //       name: 'Error 404',
-  //       to: '/404',
-  //     },
-  //     {
-  //       component: CNavItem,
-  //       name: 'Error 500',
-  //       to: '/500',
-  //     },
-  //   ],
-  // },
 ]
 
 export default _nav

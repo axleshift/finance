@@ -13,6 +13,10 @@ import WidgetsBrand from '../widgets/WidgetsBrand'
 const FinancialAnalytics = () => {
   const [salesData, setSalesData] = useState(Array(12).fill(0)) // Sales for 12 months
   const [revenueData, setRevenueData] = useState(Array(12).fill(0)) // Revenue for 12 months
+  const [predictedRevenue, setPredictedRevenue] = useState(0)
+  const [predictedSales, setPredictedSales] = useState(0)
+
+  const [futurePrediction, setFuturePrediction] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,7 +42,31 @@ const FinancialAnalytics = () => {
     }
 
     fetchData()
+    fetchFutureData()
   }, [])
+
+  const fetchFutureData = async () => {
+    try {
+      const response = await axios.get(`${apiURL}/api/testGemini/sales-forecast`)
+      const { futurePrediction } = response.data
+
+      console.log(futurePrediction)
+
+      const revenueMatch = futurePrediction.match(/Revenue:\s(\d+)/)
+      const salesMatch = futurePrediction.match(/Sales:\s(\d+)/)
+
+      const predictedRevenue = revenueMatch ? parseInt(revenueMatch[1]) : 0
+      const predictedSales = salesMatch ? parseInt(salesMatch[1]) : 0
+
+      setPredictedSales(predictedSales)
+      setPredictedRevenue(predictedRevenue)
+
+      setSalesData((prev) => [...prev, predictedSales])
+      setRevenueData((prev) => [...prev, predictedRevenue])
+    } catch (error) {
+      console.error('Error fetching future prediction:', error)
+    }
+  }
 
   return (
     <CRow>
@@ -112,29 +140,7 @@ const FinancialAnalytics = () => {
           </CCardBody>
         </CCard>
       </CCol>
-      {/* Other charts */}
-      <CCol xs={6}>
-        <CCard className="mb-4">
-          <CCardHeader>Product Prices vs Expenses</CCardHeader>
-          <CCardBody>
-            <CChartScatter
-              data={{
-                datasets: [
-                  {
-                    label: 'Scatter Dataset',
-                    data: [
-                      { x: -10, y: 0 },
-                      { x: 0, y: 10 },
-                      { x: 10, y: 5 },
-                      { x: 0.5, y: 5.5 },
-                    ],
-                  },
-                ],
-              }}
-            />
-          </CCardBody>
-        </CCard>
-      </CCol>
+
       <CCol xs={6}>
         <CCard className="mb-4">
           <CCardHeader>Profit and Revenue</CCardHeader>
@@ -166,6 +172,19 @@ const FinancialAnalytics = () => {
         </CCard>
       </CCol>
       {/* Additional charts can be added as necessary */}
+      <CCol xs={6}>
+        <CCard className="mb-4">
+          <CCardHeader>Future Prediction</CCardHeader>
+          <CCardBody>
+            <p>
+              <strong>Predicted Sales:</strong> {predictedSales}
+            </p>
+            <p>
+              <strong>Predicted Revenue:</strong> {predictedRevenue}
+            </p>
+          </CCardBody>
+        </CCard>
+      </CCol>
     </CRow>
   )
 }

@@ -2,26 +2,10 @@ import expressAsyncHandler from "express-async-handler";
 import * as tf from "@tensorflow/tfjs";
 
 const exampleData = [
-  {
-    distance: 100,
-    weight: 10,
-    cost: 1000,
-  },
-  {
-    distance: 200,
-    weight: 20,
-    cost: 2000,
-  },
-  {
-    distance: 300,
-    weight: 30,
-    cost: 3000,
-  },
-  {
-    distance: 400,
-    weight: 40,
-    cost: 4000,
-  },
+  { distance: 100, weight: 10, cost: 1000 },
+  { distance: 200, weight: 20, cost: 2000 },
+  { distance: 300, weight: 30, cost: 3000 },
+  { distance: 400, weight: 40, cost: 4000 },
 ];
 
 const trainModel = async () => {
@@ -35,7 +19,7 @@ const trainModel = async () => {
   const labels = exampleData.map((d) => d.cost);
 
   const xs = tf.tensor2d(inputs);
-  const ys = tf.tensor1d(labels);
+  const ys = tf.tensor2d(labels, [labels.length, 1]);
 
   // Define Model
   const model = tf.sequential();
@@ -49,27 +33,54 @@ const trainModel = async () => {
   return model;
 };
 
-let trainedModel;
+let trainedModel = null;
 
-trainModel().then((model) => (trainedModel = model));
+// Ensure the model is trained before allowing predictions
+const initializeModel = async () => {
+  trainedModel = await trainModel();
+};
+
+initializeModel();
 
 const getPredictiveAnalytics = expressAsyncHandler(async (req, res) => {
-  if (!trainedModel)
-    return res.status(500).send("Model not trained yet. Try again later.");
+  if (!trainedModel) {
+    return res.status(500).json({
+      success: false,
+      message: "Model not trained yet. Try again later.",
+    });
+  }
 
-  const { distance, weight, userId } = req.body;
+  try {
+    const { distance, weight } = req.body;
 
-  const input = tf.tensor2d([[distance, weight]]);
 
-  const prediction = trainedModel.predict(input);
 
-  const output = prediction.dataSync()[0];
+    if (distance == null || weight == null) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing required inputs: distance and weight",
+      });
+    }
 
-  res.status(200).json({
-    success: true,
-    message: "Predictive Analytics Data",
-    estimatedCost: output,
-  });
+    const input = tf.tensor2d([[distance, weight]]);
+
+    // Ensure proper extraction of Tensor values
+    const prediction = trainedModel.predict(input);
+    const outputArray = await prediction.data(); // Ensure we extract the value properly
+    const estimatedCost = outputArray[0];
+
+    res.status(200).json({
+      success: true,
+      message: "Predictive Analytics Data",
+      estimatedCost: estimatedCost
+    });
+  } catch (error) {
+    console.error("Prediction error:", error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while making the prediction.",
+    });
+  }
 });
 
 export { getPredictiveAnalytics };

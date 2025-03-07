@@ -6,11 +6,22 @@ import expressAsyncHandler from "express-async-handler";
 const generateFinancialReport = async () => {
   try {
     const today = new Date();
+    // const reportDate = today;
     const reportDate = `${today.getFullYear()}-${String(
       today.getMonth() + 1
     ).padStart(2, "0")}`;
 
     // Fetch data from other collections (e.g., payments, expenses, etc.)
+
+    const existingReport = await financialReportModel.findOne({
+      date: reportDate,
+    });
+
+    if(existingReport) {
+      console.log(`Financial report for ${reportDate} already exists. Skipping generation.`);
+      return 
+    }
+
     const revenue = Math.floor(Math.random() * 5000000); // Placeholder revenue
     const fuelCosts = Math.floor(Math.random() * 50000);
     const driverSalaries = Math.floor(Math.random() * 100000);

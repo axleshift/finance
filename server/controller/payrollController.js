@@ -42,7 +42,7 @@ const createPayroll = asyncHandler(async (req, res) => {
 
     const payrollNumber = counter.sequence_value.toString().padStart(3, "0");
 
-    const reference = `INV-${payrollNumber}`;
+    const reference = `PR-${payrollNumber}`;
     // Calculate payroll details
     const overtimePay = overtimeHours * overtimeRate;
     const grossPay = salary + overtimePay + bonuses;

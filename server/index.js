@@ -20,7 +20,7 @@ import generateFinancialReport from "./controller/financialReportController.js";
 import financialReportModel from "./model/financialReportModel.js";
 import financialReportRouter from "./router/financialReportRouter.js";
 import predictiveAnalyticsRouter from "./router/predictiveAnalyticsRouter.js";
-
+import geminiRouter from "./router/geminiRouter.js";
 const port = process.env.PORT || 5054;
 
 const app = express();
@@ -67,6 +67,7 @@ app.use("/api/predictiveAnalytics", predictiveAnalytics);
 app.use("/api/inflow", inflowRouter);
 app.use("/api/financialReport", financialReportRouter);
 app.use("/api/predictive-analytics", predictiveAnalyticsRouter);
+app.use("/api/testGemini", geminiRouter);
 // app.use("/api/payroll", payrollRouter)
 
 generateFinancialReport();

@@ -16,6 +16,7 @@ const budgetRequestSchema = mongoose.Schema(
     },
     comment: { type: String },
   },
+
   { timestamps: true }
 );
 

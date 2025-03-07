@@ -4,6 +4,6 @@ import { getPredictiveAnalytics } from "../controller/predictiveAnalyticsControl
 
 const predictiveAnalyticsRouter = express.Router();
 
-predictiveAnalyticsRouter.get("/", authMiddleware, getPredictiveAnalytics);
+predictiveAnalyticsRouter.post("/", authMiddleware, getPredictiveAnalytics);
 
 export default predictiveAnalyticsRouter;
