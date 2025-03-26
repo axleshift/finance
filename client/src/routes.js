@@ -13,6 +13,10 @@ import Invoice_details from './views/invoice/invoice_detailsTest.js'
 import ViewAuditHistory from './views/InternalAudit/ViewAuditHistory.js'
 import FinancialReport from './views/FinancialReport/FinancialReport.js'
 import FinancialReportDetail from './views/FinancialReport/FinancialReportDetail.js'
+import FreightAudit from './views/audit/audit.js'
+import FreighAudit from './components/FreightAudit/FreighAudit.js'
+import AccountReceivables from './views/accountReceivable/accountReceivable.js'
+import ChartOfAccountsList from './components/ChartOfAccount/ChartOfAccount.js'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const GenInvoice = lazy(() => import('./views/generate-invoice/generate-invoice.js'))
@@ -47,10 +51,17 @@ const routes = [
   { path: '/reviewPaymentTransactions', name: 'ReviewPayment', element: ReviewPayment },
   { path: '/viewAuditHistory', name: 'viewAuditHistory', element: ViewAuditHistory },
   { path: '/financialReport', name: 'financialReport', element: FinancialReport },
+  { path: '/accountReceivable', name: 'accountReceivable', element: AccountReceivables },
+  { path: '/chartOfAccount', name: 'chartOfAccount', element: ChartOfAccountsList },
   {
     path: '/financialReportDetail/:id',
     name: 'financialReportDetail',
     element: FinancialReportDetail,
+  },
+  {
+    path: '/freightAudit',
+    name: 'freightAudit',
+    element: FreighAudit,
   },
 ]
 

@@ -75,7 +75,9 @@ const FinancialReport = () => {
 
   return (
     <div>
-      <table id="myTable"></table>
+      <table id="myTable" className="display w-full text-sm bg-primary text-dark font-bold">
+        <thead className="bg-primary text-light"></thead>
+      </table>
     </div>
   )
 }

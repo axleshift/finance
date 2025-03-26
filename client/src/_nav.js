@@ -65,11 +65,17 @@ const _nav = [
     items: [
       {
         component: CNavItem,
+        name: 'freightAudit',
+        to: '/freightAudit',
+      },
+      {
+        component: CNavItem,
         name: 'Payroll',
         to: '/audit',
       },
     ],
   },
+
   {
     component: CNavTitle,
     name: 'BUDGET MANAGEMENT',
@@ -78,6 +84,16 @@ const _nav = [
     component: CNavItem,
     name: 'Budget Requests',
     to: '/budgetList',
+    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
+  },
+  {
+    component: CNavTitle,
+    name: 'Account Receivable',
+  },
+  {
+    component: CNavItem,
+    name: 'AccountReceivable',
+    to: '/accountReceivable',
     icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
   },
   // {
@@ -135,12 +151,13 @@ const _nav = [
         name: 'Financial Report',
         to: '/financialReport',
       },
-      // {
-      //   component: CNavItem,
-      //   name: 'Transaction Records',
-      //   to: '/audit',
-      // },
     ],
+  },
+  {
+    component: CNavItem,
+    name: 'Chart Of Account',
+    icon: <AiOutlineAudit className="nav-icon" />,
+    to: '/chartOfAccount',
   },
 ]
 
