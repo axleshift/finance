@@ -41,8 +41,18 @@ const Login = () => {
       toast.error(error?.response.data.message)
     }
   }
+
   return (
-    <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
+    <div
+      className="min-vh-100 d-flex flex-row align-items-center"
+      style={{
+        backgroundImage:
+          "url('https://wallpaperbat.com/img/1449072-wp3704688-logistics-wallpaper.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <CContainer>
         <CRow className="justify-content-center">
           <CCol md={8}>

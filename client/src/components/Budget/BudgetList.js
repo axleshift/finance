@@ -26,7 +26,7 @@ const BudgetList = () => {
   const [status, setStatus] = useState(null)
   const [requestIdToDelete, setRequestIdToDelete] = useState(null) // Store requestId for deletion
 
-  const { token } = client_store()
+  const { token, userData } = client_store()
 
   const fetchBudgetData = async () => {
     try {
@@ -67,15 +67,19 @@ const BudgetList = () => {
           title: 'Action',
           data: null,
           render: (data) => {
+            const isSuperAdmin = userData?.role === 'super-admin'
             return `
               <div>
                 <button class="btn btn-info text-white btn-sm viewBtn" id="viewBtn_${data._id}">
-                                    <i class="fa fa-eye"></i>
-
+                  <i class="fa fa-eye"></i>
                 </button>
-                <button class="btn btn-danger text-white btn-sm deleteBtn" id="deleteBtn_${data._id}">
-                 <i class="fa fa-trash"></i> 
-                </button>
+                ${
+                  isSuperAdmin
+                    ? `<button class="btn btn-danger text-white btn-sm deleteBtn" id="deleteBtn_${data._id}">
+                    <i class="fa fa-trash"></i>
+                  </button>`
+                    : ''
+                }
               </div>`
           },
         },
@@ -194,7 +198,7 @@ const BudgetList = () => {
                     handleStatusUpdate({ id: selectedData?._id, updateStatus: 'Approved' })
                   }
                 >
-                  Process
+                  Approve
                 </button>
                 <button
                   className={` btn bg-danger text-light font-bold  `}

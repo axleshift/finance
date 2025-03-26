@@ -12,14 +12,14 @@ const create = asyncHandler(async (req, res) => {
     req.body;
   console.log(accountRequestId);
 
-  const deleteAccountRequest = await accountRequestModel.findByIdAndDelete(
-    accountRequestId
-  );
-  if (!deleteAccountRequest) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Account Request Id not found!" });
-  }
+  // const deleteAccountRequest = await accountRequestModel.findByIdAndDelete(
+  //   accountRequestId
+  // );
+  // if (!deleteAccountRequest) {
+  //   return res
+  //     .status(404)
+  //     .json({ success: false, message: "Account Request Id not found!" });
+  // }
 
   const counter = await Counter.findByIdAndUpdate(
     {
@@ -199,12 +199,12 @@ const register = asyncHandler(async (req, res) => {
   const { fullName, email, password, confirmPassword, role, phone, address } =
     req.body;
 
-  // Check if password matches
-  if (password !== confirmPassword) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Passwords do not match!" });
-  }
+  // // Check if password matches
+  // if (password !== confirmPassword) {
+  //   return res
+  //     .status(400)
+  //     .json({ success: false, message: "Passwords do not match!" });
+  // }
 
   const counter = await Counter.findByIdAndUpdate(
     {
