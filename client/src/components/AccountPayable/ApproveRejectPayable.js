@@ -34,9 +34,9 @@ const ApproveRejectPayable = () => {
   const fetchBudgetData = async () => {
     try {
       const response = await axios.get(`${apiURL}/api/budgetRequest/approveRejectPayables`)
-
-      console.log(response.data)
-      setBudgetData(response?.data)
+      const filterData = response.data.filter((item) => item.isArichived === false)
+      console.log(filterData)
+      setBudgetData(filterData)
     } catch (error) {
       console.log(error?.response?.data)
     }
@@ -57,9 +57,9 @@ const ApproveRejectPayable = () => {
           title: 'Status',
           data: null,
           render: (data) => {
-            return `<button class="btn ${data?.status === 'Approved' ? 'btn-success text-white' : data?.status === 'Declined' ? 'btn-danger text-white' : 'btn-secondary text-white'}">
+            return `<span class="btn ${data?.status === 'Approved' ? 'badge rounded-pill  text-bg-success' : data?.status === 'Declined' ? 'badge rounded-pill  text-bg-danger' : 'btn-secondary text-white'}">
             ${data?.status}
-          </button>`
+          </span>`
           },
         },
         { title: 'Comment', data: 'comment' },
@@ -68,13 +68,12 @@ const ApproveRejectPayable = () => {
           data: null,
           render: (data) => {
             return `
-              <div>
+              <div class="d-flex justify-content-center align-items-center gap-2"> 
                 <button class="btn btn-info text-white btn-sm viewBtn" id="viewBtn_${data._id}">
                                     <i class="fa fa-eye"></i>
                 </button>
                 <button class="btn btn-danger text-white btn-sm deleteBtn" id="deleteBtn_${data._id}">
-                                   <i class="fa fa-trash"></i> 
-
+📁
                 </button>
               </div>`
           },
@@ -142,9 +141,9 @@ const ApproveRejectPayable = () => {
     <div>
       <h1>Approved/Rejected Payables</h1>
       <div>
-        <button className="btn btn-primary my-2" onClick={() => setVisibleAddBudget(true)}>
+        {/* <button className="btn btn-primary my-2" onClick={() => setVisibleAddBudget(true)}>
           Add Budget
-        </button>
+        </button> */}
       </div>
       <table id="myTable" className="display w-full text-sm bg-primary text-dark font-bold">
         <thead className="bg-primary text-light"></thead>
@@ -218,17 +217,17 @@ const ApproveRejectPayable = () => {
       {/* Delete Confirmation Modal */}
       <CModal alignment="center" visible={visibleDelete} onClose={() => setVisibleDelete(false)}>
         <CModalHeader>
-          <CModalTitle>Delete Budget</CModalTitle>
+          <CModalTitle>Archive Budget</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p>Are you sure you want to delete this budget?</p>
+          <p>Are you sure you want to Archive this budget?</p>
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setVisibleDelete(false)}>
             Cancel
           </CButton>
           <CButton color="danger" onClick={confirmationDelete}>
-            Confirm Delete
+            Confirm Archive
           </CButton>
         </CModalFooter>
       </CModal>

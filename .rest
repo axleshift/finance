@@ -1,0 +1,18 @@
+### 1. Budget Request APIs
+POST http://localhost:5054/api/budgetRequest
+Content-Type: application/json
+
+{
+  "department": "HR",
+  "typeOfRequest": "Employee Relations",
+  "category": "Engagement Activities",
+  "reason": "Improve employee satisfaction",
+  "totalRequest": 15000,
+  "documents": "employee_engagement_plan.pdf",
+  "status": "Pending",
+  "comment": "Includes team-building events"
+}
+
+### 2. Get All Budget Requests
+GET http://localhost:5054/api/budgetRequest
+Content-Type:application/json

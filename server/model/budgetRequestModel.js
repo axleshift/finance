@@ -15,6 +15,7 @@ const budgetRequestSchema = mongoose.Schema(
       default: "Pending",
     },
     comment: { type: String },
+    isArichived: { type: Boolean, default: false },
   },
 
   { timestamps: true }

@@ -13,7 +13,6 @@ import { getTotalCompanyCashReturn } from "../model/totalCashAggregation.js";
 const createBudgetRequest = async (req, res) => {
   try {
     const {
-      requestId,
       department,
       typeOfRequest,
       category,
@@ -147,15 +146,19 @@ const deleteBudgetRequest = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const deletedRequest = await budgetRequestModel.findByIdAndDelete(id);
+    const archivedRequest = await budgetRequestModel.findByIdAndUpdate(
+      id,
+      { isArichived: true },
+      { new: true }
+    );
 
-    if (!deletedRequest) {
+    if (!archivedRequest) {
       return res.status(404).json({ message: "Budget request not found" });
     }
 
     res.status(200).json({
-      message: "Budget request deleted successfully",
-      deletedRequest,
+      message: "Budget request archived successfully",
+      archivedRequest,
     });
   } catch (error) {
     res.status(500).json({
@@ -164,6 +167,27 @@ const deleteBudgetRequest = async (req, res) => {
     });
   }
 };
+// const deleteBudgetRequest = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+
+//     const deletedRequest = await budgetRequestModel.findByIdAndDelete(id);
+
+//     if (!deletedRequest) {
+//       return res.status(404).json({ message: "Budget request not found" });
+//     }
+
+//     res.status(200).json({
+//       message: "Budget request deleted successfully",
+//       deletedRequest,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       message: "Error deleting budget request",
+//       error: error.message,
+//     });
+//   }
+// };
 
 // Get pending budgets
 const getPendingBudget = expressAsyncHandler(async (req, res) => {

@@ -447,7 +447,7 @@ const AccountReceivables = () => {
             render: (data) => {
               const isSuperAdmin = userData?.role === 'super-admin'
               return `
-                <div class="d-flex gap-2 ">
+                <div class="d-flex justify-content-center align-items-center gap-2">
                   <button class="btn btn-sm btn-info viewBtn text-white" id="viewBtn_${data._id}">
                     View
                   </button>
@@ -457,7 +457,7 @@ const AccountReceivables = () => {
                           Edit
                         </button>
                         <button class="btn btn-sm btn-danger deleteBtn text-white" id="deleteBtn_${data._id}">
-                          Delete
+                          📁
                         </button>`
                       : ''
                   }

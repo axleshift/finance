@@ -1,5 +1,7 @@
 import DataTable from 'datatables.net-dt'
 import React, { useEffect, useState } from 'react'
+import { FaArchive } from 'react-icons/fa'
+
 import {
   CButton,
   CForm,
@@ -32,7 +34,9 @@ const BudgetList = () => {
     try {
       const response = await axios.get(`${apiURL}/api/budgetRequest`)
 
-      const pendingData = response.data.filter((item) => item.status === 'Pending')
+      const pendingData = response.data.filter(
+        (item) => item.status === 'Pending' && item.isArichived === false,
+      )
       setBudgetData(pendingData)
     } catch (error) {
       console.log(error?.response?.data)
@@ -58,9 +62,9 @@ const BudgetList = () => {
           title: 'Status',
           data: null,
           render: (data) => {
-            return `<button class="btn btn-secondary text-light">
+            return `<span class="badge rounded-pill  text-bg-secondary">
             ${data?.status === 'Pending' ? data.status : 'N/A'}
-          </button>`
+          </span>`
           },
         },
         { title: 'Comment', data: 'comment' },
@@ -69,14 +73,12 @@ const BudgetList = () => {
           data: null,
           render: (data) => {
             return `
-              <div>
+              <div class="d-flex justify-content-center align-items-center gap-2">
                 <button class="btn btn-info text-white btn-sm viewBtn" id="viewBtn_${data._id}">
                   <i class="fa fa-eye"></i>
                 </button>
                 <button class="btn btn-danger text-white btn-sm deleteBtn" id="deleteBtn_${data._id}">
-        <i class="fa fa-trash"></i> 
-
-                </button>
+📁</button>
               </div>`
           },
         },
@@ -229,17 +231,17 @@ const BudgetList = () => {
       {/* Delete Confirmation Modal */}
       <CModal alignment="center" visible={visibleDelete} onClose={() => setVisibleDelete(false)}>
         <CModalHeader>
-          <CModalTitle>Delete Budget</CModalTitle>
+          <CModalTitle>Archive Budget</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p>Are you sure you want to delete this budget?</p>
+          <p>Are you sure you want to Archive this budget?</p>
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setVisibleDelete(false)}>
             Cancel
           </CButton>
           <CButton color="danger" onClick={confirmationDelete}>
-            Confirm Delete
+            Confirm Archive
           </CButton>
         </CModalFooter>
       </CModal>
