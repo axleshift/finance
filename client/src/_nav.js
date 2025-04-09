@@ -21,16 +21,16 @@ const _nav = [
     to: '/dashboard',
     icon: <FontAwesomeIcon icon={faHouse} className="nav-icon" />,
   },
-  {
-    component: CNavTitle,
-    name: 'Cash Management',
-  },
-  {
-    component: CNavItem,
-    name: 'View Collection',
-    to: '/viewCollection',
-    icon: <FontAwesomeIcon icon={faFileInvoice} className="nav-icon" />,
-  },
+  // {
+  //   component: CNavTitle,
+  //   name: 'Cash Management',
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'View Collection',
+  //   to: '/viewCollection',
+  //   icon: <FontAwesomeIcon icon={faFileInvoice} className="nav-icon" />,
+  // },
   // End
 
   {
@@ -51,12 +51,12 @@ const _nav = [
   //   icon: <FontAwesomeIcon icon={faReceipt} className="nav-icon" />,
   // },
 
-  {
-    component: CNavItem,
-    name: 'Financial Analytics',
-    to: '/financial-analytics',
-    icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
-  },
+    // {
+    //   component: CNavItem,
+    //   name: 'Financial Analytics',
+    //   to: '/financial-analytics',
+    //   icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
+    // },
 
   {
     component: CNavGroup,

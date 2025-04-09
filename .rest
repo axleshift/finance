@@ -16,3 +16,37 @@ Content-Type: application/json
 ### 2. Get All Budget Requests
 GET http://localhost:5054/api/budgetRequest
 Content-Type:application/json
+
+
+### 3. Get sales and revenue data
+GET http://localhost:5054/api/salesAndRevenue/monthly-sales-revenue
+Content-Type:application/json
+
+
+### 4. POST Invoice Data
+POST http://localhost:5054/api/invoice/create
+Content-Type:application/json
+
+ {
+    "firstName": "Isabel",
+    "lastName": "Chua",
+    "customerId": "CUST-PH-010",
+    "address": "852 Batangas Road, Batangas City, Batangas",
+    "products": [
+      {
+        "name": "Blender (Imarflex)",
+        "quantity": 1,
+        "price": 1500,
+        "total": 1500
+      }
+    ],
+    "selectedCurrency": "PHP",
+    "email": "isabel.chua@example.com",
+    "phone": "+639234567890",
+    "totalAmount": 1500,
+    "paymentMethod": "Maya Wallet",   
+    "deliveryDate": "2023-08-24",
+    "dueDate": "2023-09-24",
+    "notes": "For small business",
+    "trackingId": "PHL-010-PH"
+  }

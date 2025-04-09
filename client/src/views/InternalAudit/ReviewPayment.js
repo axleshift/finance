@@ -35,12 +35,19 @@ const ReviewPayment = () => {
       const table = new DataTable('#myTable', {
         data: invoiceData,
         columns: [
-          { title: 'Invoice#', data: 'invoiceNumber' },
-          { title: 'First Name', data: 'firstName' },
-          { title: 'Last Name', data: 'lastName' },
-          { title: 'Currency', data: 'selectedCurrency' },
-          { title: 'Status', data: 'status' },
-          { title: 'Payment Method', data: 'paymentMethod' },
+          { title: 'Invoice#', data: 'invoiceNumber', render: (data) => `${data ? data : 'N/A'}` },
+          { title: 'TrackingId', data: 'trackingId', render: (data) => `${data ? data : 'N/A'}` },
+          {
+            title: 'Currency',
+            data: 'selectedCurrency',
+            render: (data) => `${data ? data : 'N/A'}`,
+          },
+          { title: 'Status', data: 'status', render: (data) => `${data ? data : 'N/A'}` },
+          {
+            title: 'Payment Method',
+            data: 'paymentMethod',
+            render: (data) => `${data ? data : 'N/A'}`,
+          },
           { title: 'Total Amount', data: 'totalAmount' },
           {
             title: 'QR Code',
@@ -61,10 +68,7 @@ const ReviewPayment = () => {
                   </button>
                   <button class="bg-teal-500 text-xs btn btn-info text-white px-2 py-1 rounded-lg mx-1 viewBtn" id="viewBtn_${data._id}">
                     View
-                  </button>
-                  <button class="bg-gray-500 text-xs btn btn-danger text-white px-2 py-1 rounded-lg mx-1 deleteBtn" id="deleteBtn_${data._id}">
-                    Delete
-                  </button>
+                
                 </div>
               `
             },
@@ -116,6 +120,10 @@ const ReviewPayment = () => {
     }
   }, [invoiceData])
 
+  // </button>
+  // <button class="bg-gray-500 text-xs btn btn-danger text-white px-2 py-1 rounded-lg mx-1 deleteBtn" id="deleteBtn_${data._id}">
+  //   Delete
+  // </button>
   const handleApproval = (id) => {
     console.log(`Approving invoice with ID: ${id}`)
     // Logic to approve invoice (e.g., API call)

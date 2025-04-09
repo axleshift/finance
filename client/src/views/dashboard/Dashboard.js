@@ -55,6 +55,8 @@ import WidgetsDropdown from '../widgets/WidgetsDropdown'
 import MainChart from './MainChart'
 import { apiURL } from '../../context/client_store'
 import axios from 'axios'
+import CashSummary from '../CashManagement/ViewCollection'
+import FinancialAnalytics from '../financial-analytics/finacial-analytics'
 
 const Dashboard = () => {
   const progressExample = [
@@ -180,8 +182,10 @@ const Dashboard = () => {
 
   return (
     <>
+      <CashSummary />
       <WidgetsDropdown className="mb-4" />
       <WidgetsBrand className="mb-4" withCharts />
+      <FinancialAnalytics />
       {/* <CCard className="mb-4">
         <CCardBody>
           <CRow>

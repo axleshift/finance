@@ -524,7 +524,7 @@ const AccountReceivables = () => {
 
   const confirmDelete = () => {
     setReceivablesData((prev) => prev.filter((item) => item._id !== selectedReceivableId))
-    toast.success('Receivable deleted successfully!')
+    toast.success('Receivable Archive successfully!')
     setVisibleDelete(false)
   }
 
@@ -886,17 +886,15 @@ const AccountReceivables = () => {
           {/* Delete Modal */}
           <CModal visible={visibleDelete} onClose={() => setVisibleDelete(false)}>
             <CModalHeader>
-              <CModalTitle>Confirm Deletion</CModalTitle>
+              <CModalTitle>Confirm Archive</CModalTitle>
             </CModalHeader>
-            <CModalBody>
-              Are you sure you want to delete this receivable? This action cannot be undone.
-            </CModalBody>
+            <CModalBody>Are you sure you want archive this receivable?</CModalBody>
             <CModalFooter>
               <CButton color="secondary" onClick={() => setVisibleDelete(false)}>
                 Cancel
               </CButton>
               <CButton color="danger" onClick={confirmDelete}>
-                Delete
+                Archive
               </CButton>
             </CModalFooter>
           </CModal>

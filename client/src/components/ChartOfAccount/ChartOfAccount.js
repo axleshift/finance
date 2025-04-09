@@ -195,9 +195,7 @@ const ChartOfAccountsList = () => {
                 <button class="btn btn-info text-white btn-sm viewBtn" id="viewBtn_${data._id}">
                   <i class="fa fa-eye"></i>
                 </button>
-                <button class="btn btn-danger text-white btn-sm deleteBtn" id="deleteBtn_${data._id}">
-                  <i class="fa fa-trash"></i> 
-                </button>
+              
               </div>`
           },
         },
@@ -217,6 +215,9 @@ const ChartOfAccountsList = () => {
     }
   }, [accountsData])
 
+  //   <button class="btn btn-danger text-white btn-sm deleteBtn" id="deleteBtn_${data._id}">
+  //   <i class="fa fa-trash"></i>
+  // </button>
   const handleView = (id) => {
     const selected = accountsData.find((item) => item._id === id)
     setSelectedData(selected)

@@ -82,9 +82,7 @@ const FreightAudit = () => {
                 <button class="btn btn-info text-white btn-sm viewBtn" id="viewBtn_${data._id}">
                   <i class="fa fa-eye"></i>
                 </button>
-                <button class="btn btn-danger text-white btn-sm deleteBtn" id="deleteBtn_${data._id}">
-<i class="fa fa-trash"></i> 
-                </button>
+              
               </div>`
           },
         },
@@ -103,6 +101,9 @@ const FreightAudit = () => {
       table.destroy()
     }
   }, [payrollData])
+  // <button class="btn btn-danger text-white btn-sm deleteBtn" id="deleteBtn_${data._id}">
+  // <i class="fa fa-trash"></i>
+  //                 </button>
 
   const handleView = (data) => {
     setSelectedPayroll(data)

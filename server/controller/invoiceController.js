@@ -23,6 +23,7 @@ const createInvoice = asyncHandler(async (req, res) => {
     discounts,
     dueDate,
     notes,
+    trackingId,
   } = req.body;
 
   // Generate invoice number
@@ -37,6 +38,7 @@ const createInvoice = asyncHandler(async (req, res) => {
 
   const newInvoice = new invoiceModel({
     invoiceNumber: reference,
+    trackingId,
     firstName,
     lastName,
     customerId,
@@ -253,7 +255,7 @@ const statusUpdate = asyncHandler(async (req, res) => {
 
 const AuditInvoice = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { userId } = req.body; 
+  const { userId } = req.body;
   const existUser = await userModel.findById(userId);
   if (!existUser) {
     return res

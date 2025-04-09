@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, useLocation } from 'react-router-dom' // Add useLocation hook to get query params
+import { useParams, useNavigate, useLocation } from 'react-router-dom' // Add useLocation hook to get query params
 import axios from 'axios'
 import { apiURL } from '../../context/client_store'
 import Store from '../../context/client_store'
@@ -8,11 +8,14 @@ import { toast } from 'react-toastify'
 const Invoice_details = () => {
   // State for payment status
   const [status, setStatus] = useState('Pending')
-  const { search } = useLocation() // Get the current location's search (query parameters)
+  const { search } = useLocation()
+
   const queryParams = new URLSearchParams(search) // Parse the query params
   const invoiceId = queryParams.get('id') // Get the invoice ID from query params
   const [data, setData] = useState(null)
   const { token } = Store()
+
+  const router = useNavigate()
 
   useEffect(() => {
     if (invoiceId) {
@@ -58,7 +61,9 @@ const Invoice_details = () => {
         },
         { headers: { token: token } },
       )
+      router('/reviewPaymentTransactions')
       fetchSpecificId(invoiceId) // Re-fetch the invoice data to update the status
+
       toast.success('Updated Successfully!')
     } catch (error) {
       console.log(error?.response?.data?.message)
@@ -72,7 +77,7 @@ const Invoice_details = () => {
 
       <div className="d-flex justify-content-between">
         <div style={{ borderBottom: '1px solid black', paddingBottom: '10px' }}>
-          <h2>Invoicesss</h2>
+          <h2>Invoices</h2>
           <p>
             <strong>Name:</strong> {data?.firstName} {data?.lastName}
           </p>
