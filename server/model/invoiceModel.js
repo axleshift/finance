@@ -11,6 +11,7 @@ const itemSchema = new mongoose.Schema({
 const invoiceSchema = mongoose.Schema(
   {
     invoiceNumber: { type: String },
+    invoiceIdCore1: { type: String },
     trackingId: { type: String, default: "12" },
     firstName: { type: String },
     customerId: { type: String },

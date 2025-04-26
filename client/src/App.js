@@ -20,12 +20,12 @@ const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
 const App = () => {
-  const { token } = client_store()
   const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
   const storedTheme = useSelector((state) => state.theme)
   const [isTokenVerified, setIsTokenVerified] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
+  const { fetchUserData, userData } = client_store()
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
@@ -34,6 +34,13 @@ const App = () => {
     if (theme) setColorMode(theme)
     else if (!isColorModeSet()) setColorMode(storedTheme)
   }, [storedTheme, isColorModeSet, setColorMode])
+
+  useEffect(() => {
+    // Fetch user data when component mounts
+    if (!userData) {
+      fetchUserData()
+    }
+  }, [fetchUserData, userData])
 
   useEffect(() => {
     const verifyToken = async () => {

@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 import DataTable from 'datatables.net-dt'
 import { CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import { useNavigate } from 'react-router-dom'
+import { FaQrcode } from 'react-icons/fa' // Import QR code icon
 
 const ReviewPayment = () => {
   const [invoiceData, setInvoiceData] = useState([])
@@ -48,13 +49,21 @@ const ReviewPayment = () => {
             data: 'paymentMethod',
             render: (data) => `${data ? data : 'N/A'}`,
           },
-          { title: 'Total Amount', data: 'totalAmount' },
+          {
+            title: 'Total Amount',
+            data: 'totalAmount',
+            render: (data) => `${data ? data : 'N/A'}`,
+          },
           {
             title: 'QR Code',
-            data: 'qrCode', // Assuming qrCode is part of the invoice data
+            data: 'qrCode',
             render: (data, type, row) => {
-              const qrCodeUrl = row.qrCode ? row.qrCode : 'N/A' // Check if qrCode is available in the data
-              return `<img src="${qrCodeUrl}" width="100" alt="QR Code" class="qr-code-img" />` // Render the QR code with class
+              if (!data) return 'N/A'
+              return `
+                <button class="qr-code-btn" title="View QR Code">
+                  <i class="fas fa-qrcode"></i> <!-- Using inline icon for DataTables -->
+                </button>
+              `
             },
           },
           {
@@ -68,7 +77,7 @@ const ReviewPayment = () => {
                   </button>
                   <button class="bg-teal-500 text-xs btn btn-info text-white px-2 py-1 rounded-lg mx-1 viewBtn" id="viewBtn_${data._id}">
                     View
-                
+                  </button>
                 </div>
               `
             },
@@ -82,6 +91,7 @@ const ReviewPayment = () => {
           const deleteBtn = row.querySelector(`#deleteBtn_${data._id}`)
           const viewBtn = row.querySelector(`#viewBtn_${data._id}`)
           const editBtn = row.querySelector(`#editBtn_${data._id}`)
+          const qrCodeBtn = row.querySelector('.qr-code-btn')
 
           approveBtn?.addEventListener('click', () => handleApproval(data.id))
           rejectBtn?.addEventListener('click', () => handleRejection(data.id))
@@ -93,19 +103,18 @@ const ReviewPayment = () => {
           })
           editBtn?.addEventListener('click', () => navigate(`/edit_invoice/${data._id}`))
 
-          // Adding event listener to QR Code image click to show modal
-          const qrCodeImg = row.querySelector('.qr-code-img')
-          if (qrCodeImg) {
-            qrCodeImg.addEventListener('click', () => {
-              setQrCodeUrl(data.qrCode) // Set QR code URL for modal
-              setIsQrCodeModalVisible(true) // Show modal
+          // Add click event for QR code button
+          if (qrCodeBtn && data.qrCode) {
+            qrCodeBtn.addEventListener('click', () => {
+              setQrCodeUrl(data.qrCode)
+              setIsQrCodeModalVisible(true)
             })
           }
 
           // Cleanup event listeners when component re-renders
           return () => {
-            if (qrCodeImg) {
-              qrCodeImg.removeEventListener('click', () => {
+            if (qrCodeBtn) {
+              qrCodeBtn.removeEventListener('click', () => {
                 setQrCodeUrl(data.qrCode)
                 setIsQrCodeModalVisible(true)
               })
@@ -120,35 +129,28 @@ const ReviewPayment = () => {
     }
   }, [invoiceData])
 
-  // </button>
-  // <button class="bg-gray-500 text-xs btn btn-danger text-white px-2 py-1 rounded-lg mx-1 deleteBtn" id="deleteBtn_${data._id}">
-  //   Delete
-  // </button>
   const handleApproval = (id) => {
     console.log(`Approving invoice with ID: ${id}`)
-    // Logic to approve invoice (e.g., API call)
   }
 
   const handleRejection = (id) => {
-    setSelectedInvoiceId(id) // Set selected ID for modal
-    setVisibleReject(true) // Open rejection confirmation modal
+    setSelectedInvoiceId(id)
+    setVisibleReject(true)
   }
 
   const handlePayment = (id) => {
     console.log(`Processing payment for invoice with ID: ${id}`)
-    // Logic to handle payment (e.g., API call)
   }
 
   const handleDelete = async (id) => {
     console.log(id)
-    setSelectedInvoiceId(id) // Set selected ID for modal
-    setVisibleDelete(true) // Open delete confirmation modal
+    setSelectedInvoiceId(id)
+    setVisibleDelete(true)
   }
 
   const confirmRejection = () => {
     console.log(`Rejecting invoice with ID: ${selectedInvoiceId}`)
     setVisibleReject(false)
-    // Logic to reject invoice (e.g., API call)
   }
 
   const confirmDelete = async () => {
@@ -157,7 +159,7 @@ const ReviewPayment = () => {
       await axios.delete(`${apiURL}/api/invoice/delete/${selectedInvoiceId}`)
       toast.warn('Deleted Successfully')
       fetchInvoiceData()
-      setInvoiceData((prevData) => prevData.filter((invoice) => invoice.id !== selectedInvoiceId)) // Update state to remove deleted invoice
+      setInvoiceData((prevData) => prevData.filter((invoice) => invoice.id !== selectedInvoiceId))
     } catch (error) {
       toast.error('Failed to delete invoice')
       console.log(error?.response?.data?.message)
@@ -165,7 +167,6 @@ const ReviewPayment = () => {
     setVisibleDelete(false)
   }
 
-  // Close QR code modal when ESC key is pressed
   useEffect(() => {
     const handleEscapeKey = (event) => {
       if (event.key === 'Escape') {
@@ -190,16 +191,24 @@ const ReviewPayment = () => {
       </table>
 
       {/* QR Code Modal */}
-      <CModal alignment="center" visible={isQrCodeModalVisible} onClose={closeQrCodeModal}>
-        <CModalHeader>
-          <CModalTitle>QR Code</CModalTitle>
+      <CModal
+        alignment="center"
+        visible={isQrCodeModalVisible}
+        onClose={closeQrCodeModal}
+        size="lg"
+      >
+        <CModalHeader closeButton>
+          <CModalTitle>Scan QR Code</CModalTitle>
         </CModalHeader>
-        <CModalBody>
-          <img
-            src={qrCodeUrl} // Use qrCodeUrl for the modal
-            alt="Full-size QR Code"
-            style={{ width: '100%', height: 'auto' }}
-          />
+        <CModalBody className="text-center">
+          <div className="mb-3">
+            <img
+              src={qrCodeUrl}
+              alt="Scan this QR code"
+              style={{ maxWidth: '100%', height: 'auto', margin: '0 auto' }}
+            />
+          </div>
+          <p className="text-muted">Scan this QR code to complete your payment</p>
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={closeQrCodeModal}>
@@ -239,6 +248,24 @@ const ReviewPayment = () => {
           </CButton>
         </CModalFooter>
       </CModal>
+
+      {/* Add some CSS for the QR code button */}
+      <style>{`
+        .qr-code-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-size: 1.5rem;
+          color: #4299e1; /* blue color */
+          padding: 0.25rem;
+        }
+        .qr-code-btn:hover {
+          color: #2b6cb0; /* darker blue on hover */
+        }
+        .fa-qrcode {
+          display: inline-block;
+        }
+      `}</style>
     </div>
   )
 }

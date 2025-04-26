@@ -29,7 +29,7 @@ const CashSummary = () => {
   const [transactionAmount, setTransactionAmount] = useState('')
   const [password, setPassword] = useState('')
   const [totalCompanyCash, setTotalCompanyCash] = useState(null)
-
+  const [currency, setCurrency] = useState('₱')
   // Fetch user data on component mount
   useEffect(() => {
     fetchUserData()
@@ -88,11 +88,12 @@ const CashSummary = () => {
   const cashData = [
     {
       title: 'Total Cash of the Company',
-      value: totalCompanyCash !== null ? `$${totalCompanyCash}` : 'Loading...',
+      value:
+        totalCompanyCash !== null ? `₱${Number(totalCompanyCash).toLocaleString()}` : 'Loading...',
       color: 'primary',
     },
-    { title: 'Cash Deposit', color: 'success' },
-    { title: 'Cash Withdrawal', color: 'danger' },
+    { title: 'Cash Imbursement', color: 'success' },
+    { title: 'Cash Disbursement', color: 'danger' },
   ]
 
   return (
@@ -106,9 +107,9 @@ const CashSummary = () => {
             title={cashItem.title}
             value={cashItem.value || ''}
             onClick={() =>
-              cashItem.title === 'Cash Deposit'
+              cashItem.title === 'Cash Imbursement'
                 ? openTransactionModals('Deposit')
-                : cashItem.title === 'Cash Withdrawal' && openTransactionModals('Withdraw')
+                : cashItem.title === 'Cash Disbursement' && openTransactionModals('Withdraw')
             }
             style={{ cursor: 'pointer' }}
           />
@@ -122,12 +123,12 @@ const CashSummary = () => {
         onClose={() => setAmountModalVisible(false)}
       >
         <CModalHeader>
-          <CModalTitle>Enter {operation} Amount</CModalTitle>
+          <CModalTitle>Enter Amount</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
             type="number"
-            placeholder={`Enter ${operation.toLowerCase()} amount`}
+            placeholder={`Enter amount`}
             value={transactionAmount}
             onChange={(e) => setTransactionAmount(e.target.value)}
           />

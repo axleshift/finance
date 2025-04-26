@@ -414,7 +414,7 @@ const AccountReceivables = () => {
         columns: [
           { title: 'Invoice#', data: 'invoiceNumber' },
           { title: 'Customer', data: 'customer' },
-          { title: 'Amount Due', data: 'amountDue', render: (data) => `$${data.toFixed(2)}` },
+          { title: 'Amount Due', data: 'amountDue', render: (data) => `₱${data.toFixed(2)}` },
           { title: 'Currency', data: 'currency' },
           {
             title: 'Status',
@@ -439,7 +439,7 @@ const AccountReceivables = () => {
             title: 'Balance Due',
             data: 'balanceDue',
             render: (data) =>
-              `<span class="${data > 0 ? 'text-danger' : 'text-success'}">$${data.toFixed(2)}</span>`,
+              `<span class="${data > 0 ? 'text-danger' : 'text-success'}">₱${data.toFixed(2)}</span>`,
           },
           {
             title: 'Action',
@@ -770,10 +770,10 @@ const AccountReceivables = () => {
                       <strong>Customer:</strong> {selectedReceivable.customer}
                     </p>
                     <p>
-                      <strong>Amount Due:</strong> ${selectedReceivable.amountDue.toFixed(2)}
+                      <strong>Amount Due:</strong> ₱{selectedReceivable.amountDue.toFixed(2)}
                     </p>
                     <p>
-                      <strong>Amount Paid:</strong> $
+                      <strong>Amount Paid:</strong> ₱
                       {selectedReceivable.amountPaid?.toFixed(2) || '0.00'}
                     </p>
                     <p>

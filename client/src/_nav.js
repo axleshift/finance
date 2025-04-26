@@ -51,23 +51,23 @@ const _nav = [
   //   icon: <FontAwesomeIcon icon={faReceipt} className="nav-icon" />,
   // },
 
-    // {
-    //   component: CNavItem,
-    //   name: 'Financial Analytics',
-    //   to: '/financial-analytics',
-    //   icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
-    // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Financial Analytics',
+  //   to: '/financial-analytics',
+  //   icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
+  // },
 
   {
     component: CNavGroup,
     name: 'Freight Audit',
     icon: <AiOutlineAudit className="nav-icon" />,
     items: [
-      {
-        component: CNavItem,
-        name: 'freightAudit',
-        to: '/freightAudit',
-      },
+      // {
+      //   component: CNavItem,
+      //   name: 'freightAudit',
+      //   to: '/freightAudit',
+      // },
       {
         component: CNavItem,
         name: 'Payroll',
