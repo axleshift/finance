@@ -10,6 +10,8 @@ import {
   CModalHeader,
   CModalTitle,
 } from '@coreui/react'
+import { CCard, CCardBody, CCardHeader, CCol, CRow } from '@coreui/react'
+
 import { toast } from 'react-toastify'
 
 import axios from 'axios'
@@ -141,13 +143,53 @@ const BudgetList = () => {
     }
   }
 
+  const kupsData = [
+    {
+      title: 'Operating Expenses',
+      amount: '₱1,015,164.60',
+      description: 'Regular operational costs and day-to-day expenses',
+      color: 'primary',
+    },
+    {
+      title: 'Capital Expenditure',
+      amount: '₱422,985.25',
+      description: 'Long-term investments in assets and infrastructure',
+      color: 'info',
+    },
+    {
+      title: 'Emergency Budget',
+      amount: '₱84,597.05',
+      description: 'Funds reserved for unexpected situations',
+      color: 'warning',
+    },
+    {
+      title: 'Budget Request',
+      amount: budgetData.length,
+      color: 'primary',
+    },
+  ]
+
   return (
     <div>
       <h1>Budget Management</h1>
       <div>
-        {/* <button className="btn btn-primary my-2" onClick={() => setVisibleAddBudget(true)}>
-          Add Budget
-        </button> */}
+        <CRow>
+          {kupsData.map((budget, index) => (
+            <CCol md={4} key={index}>
+              <CCard className={`mb-4 border-top-${budget.color} border-top-3`}>
+                <CCardHeader>
+                  <h5>{budget.title}</h5>
+                </CCardHeader>
+                <CCardBody>
+                  <div className="text-center">
+                    <h2 className="mb-3">{budget.amount}</h2>
+                    <p className="text-medium-emphasis">{budget.description}</p>
+                  </div>
+                </CCardBody>
+              </CCard>
+            </CCol>
+          ))}
+        </CRow>
       </div>
       <table id="myTable" className="display w-full text-sm bg-primary text-dark font-bold">
         <thead className="bg-primary text-light"></thead>

@@ -22,6 +22,9 @@ Content-Type:application/json
 GET http://localhost:5054/api/salesAndRevenue/monthly-sales-revenue
 Content-Type:application/json
 
+### 3. Get Outflow
+GET http://localhost:5054/api/inflow/getAll
+Content-Type:application/json
 
 ### 4. POST Invoice Data
 POST http://localhost:5054/api/invoice/create

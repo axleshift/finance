@@ -213,69 +213,6 @@ const getProcessBudget = expressAsyncHandler(async (req, res) => {
   }
 });
 
-// const statusUpdate = expressAsyncHandler(async (req, res) => {
-//   const { id } = req.params;
-//   const { userId, department, status } = req.body;
-
-//   const existUser = await userModel.findById(userId);
-//   if (!existUser) {
-//     return res
-//       .status(404)
-//       .json({ success: false, message: "User Id not found!" });
-//   }
-
-//   console.log(existUser);
-
-//   const existing = await budgetRequestModel.findById(id);
-
-//   if (totalCompanyCashReturn < existing?.totalRequest) {
-//     res.status(404).json({
-//       success: false,
-//       message: "Not enough company cash to approve this request.",
-//     });
-//   }
-
-//   if (existing?.status === "Approved") {
-//     return res
-//       .status(404)
-//       .json({ success: false, message: "Already approved!" });
-//   }
-//   const updated = await budgetRequestModel.findByIdAndUpdate(
-//     id,
-//     { status: status },
-//     { new: true }
-//   );
-
-//   if (!updated) {
-//     return res
-//       .status(404)
-//       .json({ success: false, message: "Budget id not found!" });
-//   }
-
-//   if (status === "Approved") {
-//     const outflow = new outflowsTransactionModel({
-//       approver: existUser?.fullName,
-//       approverId: existUser?._id,
-//       totalAmount: existing?.totalRequest,
-//       department: department,
-//     });
-
-//     if (!outflow) {
-//       return res
-//         .status(404)
-//         .json({ success: false, message: "Outflow not found!" });
-//     }
-
-//     await outflow.save();
-//   }
-
-//   res.status(200).json({
-//     success: true,
-//     message: "Update Status Successfully",
-//     data: updated,
-//   });
-// });
-
 const statusUpdate = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
   const { userId, department, status } = req.body;
