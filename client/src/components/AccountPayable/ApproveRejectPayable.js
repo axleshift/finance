@@ -46,13 +46,17 @@ const ApproveRejectPayable = () => {
     const table = new DataTable('#myTable', {
       data: budgetData,
       columns: [
-        { title: 'Request ID', data: 'requestId' },
-        { title: 'Department', data: 'department' },
-        { title: 'Type of Request', data: 'typeOfRequest' },
-        { title: 'Category', data: 'category' },
-        { title: 'Reason', data: 'reason' },
+        { title: 'Request ID', data: 'requestId', render: (data) => `${data ? data : 'N/A'}` },
+        { title: 'Department', data: 'department', render: (data) => `${data ? data : 'N/A'}` },
+        {
+          title: 'Type of Request',
+          data: 'typeOfRequest',
+          render: (data) => `${data ? data : 'N/A'}`,
+        },
+        { title: 'Category', data: 'category', render: (data) => `${data ? data : 'N/A'}` },
+        { title: 'Reason', data: 'reason', render: (data) => `${data ? data : 'N/A'}` },
         { title: 'Total Request', data: 'totalRequest' },
-        { title: 'Documents', data: 'documents' },
+        { title: 'Documents', data: 'documents', render: (data) => `${data ? data : 'N/A'}` },
         {
           title: 'Status',
           data: null,
@@ -62,7 +66,7 @@ const ApproveRejectPayable = () => {
           </span>`
           },
         },
-        { title: 'Comment', data: 'comment' },
+        { title: 'Comment', data: 'comment', render: (data) => `${data ? data : 'No comment'}` },
         {
           title: 'Action',
           data: null,

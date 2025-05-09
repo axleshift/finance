@@ -5,7 +5,7 @@ const budgetRequestSchema = mongoose.Schema(
     requestId: { type: String, required: true },
     department: { type: String, required: true },
     typeOfRequest: { type: String, required: true },
-    category: { type: String, required: true },
+    category: { type: String, required: false },
     reason: { type: String, required: true },
     totalRequest: { type: Number, required: true },
     documents: { type: String, required: true },

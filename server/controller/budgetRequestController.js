@@ -215,7 +215,7 @@ const getProcessBudget = expressAsyncHandler(async (req, res) => {
 
 const statusUpdate = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { userId, department, status } = req.body;
+  const { userId, department, status, reason } = req.body;
 
   const existUser = await userModel.findById(userId);
   if (!existUser) {
@@ -259,7 +259,7 @@ const statusUpdate = expressAsyncHandler(async (req, res) => {
 
   const updated = await budgetRequestModel.findByIdAndUpdate(
     id,
-    { status: status },
+    { status: status, reason },
     { new: true }
   );
 

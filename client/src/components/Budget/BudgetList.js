@@ -9,11 +9,13 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCol,
+  CRow,
 } from '@coreui/react'
-import { CCard, CCardBody, CCardHeader, CCol, CRow } from '@coreui/react'
-
 import { toast } from 'react-toastify'
-
 import axios from 'axios'
 import client_store from '../../context/client_store'
 import { apiURL } from '../../context/client_store'
@@ -22,11 +24,13 @@ const BudgetList = () => {
   const [loading, setLoading] = useState(false)
   const [visibleView, setVisibleView] = useState(false)
   const [visibleDelete, setVisibleDelete] = useState(false)
+  const [visibleDeclineReason, setVisibleDeclineReason] = useState(false)
   const [selectedData, setSelectedData] = useState(null)
   const [budgetData, setBudgetData] = useState([])
   const [visibleAddBudget, setVisibleAddBudget] = useState(false)
   const [status, setStatus] = useState(null)
-  const [requestIdToDelete, setRequestIdToDelete] = useState(null) // Store requestId for deletion
+  const [requestIdToDelete, setRequestIdToDelete] = useState(null)
+  const [declineReason, setDeclineReason] = useState('')
 
   const { token, userData } = client_store()
 
@@ -54,7 +58,6 @@ const BudgetList = () => {
         { title: 'Department', data: 'department' },
         { title: 'Type of Request', data: 'typeOfRequest' },
         { title: 'Category', data: 'category' },
-        // { title: 'Reason', data: 'reason' },
         { title: 'Total Request', data: 'totalRequest' },
         { title: 'Documents', data: 'documents' },
         {
@@ -66,7 +69,7 @@ const BudgetList = () => {
           </span>`
           },
         },
-        { title: 'Comment', data: 'comment' },
+        { title: 'Comment', data: 'comment', render: (data) => `${data ? data : 'N/A'}` },
         {
           title: 'Action',
           data: null,
@@ -110,8 +113,8 @@ const BudgetList = () => {
   }
 
   const handleDelete = (id) => {
-    setRequestIdToDelete(id) // Set the requestId to delete
-    setVisibleDelete(true) // Show the delete confirmation modal
+    setRequestIdToDelete(id)
+    setVisibleDelete(true)
   }
 
   const confirmationDelete = async () => {
@@ -122,14 +125,18 @@ const BudgetList = () => {
     } catch (error) {
       toast.error('Failed to delete budget')
     }
-    setVisibleDelete(false) // Close the modal after deleting
+    setVisibleDelete(false)
   }
 
-  const handleStatusUpdate = async ({ id, updateStatus }) => {
+  const handleStatusUpdate = async ({ id, updateStatus, reason }) => {
     try {
       const response = await axios.post(
         `${apiURL}/api/budgetRequest/updateStatus/${id}`,
-        { department: 'Finance', status: updateStatus },
+        {
+          department: 'Finance',
+          status: updateStatus,
+          ...(updateStatus === 'Declined' && { reason: reason }),
+        },
         {
           headers: { token: token },
         },
@@ -137,6 +144,8 @@ const BudgetList = () => {
 
       fetchBudgetData()
       setVisibleView(false)
+      setVisibleDeclineReason(false)
+      setDeclineReason('')
       toast.success(response?.data.message)
     } catch (error) {
       toast.error(error?.response.data.message)
@@ -165,7 +174,7 @@ const BudgetList = () => {
     {
       title: 'Budget Request',
       amount: budgetData.length,
-      color: 'primary',
+      color: 'success',
     },
   ]
 
@@ -175,7 +184,7 @@ const BudgetList = () => {
       <div>
         <CRow>
           {kupsData.map((budget, index) => (
-            <CCol md={4} key={index}>
+            <CCol md={3} key={index}>
               <CCard className={`mb-4 border-top-${budget.color} border-top-3`}>
                 <CCardHeader>
                   <h5>{budget.title}</h5>
@@ -183,7 +192,9 @@ const BudgetList = () => {
                 <CCardBody>
                   <div className="text-center">
                     <h2 className="mb-3">{budget.amount}</h2>
-                    <p className="text-medium-emphasis">{budget.description}</p>
+                    {budget.description && (
+                      <p className="text-medium-emphasis">{budget.description}</p>
+                    )}
                   </div>
                 </CCardBody>
               </CCard>
@@ -245,10 +256,8 @@ const BudgetList = () => {
                   Approve
                 </button>
                 <button
-                  className={` btn bg-danger text-light font-bold  `}
-                  onClick={() =>
-                    handleStatusUpdate({ id: selectedData?._id, updateStatus: 'Declined' })
-                  }
+                  className={`btn bg-danger text-light font-bold`}
+                  onClick={() => setVisibleDeclineReason(true)}
                 >
                   Decline
                 </button>
@@ -266,6 +275,62 @@ const BudgetList = () => {
             }}
           >
             Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      {/* Decline Reason Modal */}
+      <CModal
+        alignment="center"
+        visible={visibleDeclineReason}
+        onClose={() => setVisibleDeclineReason(false)}
+      >
+        <CModalHeader>
+          <CModalTitle>Reason for Decline</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CForm>
+            <div className="mb-3">
+              <label htmlFor="declineReason" className="form-label">
+                Please provide the reason for declining this request:
+              </label>
+              <CFormInput
+                type="text"
+                id="declineReason"
+                value={declineReason}
+                onChange={(e) => setDeclineReason(e.target.value)}
+                placeholder="Enter reason for decline"
+                required
+              />
+            </div>
+          </CForm>
+        </CModalBody>
+        <CModalFooter>
+          <CButton
+            color="secondary"
+            onClick={() => {
+              setVisibleDeclineReason(false)
+              setDeclineReason('')
+            }}
+          >
+            Cancel
+          </CButton>
+          <CButton
+            color="danger"
+            onClick={() => {
+              if (!declineReason.trim()) {
+                toast.error('Please provide a reason for declining')
+                return
+              }
+              handleStatusUpdate({
+                id: selectedData?._id,
+                updateStatus: 'Declined',
+                reason: declineReason,
+              })
+            }}
+            disabled={!declineReason.trim()}
+          >
+            Confirm Decline
           </CButton>
         </CModalFooter>
       </CModal>

@@ -6,7 +6,6 @@ Content-Type: application/json
   "department": "HR",
   "typeOfRequest": "Employee Relations",
   "category": "Engagement Activities",
-  "reason": "Improve employee satisfaction",
   "totalRequest": 15000,
   "documents": "employee_engagement_plan.pdf",
   "status": "Pending",
